@@ -37,12 +37,15 @@ int main()
 	shape.SetPosition(300,200);
 	
 	sfp::Object object(shape);
+	sfp::Object foo(bottom);
 	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
 	
 	world.AddObject(object);
+	collision.AddObject(object);
+	collision.AddObject(foo);
 	
 	bool up(false), right(false), left(false);
 	

@@ -7,8 +7,7 @@
 #include "Physicable.hpp"
 
 #include <vector>
-#include <cmath> // noch nicht
-
+#include <iostream>//
 #include <SFML/System.hpp>
 #ifdef SFML_GRAPHICS_ENABLED
 #include <SFML/Graphics.hpp>
@@ -47,6 +46,9 @@ namespace sfp
 			Object();
 			
 			void ComputeArea() {sfp::Physicable::ComputeArea(sfp::Polygon::myPoints);}
+			
+			sf::Vector2f ToGlobal(const sf::Vector2f&);
+			sf::Vector2f ToLocal(const sf::Vector2f&);
 			
 			#ifdef SFML_GRAPHICS_ENABLED
 		private:

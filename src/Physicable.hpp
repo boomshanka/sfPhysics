@@ -33,6 +33,9 @@ namespace sfp
 		public:
 			Physicable();
 			
+			void Rotate(float angle) {myRotation+=angle;} ///
+			void Move(const sf::Vector2f& move) {myGlobalPosition+=move;}
+			void SetPosition(const sf::Vector2f pos) {myGlobalPosition=pos;} //get pos
 			
 			//	Getter & Setter	//
 			bool SetMass(float);
@@ -42,10 +45,12 @@ namespace sfp
 			bool SetFriction(float);
 
 			void SetCenter(const sf::Vector2f& center) {myCenter=center;}
+			void SetRotation(float angle) {myRotation=angle;} //
 			void SetSpeed(sfp::Vector2f speed) {mySpeed=speed;}
 			void SetImpulse(sfp::Vector2f impulse) {mySpeed=impulse/myMass;}
 			
 			sf::Vector2f GetCenter() {return myCenter;}
+			////
 			sfp::Vector2f GetSpeed() {return mySpeed;}
 			sfp::Vector2f GetImpulse() {return mySpeed*myMass;}
 			

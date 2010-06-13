@@ -3,11 +3,11 @@
 
 
 #include "SFML_Graphics.hpp"
-
-#include <SFML/System/Vector2.hpp>
 #ifdef SFML_GRAPHICS_ENABLED
 #include <SFML/Graphics.hpp>
 #endif
+
+#include <SFML/System/Vector2.hpp>
 
 #include <vector>
 
@@ -44,9 +44,13 @@ namespace sfp
 			int GetPointCount() {return myPoints.size();}
 			const sf::Vector2f& GetPoint(int index) {return myPoints[index];}
 			
+			
+			PolygonType GetPolygonType() {return myPolygonType;}
+			
 			static Polygon Line(); //
 			static Polygon Rectangle();
 			static Polygon Circle();
+			
 	};
 
 } // namespace

@@ -59,6 +59,7 @@ void sfp::Environment::MoveObjects()
 	{
 		if((*it)->GetDrawable()!=NULL)
 			(*it)->GetDrawable()->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+		(*it)->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
 	}
 }
 
