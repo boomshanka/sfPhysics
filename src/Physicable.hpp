@@ -21,6 +21,8 @@ namespace sfp
 			float myRotationSpeed;
 			float myRotation;
 			
+			float myOldRotation;
+			
 			sf::Vector2f myCenter;	//Center of gravity
 			
 			//	Properties	//
@@ -30,7 +32,7 @@ namespace sfp
 			float myRestitution;	//Abprallkraft
 			float myFriction;		//Reibung
 			
-			void ComputeArea(const std::vector<sf::Vector2f>&);
+			sf::Vector2f ComputeArea(const std::vector<sf::Vector2f>&);
 		public:
 			Physicable();
 			

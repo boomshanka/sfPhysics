@@ -9,7 +9,6 @@
 #include "SAT.hpp"
 
 #include <vector>
-#include <iostream>//
 #include <SFML/System.hpp>
 #ifdef SFML_GRAPHICS_ENABLED
 #include <SFML/Graphics.hpp>
@@ -59,7 +58,12 @@ namespace sfp
 			sf::Drawable* myDrawable;
 		public:
 			Object(sf::Shape&);
+			Object(sf::Sprite&);
+			Object(sf::Drawable&);
 			
+			void SetShape(sf::Shape&);
+			void SetSprite(sf::Sprite&);
+			void SetDrawable(sf::Drawable&);
 			
 			sf::Drawable* GetDrawable() {return myDrawable;}
 			void RemoveDrawable() {myDrawable=NULL;}

@@ -26,8 +26,12 @@ sfp::Object::~Object()
 
 void sfp::Object::ComputeSeparatingAxis()
 {
-	delete mySeparatingAxis;
-	mySeparatingAxis=new sfp::SeparatingAxis(*this);
+	if(Physicable::myOldRotation!=Physicable::myRotation || mySeparatingAxis==NULL)
+	{
+		delete mySeparatingAxis;
+		mySeparatingAxis=new sfp::SeparatingAxis(*this);
+		Physicable::myOldRotation=Physicable::myRotation;
+	}
 }
 
 
@@ -101,18 +105,62 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
 #ifdef SFML_GRAPHICS_ENABLED
 
 sfp::Object::Object(sf::Shape& shape)
-:myDrawable(&shape),
-mySeparatingAxis(NULL),
+:mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true)
 {
+	SetShape(shape);
+}
+
+
+
+sfp::Object::Object(sf::Sprite& sprite)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	SetSprite(sprite);
+}
+
+
+
+sfp::Object::Object(sf::Drawable& drawable)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	SetDrawable(drawable);
+}
+
+
+
+void sfp::Object::SetShape(sf::Shape& shape)
+{
+	myDrawable=&shape;
+	
 	for(unsigned int i=0; i<shape.GetPointsCount();++i)
 	{
 		Polygon::AddPoint(shape.GetPointPosition(i));
 	}
-	Physicable::ComputeArea(sfp::Polygon::myPoints);
+	shape.SetOrigin(Physicable::ComputeArea(sfp::Polygon::myPoints));
+	shape.SetPosition(shape.GetPosition()+shape.GetOrigin());
 	
 	Physicable::myGlobalPosition=shape.GetPosition()-shape.GetOrigin();
+	Physicable::myRotation=shape.GetRotation();
 }
 
-#endif
+
+
+void sfp::Object::SetSprite(sf::Sprite& sprite)
+{
+	myDrawable=&sprite;
+}
+
+
+
+void sfp::Object::SetDrawable(sf::Drawable& drawable)
+{
+	myDrawable=&drawable;
+}
+
+
+
+#endif // SFML_GRAPHICS_ENABLED
 

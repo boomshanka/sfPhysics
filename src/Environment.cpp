@@ -76,7 +76,7 @@ void sfp::Environment::MoveDrawables()
 		if((*it)->GetDrawable()!=NULL)
 		{
 			(*it)->GetDrawable()->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
-			(*it)->GetDrawable()->Rotate((*it)->GetRotationSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+			(*it)->GetDrawable()->SetRotation((*it)->GetRotation()*sfp::Time::ElapsedTime*myTimefactor);
 		}
 	}
 }

@@ -41,8 +41,8 @@ void sfp::SeparatingAxis::AddAx(const sf::Vector2f& first, const sf::Vector2f& s
 	myAxis.push_back(sf::Vector2f(-(first.y-second.y),first.x-second.x));
 	
 	//normalize
-	float tmp=sqrt(myAxis.front().x * myAxis.front().x + myAxis.front().y * myAxis.front().y);
-	myAxis.front()/=tmp;
+//	float tmp=sqrt(myAxis.front().x * myAxis.front().x + myAxis.front().y * myAxis.front().y);
+//	myAxis.front()/=tmp;
 }
 
 

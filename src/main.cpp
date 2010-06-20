@@ -24,7 +24,7 @@ int main()
 	shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
 	shape.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
 	shape.AddPoint(50, 70,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
-	//shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128));
+	shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128));
 	shape.AddPoint(-50, 70, sf::Color(255, 170, 170), sf::Color(0, 128, 128));
 	shape.AddPoint(-50, 0,  sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
 	
