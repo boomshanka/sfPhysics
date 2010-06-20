@@ -8,7 +8,7 @@
 #include "CollisionEvent.hpp"
 
 
-//#include <iostream>
+//#include <iostream>//
 #include <list>
 #include <queue>
 //#include <cmath>
@@ -24,6 +24,8 @@ namespace sfp
 		private:
 			std::list<sfp::Object*> myObjects;
 			std::queue<CollisionEvent> myCollisionEvents;
+			
+			bool myNoCollisionEventEnabled;
 		public:
 			Collision();
 			~Collision();
@@ -36,6 +38,7 @@ namespace sfp
 			
 		protected:
 			void UpdateCollisionEvents();
+			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
 	};
 }

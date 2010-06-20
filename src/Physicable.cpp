@@ -3,9 +3,10 @@
 
 
 sfp::Physicable::Physicable()
-:myRotation(0),
-myMass(10), myDensity(1), myRestitution(0), myFriction(0)
-{//myArea
+:myRotationSpeed(0), myRotation(0),
+myMass(10), myDensity(1), myRestitution(0), myFriction(0),
+myArea(10)
+{
 
 }
 

@@ -51,15 +51,33 @@ void sfp::Environment::RenderGravity()
 
 
 
+void sfp::Environment::MoveObjects(bool moovedrawables)
+{
+	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
+	{
+		(*it)->Rotate((*it)->GetRotationSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+		(*it)->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+	}
+	
+	#ifdef SFML_GRAPHICS_ENABLED
+	if(moovedrawables)
+		MoveDrawables();
+	#endif
+}
+
+
+
 #ifdef SFML_GRAPHICS_ENABLED
 
-void sfp::Environment::MoveObjects()
+void sfp::Environment::MoveDrawables()
 {
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
 		if((*it)->GetDrawable()!=NULL)
+		{
 			(*it)->GetDrawable()->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
-		(*it)->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+			(*it)->GetDrawable()->Rotate((*it)->GetRotationSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+		}
 	}
 }
 

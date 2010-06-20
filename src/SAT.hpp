@@ -4,16 +4,16 @@
 #include "Objects.hpp"
 
 #include <queue>
-#include <utility>
 
 
 namespace sfp
 {
+	class Object;
 
 	class SeparatingAxis
 	{
 		private:
-			std::queue<std::pair<sf::Vector2f, sf::Vector2f> > myAxis;
+			std::vector<sf::Vector2f> myAxis;
 		public:
 			SeparatingAxis() {;}
 			SeparatingAxis(sfp::Object& object) {ComputeSeperatingAxix(object);}
@@ -22,9 +22,11 @@ namespace sfp
 			
 			void ComputeSeperatingAxix(sfp::Object&);
 			
+			int GetAxisCount() {return myAxis.size();}
+			sf::Vector2f GetAx(int index) {return myAxis[index];}
 			
 		protected:
-			void AddAx(const sf::Vector2f& first, const sf::Vector2f& second) {myAxis.push(std::make_pair(sf::Vector2f(-first.y,first.x), sf::Vector2f(-second.y,second.x)));}
+			void AddAx(const sf::Vector2f&, const sf::Vector2f&);
 	};
 
 }

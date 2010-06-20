@@ -42,8 +42,10 @@ namespace sfp
 			
 			void RenderGravity();
 			
+			void MoveObjects(bool moovedrawables=true);
+			
 			#ifdef SFML_GRAPHICS_ENABLED
-			void MoveObjects();
+			void MoveDrawables();
 			#endif
 	};
 	

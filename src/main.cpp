@@ -24,7 +24,7 @@ int main()
 	shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
 	shape.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
 	shape.AddPoint(50, 70,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
-	shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128));
+	//shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128));
 	shape.AddPoint(-50, 70, sf::Color(255, 170, 170), sf::Color(0, 128, 128));
 	shape.AddPoint(-50, 0,  sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
 	
@@ -33,7 +33,7 @@ int main()
 	bottom.AddPoint(800, 30,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	bottom.AddPoint(800, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	
-	bottom.SetPosition(0,500);
+	bottom.SetPosition(100,500);
 	shape.SetPosition(300,200);
 	
 	sfp::Object object(shape);
@@ -89,7 +89,18 @@ int main()
 		
 		while(collision.GetCollision(collisionevent))
 		{
-		
+			switch(collisionevent.CollisionType)
+			{
+				case sfp::PreciseCollision:
+					collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
+					collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+					break;
+				
+				default:
+					collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::White);
+					collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::White);
+					break;
+			}
 		}
 		
 		world.MoveObjects();

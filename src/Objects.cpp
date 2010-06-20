@@ -9,9 +9,27 @@ sf::Clock sfp::Time::Frametime = sf::Clock();
 
 
 sfp::Object::Object()
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
 {
 
 }
+
+
+sfp::Object::~Object()
+{
+	delete mySeparatingAxis;
+}
+
+
+
+
+void sfp::Object::ComputeSeparatingAxis()
+{
+	delete mySeparatingAxis;
+	mySeparatingAxis=new sfp::SeparatingAxis(*this);
+}
+
 
 
 
@@ -83,7 +101,9 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
 #ifdef SFML_GRAPHICS_ENABLED
 
 sfp::Object::Object(sf::Shape& shape)
-:myDrawable(&shape)
+:myDrawable(&shape),
+mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
 {
 	for(unsigned int i=0; i<shape.GetPointsCount();++i)
 	{
