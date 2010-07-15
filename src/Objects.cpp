@@ -12,7 +12,9 @@ sfp::Object::Object()
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true)
 {
-
+	#ifdef SFML_GRAPHICS_ENABLED
+	myDrawable=NULL;
+	#endif
 }
 
 
@@ -26,12 +28,28 @@ sfp::Object::~Object()
 
 void sfp::Object::ComputeSeparatingAxis()
 {
-	if(Physicable::myOldRotation!=Physicable::myRotation || mySeparatingAxis==NULL)
+	if(mySatRotation!=myRotation || mySeparatingAxis==NULL)
 	{
 		delete mySeparatingAxis;
 		mySeparatingAxis=new sfp::SeparatingAxis(*this);
-		Physicable::myOldRotation=Physicable::myRotation;
+		mySatRotation=myRotation;
 	}
+}
+
+
+
+void sfp::Object::SetCenter(const sf::Vector2f& center)
+{
+	Physicable::myCenter=center;
+	myCenter=center;
+	
+	delete mySeparatingAxis;
+	mySeparatingAxis=NULL;
+	
+	#ifdef SFML_GRAPHICS_ENABLED
+	if(myDrawable!=NULL)
+		myDrawable->SetOrigin(center);
+	#endif
 }
 
 
@@ -40,6 +58,15 @@ void sfp::Object::ComputeSeparatingAxis()
 
 sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local)
 {
+	sf::Vector2f global=myPosition;
+	
+	sfp::Vector2f position=local-myCenter;
+	
+	position.SetDirection(position.GetDirection()-myRotation); //
+	
+	global+=position;
+	
+	/*
 	sf::Vector2f global;
 	
 	global.x = local.x - Physicable::myCenter.x;
@@ -64,7 +91,7 @@ sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local)
 	global.x = sin(angle)*line;
 	global.y = cos(angle)*line;
 	
-	global += Physicable::myGlobalPosition;
+	global += Physicable::myGlobalPosition;*/
 	
 	return global;
 }
@@ -74,8 +101,8 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
 {
 	sf::Vector2f local;
 	
-	local.x = global.x-Physicable::myGlobalPosition.x - Physicable::myCenter.x;
-	local.y = global.y-Physicable::myGlobalPosition.y - Physicable::myCenter.y;
+	local.x = global.x-myPosition.x - myCenter.x;
+	local.y = global.y-myPosition.y - myCenter.y;
 	
 	float line = sqrt(local.x*local.x + local.y*local.y);
 	
@@ -91,7 +118,7 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
 		angle=0;
 	}
 	
-	angle += Physicable::myRotation;
+	angle += myRotation;
 	
 	local.x = sin(angle)*line;
 	local.y = cos(angle)*line;
@@ -99,6 +126,11 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
 	return local;
 }
 
+
+
+//------------------------------------------------------------------------------------------//
+									/*SFML_Graphics*/
+//------------------------------------------------------------------------------------------//
 
 
 
@@ -131,6 +163,40 @@ mySeparatingAxisEnabled(true)
 
 
 
+
+
+sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	SetShape(shape, center);
+}
+
+
+
+sfp::Object::Object(sf::Sprite& sprite, const sf::Vector2f& center)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	SetSprite(sprite, center);
+}
+
+
+
+sfp::Object::Object(sf::Drawable& drawable, const sf::Vector2f& center)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	SetDrawable(drawable, center);
+}
+
+
+
+
+// ------------------------- End of constructor ------------------------- //
+
+
+
 void sfp::Object::SetShape(sf::Shape& shape)
 {
 	myDrawable=&shape;
@@ -139,11 +205,11 @@ void sfp::Object::SetShape(sf::Shape& shape)
 	{
 		Polygon::AddPoint(shape.GetPointPosition(i));
 	}
-	shape.SetOrigin(Physicable::ComputeArea(sfp::Polygon::myPoints));
-	shape.SetPosition(shape.GetPosition()+shape.GetOrigin());
 	
-	Physicable::myGlobalPosition=shape.GetPosition()-shape.GetOrigin();
-	Physicable::myRotation=shape.GetRotation();
+	SetCenter(Physicable::ComputeArea(sfp::Polygon::myPoints));
+	
+	myPosition=shape.GetPosition();
+	myRotation=shape.GetRotation();
 }
 
 
@@ -151,6 +217,7 @@ void sfp::Object::SetShape(sf::Shape& shape)
 void sfp::Object::SetSprite(sf::Sprite& sprite)
 {
 	myDrawable=&sprite;
+	//FIXME
 }
 
 
@@ -158,6 +225,11 @@ void sfp::Object::SetSprite(sf::Sprite& sprite)
 void sfp::Object::SetDrawable(sf::Drawable& drawable)
 {
 	myDrawable=&drawable;
+	
+	SetCenter(drawable.GetOrigin());
+	
+	myPosition=drawable.GetPosition();
+	myRotation=drawable.GetRotation();
 }
 
 

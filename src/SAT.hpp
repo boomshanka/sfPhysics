@@ -15,10 +15,10 @@ namespace sfp
 		private:
 			std::vector<sf::Vector2f> myAxis;
 		public:
-			SeparatingAxis() {;}
+			SeparatingAxis() {}
 			SeparatingAxis(sfp::Object& object) {ComputeSeperatingAxix(object);}
 			
-			~SeparatingAxis() {;}
+			~SeparatingAxis() {}
 			
 			void ComputeSeperatingAxix(sfp::Object&);
 			

@@ -15,13 +15,8 @@ namespace sfp
 		friend class Object;
 		
 		private:
-			sf::Vector2f myGlobalPosition;
-			
 			sfp::Vector2f mySpeed;
 			float myRotationSpeed;
-			float myRotation;
-			
-			float myOldRotation;
 			
 			sf::Vector2f myCenter;	//Center of gravity
 			
@@ -38,24 +33,14 @@ namespace sfp
 			
 			void SetSpeed(sfp::Vector2f speed) {mySpeed=speed;}
 			void SetImpulse(sfp::Vector2f impulse) {mySpeed=impulse/myMass;}
-			void Move(const sf::Vector2f& move) {myGlobalPosition+=move;}
-			void SetPosition(const sf::Vector2f pos) {myGlobalPosition=pos;}
 			
-			void SetCenter(const sf::Vector2f& center) {myCenter=center;}
-			
-			void Rotate(float angle) {myRotation+=angle;}
-			void SetRotation(float angle) {myRotation=angle;}
 			void SetRotationSpeed(float speed) {myRotationSpeed=speed;}
 			void SetRotationForce(float force); //FIXME
 			
 			
 			sfp::Vector2f GetSpeed() {return mySpeed;}
 			sfp::Vector2f GetImpulse() {return mySpeed*myMass;}
-			sf::Vector2f GetPosition() {return myGlobalPosition;}
 			
-			sf::Vector2f GetCenter() {return myCenter;}
-			
-			float GetRotation() {return myRotation;}
 			float GetRotationSpeed() {return myRotationSpeed;}
 			float GetRotationForce(); //FIXME
 			

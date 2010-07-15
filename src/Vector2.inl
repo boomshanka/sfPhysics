@@ -47,7 +47,7 @@ float sfp::Vector2<T>::GetDirection()
 		}
 		return std::atan(sf::Vector2<T>::y/sf::Vector2<T>::x)* 180.f / M_PI;
 	}
-}
+} //möglicherweise prüfen?
 
 
 
@@ -56,17 +56,17 @@ void sfp::Vector2<T>::SetForce(T force)
 {
 	float direction=GetDirection();
 	
-	sf::Vector2<T>::x=std::cos(direction/180.f*M_PI)*force;
-	sf::Vector2<T>::y=std::sin(direction/180.f*M_PI)*force;
+	sf::Vector2<T>::x=std::cos(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::y=std::sin(direction*M_PI/180.f)*force;
 }
 
 
 
 template <typename T>
-void sfp::Vector2<T>::SetForce(T force, float direction)
+void sfp::Vector2<T>::SetForce(T force, float direction) //FIXME: Ist die funktion richtig? andere mögliche bugs suchen. inline vergessen?
 {
-	sf::Vector2<T>::x=std::cos(direction/180.f*M_PI)*force;
-	sf::Vector2<T>::y=std::sin(direction/180.f*M_PI)*force;
+	sf::Vector2<T>::x=std::cos(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::y=std::sin(direction*M_PI/180.f)*force;
 }
 
 
@@ -84,15 +84,15 @@ void sfp::Vector2<T>::AddForce(T force)
 {
 	float direction=GetDirection();
 	
-	sf::Vector2<T>::x+=std::cos(direction/180.f*M_PI)*force;
-	sf::Vector2<T>::y+=std::sin(direction/180.f*M_PI)*force;
+	sf::Vector2<T>::x+=std::cos(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::y+=std::sin(direction*M_PI/180.f)*force;
 }
 
 
 template <typename T>
 void sfp::Vector2<T>::AddForce(T force, float direction)
 {
-	sf::Vector2<T>::x+=std::cos(direction/180.f*M_PI)*force;
-	sf::Vector2<T>::y+=std::sin(direction/180.f*M_PI)*force;
+	sf::Vector2<T>::x+=std::cos(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::y+=std::sin(direction*M_PI/180.f)*force;
 }
 

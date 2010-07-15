@@ -55,7 +55,7 @@ void sfp::Environment::MoveObjects(bool moovedrawables)
 {
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
-		(*it)->Rotate((*it)->GetRotationSpeed()*sfp::Time::ElapsedTime*myTimefactor);
+		(*it)->SetRotation((*it)->GetRotation()+(*it)->GetRotationSpeed()*sfp::Time::ElapsedTime*myTimefactor);
 		(*it)->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
 	}
 	
@@ -75,8 +75,9 @@ void sfp::Environment::MoveDrawables()
 	{
 		if((*it)->GetDrawable()!=NULL)
 		{
-			(*it)->GetDrawable()->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor);
-			(*it)->GetDrawable()->SetRotation((*it)->GetRotation()*sfp::Time::ElapsedTime*myTimefactor);
+			//(*it)->GetDrawable()->Move((*it)->GetSpeed()*sfp::Time::ElapsedTime*myTimefactor); // das hier geht, das untere verschiebt das objekt //
+			(*it)->GetDrawable()->SetPosition((*it)->GetPosition());// FIXME scheint nicht zu gehn, wa?
+			(*it)->GetDrawable()->SetRotation((*it)->GetRotation());
 		}
 	}
 }

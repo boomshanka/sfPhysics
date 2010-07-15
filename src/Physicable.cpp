@@ -2,11 +2,10 @@
 #include <queue>
 #include <utility>
 
-
+#include <iostream>
 sfp::Physicable::Physicable()
-:myRotationSpeed(0), myRotation(0), myOldRotation(0),
-myMass(10), myDensity(1), myRestitution(0), myFriction(0),
-myArea(10)
+:myRotationSpeed(0), myArea(10),
+myMass(10), myDensity(1), myRestitution(0), myFriction(0)
 {
 
 }
@@ -90,8 +89,8 @@ sf::Vector2f sfp::Physicable::ComputeArea(const std::vector<sf::Vector2f>& point
 	center.pop();
 	while(0<center.size())
 	{
-		sf::Vector2f diff(pair.first-center.front().first);
-		diff*=(pair.second/(pair.second+center.front().second));
+		sf::Vector2f diff(center.front().first-pair.first);
+		diff*=(center.front().second/(center.front().second+pair.second));
 		pair.first+=diff;
 		pair.second+=center.front().second;
 		center.pop();
