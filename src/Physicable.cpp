@@ -1,8 +1,9 @@
 #include "Physicable.hpp"
-#include <queue>
-#include <utility>
 
-#include <iostream>
+#include <queue>
+
+
+
 sfp::Physicable::Physicable()
 :myRotationSpeed(0), myArea(10),
 myMass(10), myDensity(1), myRestitution(0), myFriction(0)
@@ -67,9 +68,30 @@ bool sfp::Physicable::SetFriction(float friction)
 
 
 
-sf::Vector2f sfp::Physicable::ComputeArea(const std::vector<sf::Vector2f>& points)
+
+sf::Vector2f sfp::Physicable::ComputeArea(const std::vector<Polygon>& polygons) //FIXME UNBEDiNGT TESTEN!
 {
 	myArea=0;
+	
+	std::pair<sf::Vector2f, float> pair=ComputeArea(polygons[0].myPoints);
+	
+	for(unsigned int i=1; i<polygons.size(); ++i)
+	{
+		std::pair<sf::Vector2f, float> temp=ComputeArea(polygons[i].myPoints);
+		
+		sf::Vector2f diff(temp.first-pair.first);
+		diff*=(temp.second/(temp.second+pair.second));
+		pair.first+=diff;
+		pair.second+=temp.second;
+	}
+	
+	return pair.first;
+}
+
+
+
+std::pair<sf::Vector2f, float> sfp::Physicable::ComputeArea(const std::vector<sf::Vector2f>& points)
+{
 	std::queue<std::pair<sf::Vector2f, float> > center;
 	for(int i=2;i<points.size();++i)
 	{
@@ -96,7 +118,7 @@ sf::Vector2f sfp::Physicable::ComputeArea(const std::vector<sf::Vector2f>& point
 		center.pop();
 	}
 	
-	return pair.first; // return the center of gravity
+	return pair; // return the center of gravity
 }
 
 

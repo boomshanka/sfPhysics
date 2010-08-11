@@ -9,6 +9,12 @@
 
 int main()
 {
+//	0°		→	1,0
+//	90°		↓	0,1
+//	180°	←	-1,0
+//	270°	↑	0,-1
+//	360°	→	1,0
+	
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Physics Test");
 	window.UseVerticalSync(true);
 	
@@ -24,7 +30,7 @@ int main()
 	shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
 	shape.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
 	shape.AddPoint(50, 70,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
-	//shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128));
+	//shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128)); //Für convex/concav
 	shape.AddPoint(-50, 70, sf::Color(255, 170, 170), sf::Color(0, 128, 128));
 	shape.AddPoint(-50, 0,  sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
 	
@@ -98,6 +104,9 @@ int main()
 				case sfp::PreciseCollision:
 					collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
 					collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+					
+					//collisionevent.GetFirstObject().Move(collisionevent.GetFirstObject().GetSpeed()*collisionevent.CollisionTime);
+					//collisionevent.GetSecondObject().Move(collisionevent.GetSecondObject().GetSpeed()*collisionevent.CollisionTime);
 					break;
 				
 				default:

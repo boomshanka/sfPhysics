@@ -18,6 +18,21 @@ mySeparatingAxisEnabled(true)
 }
 
 
+sfp::Object::Object(const Polygon& polygon)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	#ifdef SFML_GRAPHICS_ENABLED
+	myDrawable=NULL;
+	#endif
+	
+	PolygonManager::SetPolygon(polygon);
+	ComputeArea();
+}
+
+
+
+
 sfp::Object::~Object()
 {
 	delete mySeparatingAxis;
@@ -65,33 +80,6 @@ sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local)
 	position.SetDirection(position.GetDirection()-myRotation); //
 	
 	global+=position;
-	
-	/*
-	sf::Vector2f global;
-	
-	global.x = local.x - Physicable::myCenter.x;
-	global.y = local.y - Physicable::myCenter.y;
-	
-	float line = sqrt(global.x*global.x + global.y*global.y);
-	
-	float angle;
-	if(line!=0)
-	{
-		angle = asin(global.x/line);
-		if(local.y<0) //oder 2. winkel für global.y=cos(winkel2)*line FIXME auch ToLocal
-			angle=3.141592654f-angle;
-	}
-	else
-	{
-		angle = 0;
-	}
-	
-	angle -= Physicable::myRotation;
-	
-	global.x = sin(angle)*line;
-	global.y = cos(angle)*line;
-	
-	global += Physicable::myGlobalPosition;*/
 	
 	return global;
 }
@@ -201,12 +189,14 @@ void sfp::Object::SetShape(sf::Shape& shape)
 {
 	myDrawable=&shape;
 	
+	Polygon polygon;
 	for(unsigned int i=0; i<shape.GetPointsCount();++i)
 	{
-		Polygon::AddPoint(shape.GetPointPosition(i));
+		polygon.AddPoint(shape.GetPointPosition(i));
 	}
+	PolygonManager::SetPolygon(polygon);
 	
-	SetCenter(Physicable::ComputeArea(sfp::Polygon::myPoints));
+	ComputeArea();
 	
 	myPosition=shape.GetPosition();
 	myRotation=shape.GetRotation();

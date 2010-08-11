@@ -2,18 +2,14 @@
 #define COLLISION_HPP
 
 
-#include <SFML/Graphics.hpp>
-
 #include "Objects.hpp"
 #include "CollisionEvent.hpp"
 
+#include <SFML/Graphics.hpp>
 
-//#include <iostream>//
 #include <list>
 #include <queue>
-//#include <cmath>
 
-#define _USE_MATH_DEFINES
 
 
 namespace sfp

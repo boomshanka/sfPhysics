@@ -4,8 +4,10 @@
 
 #include "SFML_Graphics.hpp"
 #include "Vector2.hpp"
+#include "Polygon.hpp"
 
 #include <vector>
+#include <utility>
 
 
 namespace sfp
@@ -27,7 +29,6 @@ namespace sfp
 			float myRestitution;	//Abprallkraft
 			float myFriction;		//Reibung
 			
-			sf::Vector2f ComputeArea(const std::vector<sf::Vector2f>&);
 		public:
 			Physicable();
 			
@@ -61,6 +62,11 @@ namespace sfp
 			
 			
 			void Force(); //FIXME
+			
+		protected:
+			sf::Vector2f ComputeArea(const std::vector<Polygon>&);
+			std::pair<sf::Vector2f, float> ComputeArea(const std::vector<sf::Vector2f>&);
+			
 	};
 
 } // Namespace

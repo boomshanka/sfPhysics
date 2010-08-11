@@ -1,6 +1,11 @@
 #include "Collision.hpp"
 #include "SAT.hpp"
 
+#include <cmath>
+
+
+#define _USE_MATH_DEFINES
+
 
 
 sfp::Collision::Collision()
@@ -74,7 +79,7 @@ void sfp::Collision::UpdateCollisionEvents()
 			else
 			{
 				if(!myNoCollisionEventEnabled && myCollisionEvents.front().CollisionType==NoCollision)
-					myCollisionEvents.pop(); //FIXME ist pop hier richtig?
+					myCollisionEvents.pop(); //FIXME ist pop hier richtig? (wie wärs wenn einfach kein objekt erstellt wird?)
 			}
 		}
 	}
@@ -82,7 +87,7 @@ void sfp::Collision::UpdateCollisionEvents()
 
 
 
-bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
+bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second) //Funktion aufteilen und mehrere formen pro objekt unterstützen
 {
 	//if
 	{
@@ -121,6 +126,26 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 				
 				if(firstmax < secondmin || firstmin > secondmax)
 					return false;
+				
+				sfp::Vector2f intersection; //FIXME läuft kein meter
+				intersection.SetForce(firstmin>secondmax ? (firstmin-secondmax) : (secondmin-firstmax), sfp::Vector2f(first.GetSeparatingAxis().GetAx(i)).GetDirection());
+				
+				if(first.GetSpeed().x!=0)
+				{
+					sf::Vector2f speed=first.GetSpeed()+second.GetSpeed();
+					float time=intersection.x/speed.x;
+					
+					if(time<myCollisionEvents.front().CollisionTime || myCollisionEvents.front().CollisionTime==0)
+						myCollisionEvents.front().CollisionTime=time;
+				}
+				else if(first.GetSpeed().y!=0)
+				{
+					sf::Vector2f speed=first.GetSpeed()+second.GetSpeed();
+					float time=intersection.y/speed.y;
+					
+					if(time<myCollisionEvents.front().CollisionTime || myCollisionEvents.front().CollisionTime==0)
+						myCollisionEvents.front().CollisionTime=time;
+				}
 			}
 		}
 		//myCollisionEvents.front()

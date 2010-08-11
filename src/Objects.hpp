@@ -3,7 +3,7 @@
 
 
 #include "SFML_Graphics.hpp"
-#include "Polygon.hpp"
+#include "PolygonManager.hpp"
 #include "Physicable.hpp"
 
 #include "SAT.hpp"
@@ -33,7 +33,7 @@ namespace sfp
 
 	
 	
-	class Object : public Polygon, public Physicable
+	class Object : public PolygonManager, public Physicable
 	{
 		private:
 			sf::Vector2f myPosition;
@@ -46,10 +46,11 @@ namespace sfp
 			float mySatRotation;
 		public:
 			Object();
+			Object(const Polygon&);
 			~Object();
 			
 			// //
-			void ComputeArea() {SetCenter(Physicable::ComputeArea(sfp::Polygon::myPoints));}
+			void ComputeArea() {SetCenter(Physicable::ComputeArea(PolygonManager::myConvexPolygons));}
 			
 			void EnableSeparatingAxis(bool enabled) {mySeparatingAxisEnabled=enabled;}
 			bool IsSeparatingAxisEnabled() {return mySeparatingAxisEnabled;}

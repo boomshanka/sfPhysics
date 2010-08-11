@@ -22,10 +22,12 @@ namespace sfp
 			sfp::Object* firstobject;
 			sfp::Object* secondobject;
 		public:
-			CollisionEvent() {;}
+			CollisionEvent() : CollisionTime(0) {}
 			CollisionEvent(sfp::Object& first, sfp::Object& second) { firstobject=&first; secondobject=&second; }
 			
 			CollisionEventType CollisionType;
+			
+			float CollisionTime;
 			
 			
 			sfp::Object& GetFirstObject() {return *firstobject;}

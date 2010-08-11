@@ -1,6 +1,6 @@
 DEBUGFLAGS = -g -DDEBUG
 
-CC=g++
+CC=colorgcc
 LIBS= -lsfml-graphics -lsfml-window -lsfml-system
 SOURCE= src/*.cpp
 CFLAGS=

@@ -25,7 +25,7 @@ namespace sfp
 	
 	class Polygon
 	{
-		friend class Object;
+		friend class Physicable;
 		
 		private:
 			PolygonType myPolygonType;
@@ -34,15 +34,16 @@ namespace sfp
 			float myRadius;
 		public:
 			Polygon();
+			virtual ~Polygon() {}
 			
-			void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
-			void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec);}
+			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
+			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec);}
 			
-			void SetPointPosition(int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}
-			void SetPointPosition(int index, const sf::Vector2f& vec) {myPoints[index]=vec;}
+			virtual void SetPointPosition(unsigned int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}
+			virtual void SetPointPosition(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec;}
 			
-			int GetPointCount() {return myPoints.size();}
-			const sf::Vector2f& GetPoint(int index) {return myPoints[index];}
+			virtual int GetPointCount() {return myPoints.size();}
+			virtual const sf::Vector2f& GetPoint(unsigned int index) {return myPoints[index];}
 			
 			
 			PolygonType GetPolygonType() {return myPolygonType;}

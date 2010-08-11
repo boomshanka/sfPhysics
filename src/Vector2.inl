@@ -1,4 +1,11 @@
 /*Foo!*/
+//	0°		→	1,0
+//	90°		↓	0,1
+//	180°	←	-1,0
+//	270°	↑	0,-1
+//	360°	→	1,0
+
+
 
 template <typename T>
 inline sfp::Vector2<T>::Vector2()
@@ -24,7 +31,7 @@ inline sfp::Vector2<T>::Vector2(sf::Vector2<T> vec)
 
 
 template <typename T>
-T sfp::Vector2<T>::GetForce()
+inline T sfp::Vector2<T>::GetForce()
 {
 	return std::sqrt(sf::Vector2<T>::x*sf::Vector2<T>::x + sf::Vector2<T>::y*sf::Vector2<T>::y);
 }
@@ -32,27 +39,18 @@ T sfp::Vector2<T>::GetForce()
 
 
 template <typename T>
-float sfp::Vector2<T>::GetDirection()
+inline float sfp::Vector2<T>::GetDirection() // Liefert Werte zw 0° und °360
 {
-	if(sf::Vector2<T>::x==0)
-	{
-		return sf::Vector2<T>::y<0 ? -90 : 90;
-	}
-	else
-	{
-		if(sf::Vector2<T>::x<0)
-		{
-			return sf::Vector2<T>::x<0 ? (std::atan(sf::Vector2<T>::y/sf::Vector2<T>::x)* 180.f / M_PI-180)
-										:(std::atan(sf::Vector2<T>::y/sf::Vector2<T>::x)* 180.f / M_PI+180);
-		}
-		return std::atan(sf::Vector2<T>::y/sf::Vector2<T>::x)* 180.f / M_PI;
-	}
-} //möglicherweise prüfen?
+	if(sf::Vector2<T>::y<0)
+		return std::atan2(sf::Vector2<T>::y, sf::Vector2<T>::x) * 180.f/M_PI + 360;
+	
+	return std::atan2(sf::Vector2<T>::y, sf::Vector2<T>::x) * 180.f/M_PI; //Werte zw -180° und 180°
+}
 
 
 
 template <typename T>
-void sfp::Vector2<T>::SetForce(T force)
+inline void sfp::Vector2<T>::SetForce(T force)
 {
 	float direction=GetDirection();
 	
@@ -63,7 +61,7 @@ void sfp::Vector2<T>::SetForce(T force)
 
 
 template <typename T>
-void sfp::Vector2<T>::SetForce(T force, float direction) //FIXME: Ist die funktion richtig? andere mögliche bugs suchen. inline vergessen?
+inline void sfp::Vector2<T>::SetForce(T force, float direction) //FIXME: Ist die funktion richtig? andere mögliche bugs suchen. inline vergessen?
 {
 	sf::Vector2<T>::x=std::cos(direction*M_PI/180.f)*force;
 	sf::Vector2<T>::y=std::sin(direction*M_PI/180.f)*force;
@@ -72,7 +70,7 @@ void sfp::Vector2<T>::SetForce(T force, float direction) //FIXME: Ist die funkti
 
 
 template <typename T>
-void sfp::Vector2<T>::SetDirection(float direction)
+inline void sfp::Vector2<T>::SetDirection(float direction)
 {
 	SetForce(GetForce(), direction);
 }
@@ -80,7 +78,7 @@ void sfp::Vector2<T>::SetDirection(float direction)
 
 
 template <typename T>
-void sfp::Vector2<T>::AddForce(T force)
+inline void sfp::Vector2<T>::AddForce(T force)
 {
 	float direction=GetDirection();
 	
@@ -90,7 +88,7 @@ void sfp::Vector2<T>::AddForce(T force)
 
 
 template <typename T>
-void sfp::Vector2<T>::AddForce(T force, float direction)
+inline void sfp::Vector2<T>::AddForce(T force, float direction)
 {
 	sf::Vector2<T>::x+=std::cos(direction*M_PI/180.f)*force;
 	sf::Vector2<T>::y+=std::sin(direction*M_PI/180.f)*force;
