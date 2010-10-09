@@ -2,8 +2,8 @@
 #define COLLISION_HPP
 
 
-#include "Objects.hpp"
-#include "CollisionEvent.hpp"
+#include <sfPhysics/Objects.hpp>
+#include <sfPhysics/CollisionEvent.hpp>
 
 #include <SFML/Graphics.hpp>
 

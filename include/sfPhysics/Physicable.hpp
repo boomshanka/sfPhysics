@@ -2,9 +2,9 @@
 #define PHYSICABLE_HPP
 
 
-#include "SFML_Graphics.hpp"
-#include "Vector2.hpp"
-#include "Polygon.hpp"
+#include <sfPhysics/SFML_Graphics.hpp>
+#include <sfPhysics/Vector2.hpp>
+#include <sfPhysics/Polygon.hpp>
 
 #include <vector>
 #include <utility>
@@ -23,9 +23,9 @@ namespace sfp
 			sf::Vector2f myCenter;	//Center of gravity
 			
 			//	Properties	//
+			float myArea;
 			float myMass;
 			float myDensity;
-			float myArea;
 			float myRestitution;	//Abprallkraft
 			float myFriction;		//Reibung
 			
@@ -60,8 +60,8 @@ namespace sfp
 			float GetFriction() {return myFriction;}
 			
 			
-			
-			void Force(); //FIXME
+			void Force(sf::Vector2f position, float direction, float force);
+			void Force(sf::Vector2f position, sfp::Vector2f force); //FIXME
 			
 		protected:
 			sf::Vector2f ComputeArea(const std::vector<Polygon>&);

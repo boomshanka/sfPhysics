@@ -1,5 +1,5 @@
-#include "Collision.hpp"
-#include "SAT.hpp"
+#include <sfPhysics/Collision.hpp>
+#include <sfPhysics/SAT.hpp>
 
 #include <cmath>
 
@@ -97,8 +97,8 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second) //F
 		{
 			for(int i=0; i<first.GetSeparatingAxis().GetAxisCount(); ++i)
 			{
-				float firstmax, secondmax;
-				float firstmin, secondmin;
+				float firstmax; float secondmax;
+				float firstmin; float secondmin;
 				
 				if(first.GetPointCount()>1)
 					firstmax=firstmin=first.ToGlobal(first.GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;

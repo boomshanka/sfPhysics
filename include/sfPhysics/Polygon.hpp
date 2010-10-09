@@ -1,8 +1,8 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+#include <sfPhysics/SFML_Graphics.hpp>
 
-#include "SFML_Graphics.hpp"
 #ifdef SFML_GRAPHICS_ENABLED
 #include <SFML/Graphics.hpp>
 #endif
@@ -16,9 +16,10 @@ namespace sfp
 {
 	enum PolygonType
 	{
-		Shape = 0,
+		Shape = 0, // oder Polygon
 		Rectangle,
 		Line,
+		Plane,
 		Circle
 	};
 	

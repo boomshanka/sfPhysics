@@ -1,4 +1,4 @@
-#include "Physicable.hpp"
+#include <sfPhysics/Physicable.hpp>
 
 #include <queue>
 
@@ -59,7 +59,7 @@ bool sfp::Physicable::SetRestitution(float restitution)
 
 bool sfp::Physicable::SetFriction(float friction)
 {
-	if(friction<0 || friction>1)
+	if(friction<0 || friction>1) //FIXME größere werte zulassen?
 		return false;
 	
 	myFriction=friction;
@@ -93,7 +93,7 @@ sf::Vector2f sfp::Physicable::ComputeArea(const std::vector<Polygon>& polygons) 
 std::pair<sf::Vector2f, float> sfp::Physicable::ComputeArea(const std::vector<sf::Vector2f>& points)
 {
 	std::queue<std::pair<sf::Vector2f, float> > center;
-	for(int i=2;i<points.size();++i)
+	for(unsigned int i=2;i<points.size();++i)
 	{
 		sfp::Vector2f line=points[0]-points[i-1];
 		float a=line.GetForce();
@@ -120,5 +120,21 @@ std::pair<sf::Vector2f, float> sfp::Physicable::ComputeArea(const std::vector<sf
 	
 	return pair; // return the center of gravity
 }
+
+
+
+
+void sfp::Physicable::Force(sf::Vector2f position, float direction, float force)
+{
+
+}
+
+
+void sfp::Physicable::Force(sf::Vector2f position, sfp::Vector2f force)
+{
+	
+}
+
+
 
 

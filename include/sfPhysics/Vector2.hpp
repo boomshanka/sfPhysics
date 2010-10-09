@@ -33,7 +33,7 @@ namespace sfp
 	
 
 
-	#include "Vector2.inl"
+	#include <sfPhysics/Vector2.inl>
 
 	// Define the most common types
 	typedef Vector2<int>   Vector2i;

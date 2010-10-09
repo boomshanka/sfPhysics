@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "Physics.hpp"
+#include <sfPhysics/Physics.hpp>
 
 
 int main()
@@ -57,11 +57,9 @@ int main()
 	object.SetRotation(0);
 	
 	
-	bool up(false), right(false), left(false);
-	
 	sf::Clock frametime;
 	unsigned int frames=0;
-
+	world.SetTimeFactor(2);
 	
 	while (window.IsOpened()) // Window Loop //
 	{

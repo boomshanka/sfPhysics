@@ -1,4 +1,4 @@
-#include "Environment.hpp"
+#include <sfPhysics/Environment.hpp>
 
 
 sfp::Environment::Environment()

@@ -2,7 +2,7 @@
 #define COLLISIONEVENT_HPP
 
 
-#include "Objects.hpp"
+#include <sfPhysics/Objects.hpp>
 
 
 namespace sfp
