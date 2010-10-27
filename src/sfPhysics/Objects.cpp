@@ -1,4 +1,4 @@
-#include "Objects.hpp"
+#include <sfPhysics/Objects.hpp>
 
 #include <cmath>
 
@@ -147,6 +147,18 @@ sfp::Object::Object(sf::Drawable& drawable)
 mySeparatingAxisEnabled(true)
 {
 	SetDrawable(drawable);
+}
+
+
+
+sfp::Object::Object(sf::Drawable& drawable, const Polygon& polygon)
+:mySeparatingAxis(NULL),
+mySeparatingAxisEnabled(true)
+{
+	myDrawable=&drawable;
+	
+	PolygonManager::SetPolygon(polygon);
+	ComputeArea();
 }
 
 

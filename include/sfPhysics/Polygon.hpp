@@ -1,8 +1,8 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+#include <sfPhysics/SFML_Graphics.hpp>
 
-#include "SFML_Graphics.hpp"
 #ifdef SFML_GRAPHICS_ENABLED
 #include <SFML/Graphics.hpp>
 #endif
@@ -16,10 +16,12 @@ namespace sfp
 {
 	enum PolygonType
 	{
-		Shape = 0,
+		Shape = 0, // oder Polygon
 		Rectangle,
 		Line,
-		Circle
+		Plane,
+		Circle,
+		NegCircle
 	};
 	
 	
@@ -31,9 +33,11 @@ namespace sfp
 			PolygonType myPolygonType;
 			std::vector<sf::Vector2f> myPoints;
 			
-			float myRadius;
+			sf::Vector2f myCircleCenter;
+			float myCircleRadius;
 		public:
 			Polygon();
+			Polygon(const Polygon&);
 			virtual ~Polygon() {}
 			
 			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
@@ -42,15 +46,18 @@ namespace sfp
 			virtual void SetPointPosition(unsigned int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}
 			virtual void SetPointPosition(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec;}
 			
-			virtual int GetPointCount() {return myPoints.size();}
-			virtual const sf::Vector2f& GetPoint(unsigned int index) {return myPoints[index];}
+			virtual int GetPointCount() const {return myPoints.size();};
+			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];};
 			
 			
-			PolygonType GetPolygonType() {return myPolygonType;}
+			PolygonType GetPolygonType() const {return myPolygonType;};
+			const sf::Vector2f& GetCircleCenter() const {return myCircleCenter;};
+			float GetCircleRadius() const {return myCircleRadius;};
 			
-			static Polygon Line(); //
 			static Polygon Rectangle();
-			static Polygon Circle();
+			static Polygon Line();
+			static Polygon Plane();
+			static Polygon Circle(const sf::Vector2f&, float);
 			
 	};
 

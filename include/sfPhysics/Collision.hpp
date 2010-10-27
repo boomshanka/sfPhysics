@@ -2,13 +2,13 @@
 #define COLLISION_HPP
 
 
-#include "Objects.hpp"
-#include "CollisionEvent.hpp"
+#include <sfPhysics/Objects.hpp>
+#include <sfPhysics/CollisionEvent.hpp>
 
 #include <SFML/Graphics.hpp>
 
 #include <list>
-#include <queue>
+#include <stack>
 
 
 
@@ -19,7 +19,7 @@ namespace sfp
 	{
 		private:
 			std::list<sfp::Object*> myObjects;
-			std::queue<CollisionEvent> myCollisionEvents;
+			std::stack<CollisionEvent> myCollisionEvents;
 			
 			bool myNoCollisionEventEnabled;
 		public:
@@ -36,6 +36,11 @@ namespace sfp
 			void UpdateCollisionEvents();
 			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
+			bool ShapeShape(sfp::Object&, sfp::Object&);
+			bool ShapePlane(sfp::Object&, sfp::Object&);
+			bool ShapeCircle(sfp::Object&, sfp::Object&);
+			bool PlaneCircle(sfp::Object&, sfp::Object&);
+			bool CircleCircle(sfp::Object&, sfp::Object&);
 	};
 }
 

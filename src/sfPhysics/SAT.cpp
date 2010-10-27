@@ -1,4 +1,4 @@
-#include "SAT.hpp"
+#include <sfPhysics/SAT.hpp>
 
 #include <cmath>
 

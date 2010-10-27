@@ -1,10 +1,10 @@
 #ifndef ENVIRONMENT_HPP
 #define ENVIRONMENT_HPP
 
-#include <SFML/Graphics.hpp>
+#include <sfPhysics/Objects.hpp>
+#include <sfPhysics/Collision.hpp>
 
-#include "Objects.hpp"
-#include "Collision.hpp"
+#include <SFML/Graphics.hpp>
 
 #include <iostream>
 #include <list>
@@ -26,6 +26,9 @@ namespace sfp
 			
 			void ReceiveFrameTime();
 			float GetFrameTime();
+			
+			void SetTimeFactor(float timefactor) {myTimefactor=timefactor;}
+			float GetTimeFactor() {return myTimefactor;}
 			
 			const sf::Vector2f& GetGravity() {return myGravity;}
 			void SetGravity(const sf::Vector2f& gravity) {myGravity=gravity;}

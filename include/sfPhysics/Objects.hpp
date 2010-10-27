@@ -2,11 +2,11 @@
 #define OBJECTS_HPP
 
 
-#include "SFML_Graphics.hpp"
-#include "PolygonManager.hpp"
-#include "Physicable.hpp"
+#include <sfPhysics/SFML_Graphics.hpp>
+#include <sfPhysics/PolygonManager.hpp>
+#include <sfPhysics/Physicable.hpp>
 
-#include "SAT.hpp"
+#include <sfPhysics/SAT.hpp>
 
 #include <vector>
 #include <SFML/System.hpp>
@@ -40,8 +40,8 @@ namespace sfp
 			sf::Vector2f myCenter;
 			float myRotation;
 			
-			bool mySeparatingAxisEnabled;
 			sfp::SeparatingAxis* mySeparatingAxis;
+			bool mySeparatingAxisEnabled;
 			
 			float mySatRotation;
 		public:
@@ -82,6 +82,7 @@ namespace sfp
 			Object(sf::Shape&);
 			Object(sf::Sprite&);
 			Object(sf::Drawable&);
+			Object(sf::Drawable&, const Polygon& polygon);
 			
 			Object(sf::Shape&, const sf::Vector2f&);
 			Object(sf::Sprite&, const sf::Vector2f&);
