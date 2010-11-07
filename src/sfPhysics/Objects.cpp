@@ -56,6 +56,7 @@ void sfp::Object::ComputeSeparatingAxis()
 void sfp::Object::SetCenter(const sf::Vector2f& center)
 {
 	Physicable::myCenter=center;
+	PolygonManager::SetPolygonCenter(center);
 	myCenter=center;
 	
 	delete mySeparatingAxis;
@@ -71,7 +72,7 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 
 
 
-sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local)
+sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 {
 	sf::Vector2f global=myPosition;
 	
@@ -85,7 +86,7 @@ sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local)
 }
 
 
-sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
+sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 {
 	sf::Vector2f local;
 	
@@ -99,7 +100,7 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global)
 	{
 		angle = asin(local.x/line);
 		if(local.y<0)
-			angle=3.141592654f-angle;
+			angle=3.141592654f-angle; //FIXME ist - wirklich richtig (nicht *)? Funktion überprüfen!!!
 	}
 	else
 	{
@@ -159,6 +160,8 @@ mySeparatingAxisEnabled(true)
 	
 	PolygonManager::SetPolygon(polygon);
 	ComputeArea();
+	myPosition=drawable.GetPosition();
+	myRotation=drawable.GetRotation();
 }
 
 

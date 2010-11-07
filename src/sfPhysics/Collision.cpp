@@ -56,7 +56,7 @@ bool sfp::Collision::GetCollision(sfp::CollisionEvent& event)
 
 
 
-void sfp::Collision::Bounce(sfp::Object& firstobject, sfp::Object& secondobject)
+void sfp::Collision::Bounce(sfp::CollisionEvent& collisinevent)
 {
 	
 }
@@ -104,14 +104,12 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 			{
 				case Shape:
 				case Rectangle:
-				case Line:
 					for(unsigned int j=0; j<second.GetConvexPolygonCount(); ++j) //Von Objekt 2
 					{
 						switch(second.GetConvexPolygon(j).GetPolygonType())
 						{
-							case Shape: //FIXME mit einem enum ersetzen
+							case Shape:
 							case Rectangle:
-							case Line:
 								//if(BoundingBoxes)
 									if(ShapeShape(first,second)) //FIXME beidseitig!
 										isCollided=true;
@@ -142,7 +140,6 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						{
 							case Shape:
 							case Rectangle:
-							case Line:
 								if(ShapePlane(second,first))
 									isCollided=true;
 							break;
@@ -169,7 +166,6 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						{
 							case Shape:
 							case Rectangle:
-							case Line:
 								//if(BoundingBoxes)
 									if(ShapeCircle(second,first))
 										isCollided=true;
@@ -182,7 +178,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							
 							case Circle:
 								//if(BoundingBoxes)
-									if(CircleCircle(first,second))
+									if(CircleCircle(first,second, i, j))
 										isCollided=true;
 							break;
 							
@@ -273,13 +269,18 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second)
 
 
 
-bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second)
+bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
-	sfp::Vector2f distance(first.ToGlobal(first.GetCircleCenter())-second.ToGlobal(second.GetCircleCenter()));
-	if(distance.GetForce() < (first.GetCircleRadius()+second.GetCircleRadius()))
-		return true;
+	sfp::Vector2f distance(first.ToGlobal(first.GetConvexPolygon(i).GetPolygonCenter())-second.ToGlobal(second.GetConvexPolygon(j).GetPolygonCenter()));
+	if(distance.GetForce() > (first.GetConvexPolygon(i).GetCircleRadius()+second.GetConvexPolygon(j).GetCircleRadius()))
+		return false;
 	
-	return false;
+	distance.AddForce(-first.GetConvexPolygon(i).GetCircleRadius());
+	distance.AddForce(-(second.GetConvexPolygon(j).GetCircleRadius()-distance.GetForce()/2));
+
+	myCollisionEvents.top().collisionpoints.push(distance);
+	
+	return true;
 }
 
 

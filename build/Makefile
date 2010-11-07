@@ -19,8 +19,8 @@ all: sfphysics
 
 sfphysics: $(LIBS)
 
-examples:
-	cd ../examples/build/make && $(MAKE)
+samples:
+	cd ../examples/build && $(MAKE)
 
 $(LIBS):
 	mkdir -p $(LIBPATH)
@@ -36,7 +36,7 @@ install:
 
 clean mrproper:
 	$(MAKE) $@ -f Makefile.physics
-	cd ../examples/build/make && $(MAKE) $@
+	cd ../examples/build && $(MAKE) $@
 
 .PHONY: clean mrproper
 

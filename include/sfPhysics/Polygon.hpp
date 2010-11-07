@@ -16,9 +16,9 @@ namespace sfp
 {
 	enum PolygonType
 	{
-		Shape = 0, // oder Polygon
+		Shape = 0,
 		Rectangle,
-		Line,
+//		Line,
 		Plane,
 		Circle,
 		NegCircle
@@ -33,7 +33,7 @@ namespace sfp
 			PolygonType myPolygonType;
 			std::vector<sf::Vector2f> myPoints;
 			
-			sf::Vector2f myCircleCenter;
+			sf::Vector2f myCenter;
 			float myCircleRadius;
 		public:
 			Polygon();
@@ -46,13 +46,16 @@ namespace sfp
 			virtual void SetPointPosition(unsigned int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}
 			virtual void SetPointPosition(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec;}
 			
-			virtual int GetPointCount() const {return myPoints.size();};
-			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];};
+			virtual int GetPointCount() const {return myPoints.size();}
+			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];}
 			
+			virtual void SetPolygonCenter(const sf::Vector2f& center) {myCenter=center;}
+			virtual const sf::Vector2f& GetPolygonCenter() const {return myCenter;}
 			
-			PolygonType GetPolygonType() const {return myPolygonType;};
-			const sf::Vector2f& GetCircleCenter() const {return myCircleCenter;};
-			float GetCircleRadius() const {return myCircleRadius;};
+			virtual PolygonType GetPolygonType() const {return myPolygonType;}
+			
+			virtual float GetCircleRadius() const {return myCircleRadius;}
+			//SetCircleRadius?
 			
 			static Polygon Rectangle();
 			static Polygon Line();

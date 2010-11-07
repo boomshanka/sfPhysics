@@ -30,7 +30,7 @@ namespace sfp
 			
 			bool GetCollision(sfp::CollisionEvent&);
 			
-			void Bounce(sfp::Object&, sfp::Object&);
+			void Bounce(sfp::CollisionEvent&);
 			
 		protected:
 			void UpdateCollisionEvents();
@@ -40,7 +40,7 @@ namespace sfp
 			bool ShapePlane(sfp::Object&, sfp::Object&);
 			bool ShapeCircle(sfp::Object&, sfp::Object&);
 			bool PlaneCircle(sfp::Object&, sfp::Object&);
-			bool CircleCircle(sfp::Object&, sfp::Object&);
+			bool CircleCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 	};
 }
 

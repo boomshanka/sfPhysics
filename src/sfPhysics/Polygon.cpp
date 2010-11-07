@@ -15,7 +15,7 @@ sfp::Polygon::Polygon()
 sfp::Polygon::Polygon(const Polygon& polygon)
 :myPolygonType(polygon.myPolygonType),
 myPoints(polygon.myPoints),
-myCircleCenter(polygon.myCircleCenter),
+myCenter(polygon.myCenter),
 myCircleRadius(polygon.myCircleRadius)
 {
 	
@@ -52,7 +52,7 @@ sfp::Polygon sfp::Polygon::Circle(const sf::Vector2f& center, float radius)
 	Polygon polygon;
 	
 	polygon.myPolygonType=sfp::Circle;
-	polygon.myCircleCenter=center;
+	polygon.myCenter=center;
 	polygon.myCircleRadius=radius;
 	
 	return polygon;

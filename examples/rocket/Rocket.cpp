@@ -41,6 +41,7 @@ int main()
 	
 	bottom.SetPosition(100,500);
 	shape.SetPosition(300,200);
+	circle2.SetPosition(0,500);
 	
 	
 	sfp::Object object(shape);
@@ -66,11 +67,13 @@ int main()
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
-	world.SetTimeFactor(2);
+	//world.SetTimeFactor(2);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
 		world.ReceiveFrameTime();
+		
+		pCircle.Rotate(sfp::Time::ElapsedTime*50);
 		
 		while(window.GetEvent(event))
 		{

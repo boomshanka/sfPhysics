@@ -4,6 +4,9 @@
 
 #include <sfPhysics/Objects.hpp>
 
+#include <stack>
+#include <utility>
+
 
 namespace sfp
 {
@@ -21,6 +24,8 @@ namespace sfp
 		private:
 			sfp::Object* firstobject;
 			sfp::Object* secondobject;
+			
+			std::stack<sf::Vector2f> collisionpoints;
 		public:
 			CollisionEvent() : CollisionTime(0) {}
 			CollisionEvent(sfp::Object& first, sfp::Object& second) { firstobject=&first; secondobject=&second; }

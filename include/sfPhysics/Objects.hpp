@@ -53,7 +53,7 @@ namespace sfp
 			void ComputeArea() {SetCenter(Physicable::ComputeArea(PolygonManager::myConvexPolygons));}
 			
 			void EnableSeparatingAxis(bool enabled) {mySeparatingAxisEnabled=enabled;}
-			bool IsSeparatingAxisEnabled() {return mySeparatingAxisEnabled;}
+			bool IsSeparatingAxisEnabled() const {return mySeparatingAxisEnabled;}
 			
 			void ComputeSeparatingAxis();
 			sfp::SeparatingAxis& GetSeparatingAxis() {return *mySeparatingAxis;}
@@ -67,13 +67,13 @@ namespace sfp
 			
 			void SetCenter(const sf::Vector2f&);
 			
-			const sf::Vector2f& GetPosition() {return myPosition;}
-			float GetRotation() {return myRotation;}
-			const sf::Vector2f& GetCenter() {return myCenter;}
+			const sf::Vector2f& GetPosition() const {return myPosition;}
+			float GetRotation() const {return myRotation;}
+			const sf::Vector2f& GetCenter() const {return myCenter;}
 			
 			
-			sf::Vector2f ToGlobal(const sf::Vector2f&);
-			sf::Vector2f ToLocal(const sf::Vector2f&);
+			sf::Vector2f ToGlobal(const sf::Vector2f&) const;
+			sf::Vector2f ToLocal(const sf::Vector2f&) const;
 			
 			#ifdef SFML_GRAPHICS_ENABLED
 		private:

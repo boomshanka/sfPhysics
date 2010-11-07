@@ -9,7 +9,7 @@ void sfp::SeparatingAxis::ComputeSeperatingAxix(sfp::Object& object)
 	
 	switch(object.GetPolygonType())
 	{
-		case sfp::Circle:
+		case sfp::Plane:
 			
 			break;
 			
@@ -18,11 +18,11 @@ void sfp::SeparatingAxis::ComputeSeperatingAxix(sfp::Object& object)
 			AddAx(object.ToGlobal(object.GetPoint(1)), object.ToGlobal(object.GetPoint(2)));
 			break;
 			
-		case sfp::Line:
+/*		case sfp::Line:
 			AddAx(object.ToGlobal(object.GetPoint(0)), object.ToGlobal(object.GetPoint(1)));
-			break;
+			break;*/
 		
-		default:
+		case sfp::Shape:
 			if(object.GetPointCount()>1)
 				AddAx(object.ToGlobal(object.GetPoint(object.GetPointCount()-1)),object.ToGlobal(object.GetPoint(0)));
 			for(int i=1;i<object.GetPointCount();++i)
@@ -31,6 +31,9 @@ void sfp::SeparatingAxis::ComputeSeperatingAxix(sfp::Object& object)
 			}
 			break;
 		
+		default:
+			break;
+			
 	}
 }
 

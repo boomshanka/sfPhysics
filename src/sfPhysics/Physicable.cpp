@@ -6,7 +6,7 @@
 
 
 sfp::Physicable::Physicable()
-:myRotationSpeed(0), myArea(10),
+:myRotationSpeed(0), myArea(10), myInertiaMoment(10),
 myMass(10), myDensity(1), myRestitution(0), myFriction(0)
 {
 
@@ -50,7 +50,7 @@ bool sfp::Physicable::SetArea(float area)
 
 bool sfp::Physicable::SetRestitution(float restitution)
 {
-	if(restitution<0 || restitution>1)
+	if(restitution<0 || restitution>1) //FIXME größere werte zulassen?
 		return false;
 	
 	myRestitution=restitution;
@@ -70,45 +70,74 @@ bool sfp::Physicable::SetFriction(float friction)
 
 
 
-sf::Vector2f sfp::Physicable::ComputeArea(const std::vector<Polygon>& polygons) //FIXME UNBEDiNGT TESTEN!
+sf::Vector2f sfp::Physicable::ComputeArea(std::vector<sfp::Polygon>& polygons) //FIXME nicht getestet. Diese Funktionen müssen teils nach Polygon & PolygonManager
 {
 	myArea=0;
+	myInertiaMoment=10; //Falls nicht berechnet werden kann.
 	
-	unsigned int i=0;
-	bool running=true;
+	if(polygons.size()==0) return sf::Vector2f(0,0);
+	
 	std::pair<sf::Vector2f, float> pair;
+//	float pairMoment;
 	
-	while(running)
+	switch(polygons[0].GetPolygonType())
 	{
+		case Shape:
+			pair=ComputeArea(polygons[0].myPoints);
+			polygons[0].SetPolygonCenter(pair.first);
+//			pairMoment=10; //FIXME
+			break;
+		
+		case Circle:
+			pair=ComputeArea(polygons[0].GetPolygonCenter(),polygons[0].GetCircleRadius());
+//			pairMoment=0.5*myMass*polygons[0].GetCircleRadius();
+			break;
+		
+		default:
+			return sf::Vector2f(0,0);
+			break;
+	}
+	
+	for(unsigned int i=1; i<polygons.size(); ++i)
+	{
+		std::pair<sf::Vector2f, float> temp;
+//		float tempMoment;
+		
 		switch(polygons[i].GetPolygonType())
 		{
 			case Shape:
 			case Rectangle:
-			case Line:
-				pair=ComputeArea(polygons[i].myPoints);
-				running=false;
+				temp=ComputeArea(polygons[i].myPoints);
+				polygons[i].SetPolygonCenter(pair.first);
+//				tempMoment=10; //FIXME
 				break;
 			
 			case Circle:
-				myArea+=polygons[i].GetCircleRadius()*polygons[i].GetCircleRadius()*M_PI;
+				temp=ComputeArea(polygons[i].GetPolygonCenter(),polygons[i].GetCircleRadius());
+				//Berechne den Trägheitsmoment
+//				tempMoment=0.5*myMass*polygons[i].GetCircleRadius();
 				break;
 			
 			default:
 				return sf::Vector2f(0,0);
 				break;
 		}
-		++i;
-	}
-	
-	for(; i<polygons.size(); ++i)
-	{
-		std::pair<sf::Vector2f, float> temp=ComputeArea(polygons[i].myPoints);
 		
-		sf::Vector2f diff(temp.first-pair.first);
+		//Schwerpunkte addieren
+		sfp::Vector2f diff(temp.first-pair.first);
 		diff*=(temp.second/(temp.second+pair.second));
+		//Trägheitsmoment Verschieben
+//		pairMoment=pairMoment+pair.second*(diff.GetForce()*diff.GetForce())
+		//
 		pair.first+=diff;
 		pair.second+=temp.second;
+		//Trägheitsmoment Verschieben & addieren
+//		sfp::Vector2f centerdiff(temp.first-pair.first);
+//		pairMoment
+		//
 	}
+	
+//	myInertiaMoment=pairMoment;
 	
 	return pair.first;
 }
@@ -148,14 +177,24 @@ std::pair<sf::Vector2f, float> sfp::Physicable::ComputeArea(const std::vector<sf
 
 
 
+std::pair<sf::Vector2f, float> sfp::Physicable::ComputeArea(const sf::Vector2f& center, float radius)
+{
+	float area= M_PI * radius*radius;
+	
+	myArea+=area;
+	return std::make_pair(center, area);
+}
 
-void sfp::Physicable::Force(sf::Vector2f position, float direction, float force)
+
+
+
+void sfp::Physicable::Force(const sf::Vector2f& position, float direction, float force)
 {
 
 }
 
 
-void sfp::Physicable::Force(sf::Vector2f position, sfp::Vector2f force)
+void sfp::Physicable::Force(const sf::Vector2f& position, const sfp::Vector2f& force)
 {
 	
 }

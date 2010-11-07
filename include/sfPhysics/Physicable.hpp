@@ -21,9 +21,9 @@ namespace sfp
 			float myRotationSpeed;
 			
 			sf::Vector2f myCenter;	//Center of gravity
-			
-			//	Properties	//
 			float myArea;
+			float myInertiaMoment;	//Trägheitsmoment
+			
 			float myMass;
 			float myDensity;
 			float myRestitution;	//Abprallkraft
@@ -36,14 +36,14 @@ namespace sfp
 			void SetImpulse(sfp::Vector2f impulse) {mySpeed=impulse/myMass;}
 			
 			void SetRotationSpeed(float speed) {myRotationSpeed=speed;}
-			void SetRotationForce(float force); //FIXME
+			void SetRotationForce(float force) {myRotationSpeed=2*force/myInertiaMoment;}
 			
 			
-			sfp::Vector2f GetSpeed() {return mySpeed;}
-			sfp::Vector2f GetImpulse() {return mySpeed*myMass;}
+			sfp::Vector2f GetSpeed() const {return mySpeed;}
+			sfp::Vector2f GetImpulse() const {return mySpeed*myMass;}
 			
-			float GetRotationSpeed() {return myRotationSpeed;}
-			float GetRotationForce(); //FIXME
+			float GetRotationSpeed() const {return myRotationSpeed;}
+			float GetRotationForce() const {return 0.5*myRotationSpeed*myInertiaMoment;}
 			
 			
 			
@@ -53,19 +53,20 @@ namespace sfp
 			bool SetRestitution(float);
 			bool SetFriction(float);
 			
-			float GetMass() {return myMass;}
-			float GetDensity() {return myDensity;}
-			float GetArea() {return myArea;}
-			float GetRestitution() {return myRestitution;}
-			float GetFriction() {return myFriction;}
+			float GetMass() const {return myMass;}
+			float GetDensity() const {return myDensity;}
+			float GetArea() const {return myArea;}
+			float GetRestitution() const {return myRestitution;}
+			float GetFriction() const {return myFriction;}
 			
 			
-			void Force(sf::Vector2f position, float direction, float force);
-			void Force(sf::Vector2f position, sfp::Vector2f force); //FIXME
+			void Force(const sf::Vector2f& position, float direction, float force);
+			void Force(const sf::Vector2f& position, const sfp::Vector2f& force); //FIXME
 			
 		protected:
-			sf::Vector2f ComputeArea(const std::vector<Polygon>&);
+			sf::Vector2f ComputeArea(std::vector<sfp::Polygon>&);
 			std::pair<sf::Vector2f, float> ComputeArea(const std::vector<sf::Vector2f>&);
+			std::pair<sf::Vector2f, float> ComputeArea(const sf::Vector2f&, float);
 			
 	};
 

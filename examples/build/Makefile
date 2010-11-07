@@ -1,7 +1,9 @@
-export SRCROOT  = ../..
+export SRCROOT  = ..
 export CPP      = g++
 export CFLAGS   = -W -Wall -ansi -g -O2 -DNDEBUG -I../../include
 export EXAMPLES = rocket
+
+samples: all
 
 all: $(EXAMPLES)
 
