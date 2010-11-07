@@ -18,6 +18,7 @@ namespace sfp
 			
 		public:
 			PolygonManager();
+			//copyconstructor
 			
 			// Funktionen von Polygon
 			
@@ -29,6 +30,10 @@ namespace sfp
 			
 			inline int GetPointCount() const {return Polygon::GetPointCount();}
 			inline const sf::Vector2f& GetPoint(unsigned int index) const {return Polygon::GetPoint(index);}
+			
+			inline const sf::Vector2f& GetPolygonCenter() const {return Polygon::GetPolygonCenter();}
+			inline float GetPolygonArea() const {return Polygon::GetPolygonArea();}
+			inline float GetPolygonInertiaMoment() const {return Polygon::GetPolygonInertiaMoment();}
 			
 			// Funktionen von PolManager
 			
@@ -45,7 +50,7 @@ namespace sfp
 			
 		protected:
 			void ComputeConvexPolygons();
-			
+			void ComputeArea();
 	};
 
 } // namespace

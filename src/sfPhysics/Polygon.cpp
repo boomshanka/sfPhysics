@@ -15,11 +15,20 @@ sfp::Polygon::Polygon()
 sfp::Polygon::Polygon(const Polygon& polygon)
 :myPolygonType(polygon.myPolygonType),
 myPoints(polygon.myPoints),
-myCenter(polygon.myCenter),
-myCircleRadius(polygon.myCircleRadius)
+myCircleRadius(polygon.myCircleRadius),
+myCenter(polygon.myCenter), myArea(polygon.myArea), myInertiaMoment(polygon.myInertiaMoment)
 {
 	
 }
+
+
+
+
+void sfp::Polygon::ComputeArea()
+{
+	
+}
+
 
 
 
@@ -57,6 +66,7 @@ sfp::Polygon sfp::Polygon::Circle(const sf::Vector2f& center, float radius)
 	
 	return polygon;
 }
+
 
 
 

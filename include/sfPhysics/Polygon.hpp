@@ -33,8 +33,11 @@ namespace sfp
 			PolygonType myPolygonType;
 			std::vector<sf::Vector2f> myPoints;
 			
-			sf::Vector2f myCenter;
 			float myCircleRadius;
+			
+			sf::Vector2f myCenter;
+			float myArea;
+			float myInertiaMoment;
 		public:
 			Polygon();
 			Polygon(const Polygon&);
@@ -49,19 +52,25 @@ namespace sfp
 			virtual int GetPointCount() const {return myPoints.size();}
 			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];}
 			
-			virtual void SetPolygonCenter(const sf::Vector2f& center) {myCenter=center;}
-			virtual const sf::Vector2f& GetPolygonCenter() const {return myCenter;}
-			
 			virtual PolygonType GetPolygonType() const {return myPolygonType;}
 			
 			virtual float GetCircleRadius() const {return myCircleRadius;}
 			//SetCircleRadius?
+			
+			
+			virtual const sf::Vector2f& GetPolygonCenter() const {return myCenter;}
+			virtual float GetPolygonArea() const {return myArea;}
+			virtual float GetPolygonInertiaMoment() const {return myInertiaMoment;}
+			
+			
 			
 			static Polygon Rectangle();
 			static Polygon Line();
 			static Polygon Plane();
 			static Polygon Circle(const sf::Vector2f&, float);
 			
+		protected:
+			virtual void ComputeArea();
 	};
 
 } // namespace

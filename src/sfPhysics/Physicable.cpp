@@ -84,7 +84,7 @@ sf::Vector2f sfp::Physicable::ComputeArea(std::vector<sfp::Polygon>& polygons) /
 	{
 		case Shape:
 			pair=ComputeArea(polygons[0].myPoints);
-			polygons[0].SetPolygonCenter(pair.first);
+//			polygons[0].SetPolygonCenter(pair.first);
 //			pairMoment=10; //FIXME
 			break;
 		
@@ -108,7 +108,7 @@ sf::Vector2f sfp::Physicable::ComputeArea(std::vector<sfp::Polygon>& polygons) /
 			case Shape:
 			case Rectangle:
 				temp=ComputeArea(polygons[i].myPoints);
-				polygons[i].SetPolygonCenter(pair.first);
+//				polygons[i].SetPolygonCenter(pair.first);
 //				tempMoment=10; //FIXME
 				break;
 			

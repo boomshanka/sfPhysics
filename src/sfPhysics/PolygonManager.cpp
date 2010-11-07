@@ -2,7 +2,6 @@
 #include <sfPhysics/Vector2.hpp>
 
 
-#include <iostream>
 sfp::PolygonManager::PolygonManager()
 {
 	myConvexPolygons.push_back(Polygon());
@@ -28,7 +27,7 @@ void sfp::PolygonManager::SetPointPosition(unsigned int index, const sf::Vector2
 
 
 
-void sfp::PolygonManager::SetPolygon(const Polygon& polygon)
+void sfp::PolygonManager::SetPolygon(const Polygon& polygon) //FIXME zeigt this möglicherweise auf polygon?
 {
 	Polygon* thispolygon=this;
 	*thispolygon=polygon;
@@ -85,6 +84,13 @@ void sfp::PolygonManager::ComputeConvexPolygons() //FIXME!!! diese funktion stim
 		}
 	}
 	std::cerr<<myConvexPolygons.size()<<"\n";*/
+}
+
+
+
+void sfp::PolygonManager::ComputeArea()
+{
+	
 }
 
 

@@ -56,7 +56,7 @@ void sfp::Object::ComputeSeparatingAxis()
 void sfp::Object::SetCenter(const sf::Vector2f& center)
 {
 	Physicable::myCenter=center;
-	PolygonManager::SetPolygonCenter(center);
+//	PolygonManager::SetPolygonCenter(center);
 	myCenter=center;
 	
 	delete mySeparatingAxis;
