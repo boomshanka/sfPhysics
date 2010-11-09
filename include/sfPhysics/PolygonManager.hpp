@@ -10,9 +10,7 @@ namespace sfp
 {
 
 	class PolygonManager : public Polygon
-	{
-		friend class Object;
-		
+	{	
 		private:
 			std::vector<Polygon> myConvexPolygons;
 			
@@ -40,9 +38,9 @@ namespace sfp
 			unsigned int GetConvexPolygonCount() const {return myConvexPolygons.size();}
 			const Polygon& GetConvexPolygon(unsigned int index) const {return myConvexPolygons[index];}
 			
-			void AddConvexPolygon(const Polygon& pol) {myConvexPolygons.push_back(pol);}
-			void SetConvexPolygon(unsigned int index, const Polygon& polygon) {myConvexPolygons[index]=polygon;}
-			void RemoveConvexPolygon(unsigned int index) {myConvexPolygons.erase(myConvexPolygons.begin()+index);}
+			void AddConvexPolygon(const Polygon& pol) {myConvexPolygons.push_back(pol); ComputeArea();}
+			void SetConvexPolygon(unsigned int index, const Polygon& polygon) {myConvexPolygons[index]=polygon; ComputeArea();}
+			void RemoveConvexPolygon(unsigned int index) {myConvexPolygons.erase(myConvexPolygons.begin()+index); ComputeArea();}
 			
 			const sf::Vector2f& GetPoint(unsigned int polygon, unsigned int index) const {return myConvexPolygons[polygon].GetPoint(index);}
 			

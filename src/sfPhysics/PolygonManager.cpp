@@ -4,7 +4,7 @@
 
 sfp::PolygonManager::PolygonManager()
 {
-	myConvexPolygons.push_back(Polygon());
+	myConvexPolygons.push_back(Polygon());//FIXME
 }
 
 
@@ -14,6 +14,7 @@ void sfp::PolygonManager::AddPoint(const sf::Vector2f& vec)
 	Polygon::AddPoint(vec);
 	
 	ComputeConvexPolygons();
+	ComputeArea();
 }
 
 
@@ -23,6 +24,7 @@ void sfp::PolygonManager::SetPointPosition(unsigned int index, const sf::Vector2
 	Polygon::SetPointPosition(index, vec);
 	
 	ComputeConvexPolygons();
+	ComputeArea();
 }
 
 
@@ -33,6 +35,7 @@ void sfp::PolygonManager::SetPolygon(const Polygon& polygon) //FIXME zeigt this 
 	*thispolygon=polygon;
 	
 	ComputeConvexPolygons();
+	ComputeArea();
 }
 
 
@@ -90,7 +93,26 @@ void sfp::PolygonManager::ComputeConvexPolygons() //FIXME!!! diese funktion stim
 
 void sfp::PolygonManager::ComputeArea()
 {
+	Polygon::myCenter=sf::Vector2f(0,0);
+	Polygon::myArea=0;
+	Polygon::myInertiaMoment=0;
 	
+	for(unsigned int i=0; i<myConvexPolygons.size(); ++i)
+	{
+		//Schwerpunkte addieren
+		sfp::Vector2f diff(myConvexPolygons[i].GetPolygonCenter()-myCenter);
+		diff*=(myConvexPolygons[i].GetPolygonArea()/(myConvexPolygons[i].GetPolygonArea()+myArea));
+		myCenter+=diff;
+		
+		//Trägheitsmoment verschieben
+		myInertiaMoment += myArea * std::pow(diff.GetForce(),2);
+		//Trägheitsmoment von Objekt verschieben & addieren
+		diff=(myConvexPolygons[i].GetPolygonCenter()-(myCenter-diff))-diff;
+		myInertiaMoment += myConvexPolygons[i].GetPolygonInertiaMoment() + myConvexPolygons[i].GetPolygonArea() * std::pow(diff.GetForce(),2);
+		
+		//Fläche addieren
+		myArea+=myConvexPolygons[i].GetPolygonArea();
+	}
 }
 
 

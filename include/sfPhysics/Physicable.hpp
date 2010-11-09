@@ -32,14 +32,17 @@ namespace sfp
 		public:
 			Physicable();
 			
-			void SetSpeed(sfp::Vector2f speed) {mySpeed=speed;}
-			void SetImpulse(sfp::Vector2f impulse) {mySpeed=impulse/myMass;}
+			void SetSpeed(const sfp::Vector2f& speed) {mySpeed=speed;}
+			void AddSpeed(const sfp::Vector2f& speed) {mySpeed+=speed;}
+			
+			void SetImpulse(const sfp::Vector2f& impulse) {mySpeed= impulse/myMass;}
+			void AddImpulse(const sfp::Vector2f& impulse) {mySpeed+= impulse/myMass;}
 			
 			void SetRotationSpeed(float speed) {myRotationSpeed=speed;}
 			void SetRotationForce(float force) {myRotationSpeed=2*force/myInertiaMoment;}
 			
 			
-			sfp::Vector2f GetSpeed() const {return mySpeed;}
+			const sfp::Vector2f& GetSpeed() const {return mySpeed;}
 			sfp::Vector2f GetImpulse() const {return mySpeed*myMass;}
 			
 			float GetRotationSpeed() const {return myRotationSpeed;}
@@ -64,9 +67,9 @@ namespace sfp
 			void Force(const sf::Vector2f& position, const sfp::Vector2f& force); //FIXME
 			
 		protected:
-			sf::Vector2f ComputeArea(std::vector<sfp::Polygon>&);
-			std::pair<sf::Vector2f, float> ComputeArea(const std::vector<sf::Vector2f>&);
-			std::pair<sf::Vector2f, float> ComputeArea(const sf::Vector2f&, float);
+//			sf::Vector2f ComputeArea(std::vector<sfp::Polygon>&);
+//			std::pair<sf::Vector2f, float> ComputeArea(const std::vector<sf::Vector2f>&);
+//			std::pair<sf::Vector2f, float> ComputeArea(const sf::Vector2f&, float);
 			
 	};
 

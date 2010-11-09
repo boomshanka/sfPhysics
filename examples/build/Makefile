@@ -1,5 +1,5 @@
 export SRCROOT  = ..
-export CPP      = g++
+export CPP      = colorgcc ##g++
 export CFLAGS   = -W -Wall -ansi -g -O2 -DNDEBUG -I../../include
 export EXAMPLES = rocket
 

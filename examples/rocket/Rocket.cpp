@@ -79,14 +79,14 @@ int main()
 		{
 			if (event.Type == sf::Event::Closed) window.Close();
 			
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::A) ;//world.SetGravity(5+world.GetGravity());
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) ;//world.SetGravity(world.GetGravity()-5);
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::A) world.SetGravity(world.GetGravity()+sf::Vector2f(0,10));
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,10));
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) pCircle.SetImpulse(pCircle.GetImpulse()+sf::Vector2f(0,-1400*sfp::Time::ElapsedTime));
-		if(Input.IsKeyDown(sf::Key::Down)) pCircle.SetImpulse(pCircle.GetImpulse()+sf::Vector2f(0,500*sfp::Time::ElapsedTime));
-		if(Input.IsKeyDown(sf::Key::Right)) pCircle.SetImpulse(pCircle.GetImpulse()+sf::Vector2f(350*sfp::Time::ElapsedTime,0));
-		if(Input.IsKeyDown(sf::Key::Left)) pCircle.SetImpulse(pCircle.GetImpulse()+sf::Vector2f(-350*sfp::Time::ElapsedTime,0));
+		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-1600000*sfp::Time::ElapsedTime));
+		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,785300*sfp::Time::ElapsedTime));
+		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(785300*sfp::Time::ElapsedTime,0));
+		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-785300*sfp::Time::ElapsedTime,0));
 		
 		mouse_x=Input.GetMouseX();
 		mouse_y=Input.GetMouseY();

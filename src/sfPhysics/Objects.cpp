@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-
+#include <iostream>
 float sfp::Time::ElapsedTime=0;
 sf::Clock sfp::Time::Frametime = sf::Clock();
 
@@ -40,6 +40,19 @@ sfp::Object::~Object()
 
 
 
+void sfp::Object::ComputeArea()
+{
+	PolygonManager::ComputeArea();
+	
+	SetCenter(PolygonManager::myCenter);
+	Physicable::SetArea(PolygonManager::myArea);
+	Physicable::myInertiaMoment=PolygonManager::myInertiaMoment*Physicable::myDensity; //FIXME fläche muss rausgekürzt werden (bzw mit Dichte multiplizieren)
+	std::cerr<<Physicable::myInertiaMoment<<std::endl;
+	//in Physicable muss myInertiaMoment bei masse/dichteveränderungen angepasst werden!
+}
+
+
+
 
 void sfp::Object::ComputeSeparatingAxis()
 {
@@ -55,11 +68,9 @@ void sfp::Object::ComputeSeparatingAxis()
 
 void sfp::Object::SetCenter(const sf::Vector2f& center)
 {
-	Physicable::myCenter=center;
-//	PolygonManager::SetPolygonCenter(center);
-	myCenter=center;
+	myCenter=Physicable::myCenter=center;
 	
-	delete mySeparatingAxis;
+	delete mySeparatingAxis; //FIXME wirklich nötig?
 	mySeparatingAxis=NULL;
 	
 	#ifdef SFML_GRAPHICS_ENABLED

@@ -50,7 +50,7 @@ namespace sfp
 			~Object();
 			
 			// //
-			void ComputeArea() {SetCenter(Physicable::ComputeArea(PolygonManager::myConvexPolygons));}
+			void ComputeArea();//FIXME überlegen, wann sie aufgerufen wird und schauen, ob man bei Polygon & PolygonManager aufrufen von ComputeArea sparen kann. Überschreiben prüfen
 			
 			void EnableSeparatingAxis(bool enabled) {mySeparatingAxisEnabled=enabled;}
 			bool IsSeparatingAxisEnabled() const {return mySeparatingAxisEnabled;}
