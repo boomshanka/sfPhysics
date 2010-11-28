@@ -2,7 +2,7 @@
 
 
 sfp::Environment::Environment()
-: myGravity(sf::Vector2f(0,10)), myTimefactor(1)
+: myGravity(sf::Vector2f(0,10)), myTimefactor(1), myLengthfactor(1)
 {
 	
 }
@@ -75,7 +75,7 @@ void sfp::Environment::MoveDrawables()
 	{
 		if((*it)->GetDrawable()!=NULL)
 		{
-			(*it)->GetDrawable()->SetPosition((*it)->GetPosition());
+			(*it)->GetDrawable()->SetPosition((*it)->GetPosition()*myLengthfactor);
 			(*it)->GetDrawable()->SetRotation((*it)->GetRotation());
 		}
 	}

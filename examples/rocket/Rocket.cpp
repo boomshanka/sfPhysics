@@ -23,7 +23,13 @@ int main()
 	int mouse_x, mouse_y;
 	
 	
-	sf::Shape shape, bottom, circle=sf::Shape::Circle(50,50,50,sf::Color::White), circle2=sf::Shape::Circle(50,500,50,sf::Color::White);
+	sf::Shape shape, bottom, circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
+	circle2=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
+	
+	circle.SetPointColor(0,sf::Color::Yellow);
+	circle2.SetPointColor(0,sf::Color::Yellow);
+	circle.SetPointColor(1,sf::Color::Yellow);
+	circle2.SetPointColor(1,sf::Color::Yellow);
 	
 	//sfp::Object pShape(shape); sfp::Object pBottom(bottom); sfp::Object pBalken(balken);
 	
@@ -41,18 +47,21 @@ int main()
 	
 	bottom.SetPosition(100,500);
 	shape.SetPosition(300,200);
-	circle2.SetPosition(0,500);
+	circle.SetPosition(50,50);
+	circle2.SetPosition(50,500);
 	
 	
-	sfp::Object object(shape);
-	sfp::Object foo(bottom);
-	sfp::Object pCircle(circle, sfp::Polygon::Circle(sf::Vector2f(50,50),50));
-	sfp::Object pCircle2(circle2, sfp::Polygon::Circle(sf::Vector2f(50,500),50));
-	
+	sfp::Object object(shape,10);
+	sfp::Object foo(bottom,10);
+	sfp::Object pCircle(circle, sfp::Polygon::Circle(sf::Vector2f(5,5),5),10);
+	sfp::Object pCircle2(circle2, sfp::Polygon::Circle(sf::Vector2f(5,5),5),10);
 	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
+	
+	world.SetLengthFactor(10);
+	//world.SetTimeFactor(1);
 	
 	world.AddObject(object);
 	world.AddObject(pCircle);
@@ -62,18 +71,17 @@ int main()
 	collision.AddObject(pCircle2);
 	
 	
-	object.SetRotation(0);
+	//object.SetRotation(0);
 	
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
-	//world.SetTimeFactor(2);
+	
+	pCircle.SetRotationSpeed(50);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
 		world.ReceiveFrameTime();
-		
-		pCircle.Rotate(sfp::Time::ElapsedTime*50);
 		
 		while(window.GetEvent(event))
 		{
@@ -83,10 +91,15 @@ int main()
 			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,10));
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-1600000*sfp::Time::ElapsedTime));
-		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,785300*sfp::Time::ElapsedTime));
-		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(785300*sfp::Time::ElapsedTime,0));
-		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-785300*sfp::Time::ElapsedTime,0));
+		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-1600*sfp::Time::ElapsedTime));
+		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,785*sfp::Time::ElapsedTime));
+		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(785*sfp::Time::ElapsedTime,0));
+		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-785*sfp::Time::ElapsedTime,0));
+		
+		//FIXME Test
+		pCircle.Force(sfp::Vector2f(0,5),sfp::Vector2f(0,-785.4*sfp::Time::ElapsedTime));
+		pCircle.AddRotationSpeed(-pCircle.GetRotationSpeed()*0.1*sfp::Time::ElapsedTime);
+		//pCircle.AddRotationImpulse(500*sfp::Time::ElapsedTime);
 		
 		mouse_x=Input.GetMouseX();
 		mouse_y=Input.GetMouseY();

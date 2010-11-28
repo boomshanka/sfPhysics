@@ -3,7 +3,7 @@
 #include <cmath>
 
 
-
+#include <iostream>
 sfp::Polygon::Polygon()
 :myPolygonType(Shape), myCircleRadius(0)
 {
@@ -76,7 +76,8 @@ void sfp::Polygon::ComputeShapeArea()
 void sfp::Polygon::ComputeCircleArea()
 {
 	myArea = M_PI * myCircleRadius*myCircleRadius;
-	myInertiaMoment = 0.5 * myArea * myCircleRadius*myCircleRadius; //FIXME *myArea richtig??
+	myInertiaMoment = 0.5 * myArea * myCircleRadius*myCircleRadius; //Später wird Dichte dazu multipliziert (Fläche*Dichte=Gewicht)
+	std::cerr<<myInertiaMoment<<";\n";
 }
 
 

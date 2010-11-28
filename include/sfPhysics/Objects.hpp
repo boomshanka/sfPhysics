@@ -75,20 +75,23 @@ namespace sfp
 			sf::Vector2f ToGlobal(const sf::Vector2f&) const;
 			sf::Vector2f ToLocal(const sf::Vector2f&) const;
 			
-			#ifdef SFML_GRAPHICS_ENABLED
+			void Force(const sf::Vector2f& position, const sfp::Vector2f& force);
+			
+			#ifdef SFML_GRAPHICS_ENABLED //FIXME lengthfactor darf nie null sein!!
 		private:
 			sf::Drawable* myDrawable;
+			float myLengthfactor;
 		public:
-			Object(sf::Shape&);
-			Object(sf::Sprite&);
-			Object(sf::Drawable&);
-			Object(sf::Drawable&, const Polygon& polygon);
+			Object(sf::Shape&, float lengthfactor=1);
+			Object(sf::Sprite&, float lengthfactor=1);
+			Object(sf::Drawable&, float lengthfactor=1);
+			Object(sf::Drawable&, const Polygon& polygon, float lengthfactor=1);
 			
 			Object(sf::Shape&, const sf::Vector2f&);
 			Object(sf::Sprite&, const sf::Vector2f&);
 			Object(sf::Drawable&, const sf::Vector2f&);
 			
-			void SetShape(sf::Shape&);
+			void SetShape(sf::Shape&); //FIXME!!
 			void SetSprite(sf::Sprite&);
 			void SetDrawable(sf::Drawable&);
 			
@@ -98,6 +101,9 @@ namespace sfp
 			
 			sf::Drawable* GetDrawable() {return myDrawable;}
 			void RemoveDrawable() {myDrawable=NULL;}
+			
+			void SetLengthFactor(float);
+			float GetLengthFactor() const {return myLengthfactor;}
 			#endif
 	};
 		

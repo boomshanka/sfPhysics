@@ -69,17 +69,4 @@ bool sfp::Physicable::SetFriction(float friction)
 
 
 
-void sfp::Physicable::Force(const sf::Vector2f& position, float direction, float force)
-{
-
-}
-
-
-void sfp::Physicable::Force(const sf::Vector2f& position, const sfp::Vector2f& force)
-{
-	
-}
-
-
-
 

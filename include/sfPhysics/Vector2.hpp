@@ -18,10 +18,10 @@ namespace sfp
 		public:
 			Vector2();
 			Vector2(T x, T y);
-			Vector2(sf::Vector2<T> vec);
+			Vector2(const sf::Vector2<T>& vec);
 
-			T GetForce();
-			float GetDirection();
+			T GetForce() const;
+			float GetDirection() const;
 
 			void SetForce(T force);
 			void SetForce(T force, float direction);
@@ -29,6 +29,9 @@ namespace sfp
 
 			void AddForce(T force);
 			void AddForce(T force, float direction);
+			
+			float DotProduct(const sf::Vector2<T>&) const;
+			float CrossProduct(const sf::Vector2<T>&) const;
 	};
 	
 

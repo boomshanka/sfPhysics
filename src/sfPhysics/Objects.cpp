@@ -14,6 +14,7 @@ mySeparatingAxisEnabled(true)
 {
 	#ifdef SFML_GRAPHICS_ENABLED
 	myDrawable=NULL;
+	myLengthfactor=0;
 	#endif
 }
 
@@ -24,6 +25,7 @@ mySeparatingAxisEnabled(true)
 {
 	#ifdef SFML_GRAPHICS_ENABLED
 	myDrawable=NULL;
+	myLengthfactor=0;
 	#endif
 	
 	PolygonManager::SetPolygon(polygon);
@@ -75,7 +77,7 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 	
 	#ifdef SFML_GRAPHICS_ENABLED
 	if(myDrawable!=NULL)
-		myDrawable->SetOrigin(center);
+		myDrawable->SetOrigin(center*myLengthfactor);
 	#endif
 }
 
@@ -127,6 +129,17 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 }
 
 
+void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force)
+{
+	sfp::Vector2f momentarm=position;
+	momentarm.SetDirection(momentarm.GetDirection()-myRotation);
+	momentarm/=5.f;//FIXME
+	float moment=momentarm.CrossProduct(force);
+	Physicable::AddRotationImpulse(moment);
+	Physicable::AddImpulse(force);
+}
+
+
 
 //------------------------------------------------------------------------------------------//
 									/*SFML_Graphics*/
@@ -136,42 +149,46 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 
 #ifdef SFML_GRAPHICS_ENABLED
 
-sfp::Object::Object(sf::Shape& shape)
+sfp::Object::Object(sf::Shape& shape, float lengthfactor)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myLengthfactor(lengthfactor)
 {
 	SetShape(shape);
 }
 
 
 
-sfp::Object::Object(sf::Sprite& sprite)
+sfp::Object::Object(sf::Sprite& sprite, float lengthfactor)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myLengthfactor(lengthfactor)
 {
 	SetSprite(sprite);
 }
 
 
 
-sfp::Object::Object(sf::Drawable& drawable)
+sfp::Object::Object(sf::Drawable& drawable, float lengthfactor)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myLengthfactor(lengthfactor)
 {
 	SetDrawable(drawable);
 }
 
 
 
-sfp::Object::Object(sf::Drawable& drawable, const Polygon& polygon)
+sfp::Object::Object(sf::Drawable& drawable, const Polygon& polygon, float lengthfactor)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myLengthfactor(lengthfactor)
 {
 	myDrawable=&drawable;
 	
-	PolygonManager::SetPolygon(polygon);
+	PolygonManager::SetPolygon(polygon);//FIXME was ist mit Lengthfactor?
 	ComputeArea();
-	myPosition=drawable.GetPosition();
+	myPosition=drawable.GetPosition()/myLengthfactor;
 	myRotation=drawable.GetRotation();
 }
 
@@ -218,13 +235,13 @@ void sfp::Object::SetShape(sf::Shape& shape)
 	Polygon polygon;
 	for(unsigned int i=0; i<shape.GetPointsCount();++i)
 	{
-		polygon.AddPoint(shape.GetPointPosition(i));
+		polygon.AddPoint(shape.GetPointPosition(i)/myLengthfactor);
 	}
 	PolygonManager::SetPolygon(polygon);
 	
 	ComputeArea();
 	
-	myPosition=shape.GetPosition();
+	myPosition=shape.GetPosition()/myLengthfactor;
 	myRotation=shape.GetRotation();
 }
 
@@ -242,10 +259,26 @@ void sfp::Object::SetDrawable(sf::Drawable& drawable)
 {
 	myDrawable=&drawable;
 	
-	SetCenter(drawable.GetOrigin());
+	SetCenter(drawable.GetOrigin()/myLengthfactor);
 	
-	myPosition=drawable.GetPosition();
+	myPosition=drawable.GetPosition()/myLengthfactor;
 	myRotation=drawable.GetRotation();
+}
+
+
+
+void sfp::Object::SetLengthFactor(float factor)
+{/*FIXME
+	factor=
+	myLengthfactor=factor;
+	
+	myPosition=myDrawable->GetPosition()/myLengthfactor;
+	Polygon polygon;
+	for(unsigned int i=0; i<PolygonManager::GetPointsCount();++i)
+	{
+		polygon.AddPoint(PolygonManager::GetPointPosition(i)/myLengthfactor);
+	}
+	PolygonManager::SetPolygon(polygon);*/
 }
 
 

@@ -20,6 +20,7 @@ namespace sfp
 			
 			sf::Vector2f myGravity;
 			float myTimefactor;
+			float myLengthfactor;
 		public:
 			Environment();
 			~Environment();
@@ -28,14 +29,17 @@ namespace sfp
 			float GetFrameTime();
 			
 			void SetTimeFactor(float timefactor) {myTimefactor=timefactor;}
-			float GetTimeFactor() {return myTimefactor;}
+			float GetTimeFactor() const {return myTimefactor;}
 			
-			const sf::Vector2f& GetGravity() {return myGravity;}
+			void SetLengthFactor(float lengthfactor) {myLengthfactor=lengthfactor;}
+			float GetLengthFactor() const {return myLengthfactor;}
+			
+			const sf::Vector2f& GetGravity() const {return myGravity;}
 			void SetGravity(const sf::Vector2f& gravity) {myGravity=gravity;}
 			
 			void AddObject(sfp::Object&);
 			
-			unsigned int GetObjectCount() {return myObjects.size();}
+			unsigned int GetObjectCount() const {return myObjects.size();}
 			
 			sfp::Object& GetObject(unsigned int index);
 			sfp::Object& GetObject(sfp::Object&);

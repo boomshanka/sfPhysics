@@ -20,7 +20,7 @@ namespace sfp
 			sfp::Vector2f mySpeed;
 			float myRotationSpeed;
 			
-			sf::Vector2f myCenter;	//Center of gravity
+			sf::Vector2f myCenter;	//Center of gravity/mass
 			float myArea;
 			float myInertiaMoment;	//Trägheitsmoment
 			
@@ -39,14 +39,17 @@ namespace sfp
 			void AddImpulse(const sfp::Vector2f& impulse) {mySpeed+= impulse/myMass;}
 			
 			void SetRotationSpeed(float speed) {myRotationSpeed=speed;}
-			void SetRotationForce(float force) {myRotationSpeed=2*force/myInertiaMoment;}
+			void AddRotationSpeed(float speed) {myRotationSpeed+=speed;}
+			
+			void SetRotationImpulse(float impulse) {myRotationSpeed=impulse/myInertiaMoment;}
+			void AddRotationImpulse(float impulse) {myRotationSpeed+=impulse/myInertiaMoment;}
 			
 			
 			const sfp::Vector2f& GetSpeed() const {return mySpeed;}
 			sfp::Vector2f GetImpulse() const {return mySpeed*myMass;}
 			
 			float GetRotationSpeed() const {return myRotationSpeed;}
-			float GetRotationForce() const {return 0.5*myRotationSpeed*myInertiaMoment;}
+			float GetRotationImpulse() const {return myRotationSpeed*myInertiaMoment;}
 			
 			
 			
@@ -61,15 +64,6 @@ namespace sfp
 			float GetArea() const {return myArea;}
 			float GetRestitution() const {return myRestitution;}
 			float GetFriction() const {return myFriction;}
-			
-			
-			void Force(const sf::Vector2f& position, float direction, float force);
-			void Force(const sf::Vector2f& position, const sfp::Vector2f& force); //FIXME
-			
-		protected:
-//			sf::Vector2f ComputeArea(std::vector<sfp::Polygon>&);
-//			std::pair<sf::Vector2f, float> ComputeArea(const std::vector<sf::Vector2f>&);
-//			std::pair<sf::Vector2f, float> ComputeArea(const sf::Vector2f&, float);
 			
 	};
 
