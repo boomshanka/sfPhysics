@@ -26,6 +26,14 @@ sfp::Collision::~Collision()
 
 
 
+void sfp::Collision::Bounce(sfp::CollisionEvent& collisinevent)
+{
+	
+}
+
+
+
+
 bool sfp::Collision::GetCollision(sfp::CollisionEvent& event)
 {
 	if(myCollisionEvents.empty())
@@ -53,13 +61,6 @@ bool sfp::Collision::GetCollision(sfp::CollisionEvent& event)
 	return false;
 }
 
-
-
-
-void sfp::Collision::Bounce(sfp::CollisionEvent& collisinevent)
-{
-	
-}
 
 
 

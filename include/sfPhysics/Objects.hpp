@@ -76,6 +76,7 @@ namespace sfp
 			sf::Vector2f ToLocal(const sf::Vector2f&) const;
 			
 			void Force(const sf::Vector2f& position, const sfp::Vector2f& force);
+			const sfp::Vector2f& GetForce(const sf::Vector2f& position) const;
 			
 			#ifdef SFML_GRAPHICS_ENABLED //FIXME lengthfactor darf nie null sein!!
 		private:

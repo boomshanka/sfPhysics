@@ -51,16 +51,18 @@ int main()
 	circle2.SetPosition(50,500);
 	
 	
-	sfp::Object object(shape,10);
-	sfp::Object foo(bottom,10);
-	sfp::Object pCircle(circle, sfp::Polygon::Circle(sf::Vector2f(5,5),5),10);
-	sfp::Object pCircle2(circle2, sfp::Polygon::Circle(sf::Vector2f(5,5),5),10);
+	sfp::Object object(shape,50);
+	sfp::Object foo(bottom,50);
+	sfp::Object pCircle(circle, sfp::Polygon::Circle(sf::Vector2f(1,1),1),50);
+	sfp::Object pCircle2(circle2, sfp::Polygon::Circle(sf::Vector2f(1,1),1),50);
+	
+	pCircle.SetDensity(2);
 	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
 	
-	world.SetLengthFactor(10);
+	world.SetLengthFactor(50);
 	//world.SetTimeFactor(1);
 	
 	world.AddObject(object);
@@ -77,7 +79,7 @@ int main()
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
-	pCircle.SetRotationSpeed(50);
+	//pCircle.SetRotationSpeed(50);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -91,14 +93,14 @@ int main()
 			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,10));
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-1600*sfp::Time::ElapsedTime));
-		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,785*sfp::Time::ElapsedTime));
-		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(785*sfp::Time::ElapsedTime,0));
-		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-785*sfp::Time::ElapsedTime,0));
+		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-126*sfp::Time::ElapsedTime));
+		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,63*sfp::Time::ElapsedTime));
+		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63*sfp::Time::ElapsedTime,0));
+		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*sfp::Time::ElapsedTime,0));
 		
 		//FIXME Test
-		pCircle.Force(sfp::Vector2f(0,5),sfp::Vector2f(0,-785.4*sfp::Time::ElapsedTime));
-		pCircle.AddRotationSpeed(-pCircle.GetRotationSpeed()*0.1*sfp::Time::ElapsedTime);
+		pCircle.Force(sfp::Vector2f(-1,-1),sfp::Vector2f(0,-62.832*sfp::Time::ElapsedTime));
+		//pCircle.AddRotationSpeed(-pCircle.GetRotationSpeed()*0.1*sfp::Time::ElapsedTime);
 		//pCircle.AddRotationImpulse(500*sfp::Time::ElapsedTime);
 		
 		mouse_x=Input.GetMouseX();

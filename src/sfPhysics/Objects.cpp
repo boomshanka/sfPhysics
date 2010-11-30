@@ -131,12 +131,21 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 
 void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force)
 {
-	sfp::Vector2f momentarm=position;
-	momentarm.SetDirection(momentarm.GetDirection()-myRotation);
-	momentarm/=5.f;//FIXME
-	float moment=momentarm.CrossProduct(force);
-	Physicable::AddRotationImpulse(moment);
+	sfp::Vector2f hebelarm=position;
+	hebelarm.SetDirection(hebelarm.GetDirection()-myRotation);
+	//momentarm/=5.f;//FIXME
+	float moment=hebelarm.CrossProduct(force);
+	Physicable::AddRotationImpulse(-moment);
 	Physicable::AddImpulse(force);
+}
+
+
+const sfp::Vector2f& sfp::Object::GetForce(const sf::Vector2f& position) const
+{
+	sfp::Vector2f force=Physicable::GetImpulse();
+	
+	
+	return force;
 }
 
 
