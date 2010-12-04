@@ -26,6 +26,8 @@ namespace sfp
 			sfp::Object* secondobject;
 			
 			std::stack<sf::Vector2f> collisionpoints;
+			std::stack<float> collisionangle;
+			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;
 		public:
 			CollisionEvent() : CollisionTime(0) {}
 			CollisionEvent(sfp::Object& first, sfp::Object& second) { firstobject=&first; secondobject=&second; }

@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include <iostream>
+
 float sfp::Time::ElapsedTime=0;
 sf::Clock sfp::Time::Frametime = sf::Clock();
 
@@ -49,7 +49,7 @@ void sfp::Object::ComputeArea()
 	SetCenter(PolygonManager::myCenter);
 	Physicable::SetArea(PolygonManager::myArea);
 	Physicable::myInertiaMoment=PolygonManager::myInertiaMoment*Physicable::myDensity; //FIXME fläche muss rausgekürzt werden (bzw mit Dichte multiplizieren)
-	std::cerr<<Physicable::myInertiaMoment<<std::endl;
+	//std::cerr<<Physicable::myInertiaMoment<<std::endl; //FIXME
 	//in Physicable muss myInertiaMoment bei masse/dichteveränderungen angepasst werden!
 }
 
@@ -142,10 +142,29 @@ void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force
 
 const sfp::Vector2f& sfp::Object::GetForce(const sf::Vector2f& position) const
 {
-	sfp::Vector2f force=Physicable::GetImpulse();
+/*	sfp::Vector2f force;
+	force.x=
 	
 	
-	return force;
+	//=Physicable::GetImpulse();
+	
+	
+	return force;*/
+}
+
+
+
+sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
+{
+	sfp::Vector2f movement;
+	movement.x=(2*M_PI*position.GetForce())*(Physicable::myRotationSpeed/360.f);
+	float direction=position.GetDirection();
+	if(Physicable::myRotationSpeed<0) {direction+=90;} else {direction-=90;}
+	movement.SetDirection(direction);
+	
+	movement+=Physicable::mySpeed;
+	
+	return movement;
 }
 
 

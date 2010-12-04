@@ -7,7 +7,7 @@
 #define _USE_MATH_DEFINES
 
 
-
+#include <iostream>
 sfp::Collision::Collision()
 :myNoCollisionEventEnabled(false)
 {
@@ -26,9 +26,36 @@ sfp::Collision::~Collision()
 
 
 
-void sfp::Collision::Bounce(sfp::CollisionEvent& collisinevent)
+void sfp::Collision::Bounce(sfp::CollisionEvent& collisionevent)
 {
-	
+	while(!collisionevent.collisionpoints.empty())
+	{
+		sfp::Vector2f movement=collisionevent.firstobject->GetMovement(collisionevent.firstobject->ToLocal(collisionevent.collisionpoints.top()))-
+								collisionevent.secondobject->GetMovement(collisionevent.secondobject->ToLocal(collisionevent.collisionpoints.top()));
+		sf::Vector2f positions
+		(
+			collisionevent.secondobject->ToGlobal(collisionevent.secondobject->GetConvexPolygon(collisionevent.convexobjects.top().second).GetPolygonCenter()) -
+			collisionevent.firstobject->ToGlobal(collisionevent.firstobject->GetConvexPolygon(collisionevent.convexobjects.top().first).GetPolygonCenter())
+		);
+		
+		if(((movement.x>0 && positions.x>=0) || (movement.x<0 && positions.x<0) )||/*&&*/ ( (movement.y>0 && positions.y>=0) || (movement.y<0 && positions.y<0)))
+		{
+			std::cout<<collisionevent.collisionangle.top()<<" - "<<collisionevent.collisionpoints.top().x<<" "<<collisionevent.collisionpoints.top().y<<"\n";
+			
+			sfp::Vector2f speed=sfp::Vector2f(collisionevent.firstobject->GetSpeed()); speed.y*=-0.8;
+			collisionevent.firstobject->SetSpeed(speed);
+			speed=sfp::Vector2f(collisionevent.secondobject->GetSpeed()); speed.y*=-0.8;
+			collisionevent.secondobject->SetSpeed(speed);
+			
+			
+		}
+		else
+		{std::cout<<"ich kollidiere NICHT!!\n";}
+		
+		collisionevent.collisionpoints.pop();
+		collisionevent.collisionangle.pop();
+		collisionevent.convexobjects.pop();
+	}
 }
 
 
@@ -272,14 +299,16 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second)
 
 bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
-	sfp::Vector2f distance(first.ToGlobal(first.GetConvexPolygon(i).GetPolygonCenter())-second.ToGlobal(second.GetConvexPolygon(j).GetPolygonCenter()));
+	sfp::Vector2f distance(second.ToGlobal(second.GetConvexPolygon(j).GetPolygonCenter())-first.ToGlobal(first.GetConvexPolygon(i).GetPolygonCenter()));
 	if(distance.GetForce() > (first.GetConvexPolygon(i).GetCircleRadius()+second.GetConvexPolygon(j).GetCircleRadius()))
 		return false;
 	
-	distance.AddForce(-first.GetConvexPolygon(i).GetCircleRadius());
-	distance.AddForce(-(second.GetConvexPolygon(j).GetCircleRadius()-distance.GetForce()/2));
+	distance.SetForce(first.GetConvexPolygon(i).GetCircleRadius()-((first.GetConvexPolygon(i).GetCircleRadius()+second.GetConvexPolygon(j).GetCircleRadius())-distance.GetForce())/2);
 
-	myCollisionEvents.top().collisionpoints.push(distance);
+	myCollisionEvents.top().collisionpoints.push(/*sf::Vector2f(50,450));/*/distance);
+	float angle=distance.GetDirection(); if(angle>270) {angle-=270;} else {angle+=90;}
+	myCollisionEvents.top().collisionangle.push(/*0);/*/angle);
+	myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
 	
 	return true;
 }
