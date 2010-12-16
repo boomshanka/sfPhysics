@@ -50,7 +50,7 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& collisionevent)
 			
 		}
 		else
-		{std::cout<<"ich kollidiere NICHT!!\n";}
+		{std::cout<<"NEIN!!\n";}
 		
 		collisionevent.collisionpoints.pop();
 		collisionevent.collisionangle.pop();
