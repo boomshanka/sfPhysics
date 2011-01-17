@@ -1,7 +1,7 @@
 EXE     = rocket
 SRC     = $(wildcard $(SRCROOT)/$(EXE)/*.cpp)
 OBJ     = $(SRC:.cpp=.o)
-LDFLAGS = -lsfphysics -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS = -lsfphysics-system -lsfphysics-collision -lsfml-graphics -lsfml-window -lsfml-system
 
 all: $(EXE)
 

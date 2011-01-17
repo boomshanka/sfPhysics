@@ -13,7 +13,7 @@ export VERSION    = 1.0
 export CP         = cp
 export LN         = ln
 export LNFLAGS    = -s -f
-export LIBS       = physics
+export LIBS       = system collision
 
 all: sfphysics
 
@@ -32,10 +32,12 @@ install:
 	mkdir -p $(DESTDBGDIR)
 	$(CP) -r ../include/sfPhysics/ $(DESTINCDIR)/
 	find $(DESTINCDIR)/sfPhysics -name .svn -type d -print0 | xargs -0 /bin/rm -rf
-	$(MAKE) $@ -f Makefile.physics
+	$(MAKE) $@ -f Makefile.system
+	$(MAKE) $@ -f Makefile.collision
 
 clean mrproper:
-	$(MAKE) $@ -f Makefile.physics
+	$(MAKE) $@ -f Makefile.system
+	$(MAKE) $@ -f Makefile.collision
 	cd ../examples/build && $(MAKE) $@
 
 .PHONY: clean mrproper
