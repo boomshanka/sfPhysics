@@ -42,10 +42,20 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& collisionevent)
 		{
 			std::cout<<collisionevent.collisionangle.top()<<" - "<<collisionevent.collisionpoints.top().x<<" "<<collisionevent.collisionpoints.top().y<<"\n";
 			
-			sfp::Vector2f speed=sfp::Vector2f(collisionevent.firstobject->GetSpeed()); speed.y*=-0.8;
+			float sin=-std::sin(collisionevent.collisionangle.top()*M_PI/180.f);
+			float cos=-std::cos(collisionevent.collisionangle.top()*M_PI/180.f);
+			
+			sfp::Vector2f speed=sfp::Vector2f(
+	-0.8*sin*collisionevent.firstobject->GetSpeed().x-0.8*(collisionevent.firstobject->GetSpeed().y-cos*collisionevent.firstobject->GetSpeed().y),
+	-0.8*cos*collisionevent.firstobject->GetSpeed().y+0.8*(collisionevent.firstobject->GetSpeed().x-sin*collisionevent.firstobject->GetSpeed().x));
+			
+			sfp::Vector2f speed2=sfp::Vector2f(
+	-0.8*sin*collisionevent.secondobject->GetSpeed().x+0.8*(collisionevent.secondobject->GetSpeed().y-cos*collisionevent.secondobject->GetSpeed().y),
+	-0.8*cos*collisionevent.secondobject->GetSpeed().y-0.8*(collisionevent.secondobject->GetSpeed().x-sin*collisionevent.secondobject->GetSpeed().x));
+			
+			
 			collisionevent.firstobject->SetSpeed(speed);
-			speed=sfp::Vector2f(collisionevent.secondobject->GetSpeed()); speed.y*=-0.8;
-			collisionevent.secondobject->SetSpeed(speed);
+			collisionevent.secondobject->SetSpeed(speed2);
 			
 			
 			//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
