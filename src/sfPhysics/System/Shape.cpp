@@ -97,9 +97,15 @@ sfp::Shape sfp::Shape::Line()
 }
 
 
-sfp::Shape sfp::Shape::Plane()
+sfp::Shape sfp::Shape::Plane(const sf::Vector2f& center, float angle)
 {
 	Shape shape;
+	
+	shape.myShapeType=sfp::Plane;
+	shape.myCenter=center;
+	shape.myCircleRadius=angle;
+	
+	shape.myArea=1;
 	
 	return shape;
 }

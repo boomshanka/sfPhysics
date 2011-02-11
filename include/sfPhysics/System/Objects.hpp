@@ -33,6 +33,8 @@ namespace sfp
 			bool mySeparatingAxisEnabled;
 			
 			float mySatRotation;
+			
+			bool myIsFixed;
 		public:
 			Object();
 			Object(const Shape&);
@@ -65,9 +67,12 @@ namespace sfp
 			sf::Vector2f ToLocal(const sf::Vector2f&) const;
 			
 			void Force(const sf::Vector2f& position, const sfp::Vector2f& force);
-			const sfp::Vector2f& GetForce(const sf::Vector2f& position) const; //FIXME fragwürdig
+			float GetForce(const sf::Vector2f& position, float direction, const sf::Vector2f& referencespeed = sf::Vector2f(0,0)) const;
 			
 			sfp::Vector2f GetMovement(const sfp::Vector2f& position) const;
+			
+			bool IsFixed() {return myIsFixed;}
+			void Fix(bool fix) {myIsFixed=fix;}
 			
 			
 			#ifdef SFML_ENABLED //FIXME lengthfactor darf nie null sein!!

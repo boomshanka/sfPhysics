@@ -64,7 +64,7 @@ namespace sfp
 			
 			static Shape Rectangle();
 			static Shape Line();
-			static Shape Plane();
+			static Shape Plane(const sf::Vector2f&, float);
 			static Shape Circle(const sf::Vector2f&, float);
 			
 		protected:

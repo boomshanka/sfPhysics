@@ -40,22 +40,18 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& collisionevent)
 		
 		if(((movement.x>0 && positions.x>=0) || (movement.x<0 && positions.x<0) )||/*&&*/ ( (movement.y>0 && positions.y>=0) || (movement.y<0 && positions.y<0)))
 		{
-			std::cout<<collisionevent.collisionangle.top()<<" - "<<collisionevent.collisionpoints.top().x<<" "<<collisionevent.collisionpoints.top().y<<"\n";
+	//		std::cout<<collisionevent.collisionangle.top()<<" - "<<collisionevent.collisionpoints.top().x<<" "<<collisionevent.collisionpoints.top().y<<"\n";
 			
-			float sin=-std::sin(collisionevent.collisionangle.top()*M_PI/180.f);
-			float cos=-std::cos(collisionevent.collisionangle.top()*M_PI/180.f);
+			sfp::Vector2f vec1(collisionevent.firstobject->GetForce(collisionevent.firstobject->ToLocal(collisionevent.collisionpoints.top()),
+					collisionevent.collisionangle.top()+90, collisionevent.secondobject->GetSpeed()),0);
+			sfp::Vector2f vec2(collisionevent.secondobject->GetForce(collisionevent.secondobject->ToLocal(collisionevent.collisionpoints.top()),
+					collisionevent.collisionangle.top()-90, collisionevent.firstobject->GetSpeed()),0);
 			
-			sfp::Vector2f speed=sfp::Vector2f(
-	-0.8*sin*collisionevent.firstobject->GetSpeed().x-0.8*(collisionevent.firstobject->GetSpeed().y-cos*collisionevent.firstobject->GetSpeed().y),
-	-0.8*cos*collisionevent.firstobject->GetSpeed().y+0.8*(collisionevent.firstobject->GetSpeed().x-sin*collisionevent.firstobject->GetSpeed().x));
+			vec1.SetDirection(collisionevent.collisionangle.top()-90);
+			vec2.SetDirection(collisionevent.collisionangle.top()+90);
 			
-			sfp::Vector2f speed2=sfp::Vector2f(
-	-0.8*sin*collisionevent.secondobject->GetSpeed().x+0.8*(collisionevent.secondobject->GetSpeed().y-cos*collisionevent.secondobject->GetSpeed().y),
-	-0.8*cos*collisionevent.secondobject->GetSpeed().y-0.8*(collisionevent.secondobject->GetSpeed().x-sin*collisionevent.secondobject->GetSpeed().x));
-			
-			
-			collisionevent.firstobject->SetSpeed(speed);
-			collisionevent.secondobject->SetSpeed(speed2);
+			collisionevent.firstobject->Force(collisionevent.collisionpoints.top(), vec2);
+			collisionevent.secondobject->Force(collisionevent.collisionpoints.top(), vec1);
 			
 			
 			//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
@@ -63,7 +59,7 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& collisionevent)
 			
 		}
 		else
-		{std::cout<<"NEIN!!\n";}
+		{}//std::cout<<"NEIN!!\n";}
 		
 		collisionevent.collisionpoints.pop();
 		collisionevent.collisionangle.pop();
@@ -186,7 +182,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							break;
 							
 							case Circle:
-								if(PlaneCircle(first,second))
+								if(PlaneCircle(first,second, i, j))
 									isCollided=true;
 							break;
 							
@@ -213,7 +209,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							break;
 							
 							case Plane:
-								if(PlaneCircle(second,first))
+								if(PlaneCircle(second,first, j, i))
 									isCollided=true;
 							break;
 							
@@ -303,9 +299,20 @@ return false;
 
 
 
-bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second)
+bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
-
+	sfp::Vector2f hyp(second.ToGlobal(second.GetConvexShape(j).GetShapeCenter())-first.ToGlobal(first.GetConvexShape(i).GetShapeCenter()));
+	sfp::Vector2f distance(std::cos(hyp.GetDirection()-first.GetConvexShape(i).GetCircleRadius()*M_PI/180.f)*hyp.GetForce(),0);
+	
+	if(distance.x>second.GetConvexShape(j).GetCircleRadius())
+		return false;
+	
+	distance.SetDirection(first.GetConvexShape(i).GetCircleRadius());
+	myCollisionEvents.top().collisionpoints.push(second.GetConvexShape(j).GetShapeCenter()+distance);
+	myCollisionEvents.top().collisionangle.push(first.GetConvexShape(i).GetCircleRadius()+90.f);
+	myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+	
+	return true;
 }
 
 
@@ -329,26 +336,4 @@ bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsig
 
 
 
-
-
-/*				sfp::Vector2f intersection; //FIXME läuft kein meter
-				intersection.SetForce(firstmin>secondmax ? (firstmin-secondmax) : (secondmin-firstmax), sfp::Vector2f(first.GetSeparatingAxis().GetAx(i)).GetDirection());
-				
-				if(first.GetSpeed().x!=0)
-				{
-					sf::Vector2f speed=first.GetSpeed()+second.GetSpeed();
-					float time=intersection.x/speed.x;
-					
-					if(time<myCollisionEvents.front().CollisionTime || myCollisionEvents.front().CollisionTime==0)
-						myCollisionEvents.front().CollisionTime=time;
-				}
-				else if(first.GetSpeed().y!=0)
-				{
-					sf::Vector2f speed=first.GetSpeed()+second.GetSpeed();
-					float time=intersection.y/speed.y;
-					
-					if(time<myCollisionEvents.front().CollisionTime || myCollisionEvents.front().CollisionTime==0)
-						myCollisionEvents.front().CollisionTime=time;
-				}
-			}*/
 

@@ -51,6 +51,7 @@ namespace sfp
 			float GetRotationSpeed() const {return myRotationSpeed;}
 			float GetRotationImpulse() const {return myRotationSpeed*myInertiaMoment;}
 			
+			void RemoveForces() {mySpeed=sfp::Vector2f(0,0); myRotationSpeed=0;}
 			
 			
 			bool SetMass(float);

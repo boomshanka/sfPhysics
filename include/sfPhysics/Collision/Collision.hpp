@@ -37,7 +37,7 @@ namespace sfp
 			bool PolygonPolygon(sfp::Object&, sfp::Object&);
 			bool PolygonPlane(sfp::Object&, sfp::Object&);
 			bool PolygonCircle(sfp::Object&, sfp::Object&);
-			bool PlaneCircle(sfp::Object&, sfp::Object&);
+			bool PlaneCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 			bool CircleCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 	};
 }

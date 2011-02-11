@@ -26,6 +26,7 @@ namespace sfp
 			Vector2(const sf::Vector2<T>& vec);
 
 			T GetForce() const;
+			T GetForce(float) const;
 			float GetDirection() const;
 
 			void SetForce(T force);

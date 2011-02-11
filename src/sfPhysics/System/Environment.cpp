@@ -24,7 +24,8 @@ void sfp::Environment::RenderGravity()
 {
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
-		(*it)->AddSpeed(myGravity*myFrameTime);
+		if(!(*it)->IsFixed())
+			(*it)->AddSpeed(myGravity*myFrameTime);
 	}
 }
 
@@ -34,8 +35,15 @@ void sfp::Environment::MoveObjects(bool moovedrawables)
 {
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
-		(*it)->Rotate((*it)->GetRotationSpeed()*myFrameTime*myTimefactor);
-		(*it)->Move((*it)->GetSpeed()*myFrameTime*myTimefactor);
+		if((*it)->IsFixed())
+		{
+			(*it)->RemoveForces();
+		}
+		else
+		{
+			(*it)->Rotate((*it)->GetRotationSpeed()*myFrameTime*myTimefactor);
+			(*it)->Move((*it)->GetSpeed()*myFrameTime*myTimefactor);
+		}
 	}
 	
 	#ifdef SFML_ENABLED

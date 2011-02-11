@@ -39,6 +39,17 @@ inline T sfp::Vector2<T>::GetForce() const
 
 
 template <typename T>
+inline T sfp::Vector2<T>::GetForce(float direction) const
+{
+	float force=std::cos(direction*M_PI/180.f)*sf::Vector2<T>::x;
+	force+=std::sin(direction*M_PI/180.f)*sf::Vector2<T>::y;
+	
+	return force;
+}
+
+
+
+template <typename T>
 inline float sfp::Vector2<T>::GetDirection() const // Liefert Werte zw 0° und °360
 {
 	if(sf::Vector2<T>::y<0)

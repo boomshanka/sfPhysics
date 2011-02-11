@@ -63,6 +63,10 @@ int main()
 	sfp::Object pCircle3(circle3, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	
+	sfp::Object plane(sfp::Shape::Plane(sf::Vector2f(0,0),-90));
+	plane.SetPosition(sf::Vector2f(8,12));
+	plane.Fix(true);
+	
 	pCircle.SetDensity(2);
 	pCircle3.SetDensity(2);
 	pCircle4.SetDensity(2);
@@ -72,22 +76,31 @@ int main()
 	sfp::Environment world;
 	
 	world.SetLengthFactor(50);
+	world.SetGravity(sf::Vector2f(0,0));
 	//world.SetTimeFactor(1);
 	
 	world.AddObject(object);
 	world.AddObject(pCircle);
-	world.AddObject(pCircle3);
-	world.AddObject(pCircle4);
+	world.AddObject(pCircle2);
+	//world.AddObject(pCircle3);
+	//world.AddObject(pCircle4);
+//	world.AddObject(plane);
+	
 	collision.AddObject(object);
 	collision.AddObject(foo);
 	collision.AddObject(pCircle4);
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle);
 	collision.AddObject(pCircle2);
+//	collision.AddObject(plane);
 	
 	
 	//object.SetRotation(0);
+	pCircle2.SetDensity(2);
+	pCircle.SetDensity(2);
 	
+	pCircle2.SetSpeed(sf::Vector2f(0,-1));
+	pCircle.SetSpeed(sf::Vector2f(0,1));
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
@@ -112,7 +125,6 @@ int main()
 		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
 		
 		//FIXME Test
-	//	pCircle.Force(sfp::Vector2f(0,0),sfp::Vector2f(0,-62.832*window.GetFrameTime()));
 		//pCircle.AddRotationSpeed(-pCircle.GetRotationSpeed()*0.1*window.GetFrameTime());
 		//pCircle.AddRotationImpulse(500*window.GetFrameTime());
 		
@@ -135,6 +147,7 @@ int main()
 		
 		while(collision.GetCollision(collisionevent))
 		{
+			
 			switch(collisionevent.CollisionType)
 			{
 				case sfp::PreciseCollision:
@@ -151,7 +164,10 @@ int main()
 			}
 		}
 		
+		
 		world.MoveObjects();
+		
+		std::cout<<pCircle.GetSpeed().y<<" "<<pCircle2.GetSpeed().y<<"\n";
 		
 		//Draw
 		window.Draw(shape);

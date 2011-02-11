@@ -6,7 +6,7 @@
 
 sfp::Physicable::Physicable()
 :myRotationSpeed(0), myArea(1000), myInertiaMoment(10),
-myMass(1000), myDensity(1), myRestitution(0), myFriction(0)
+myMass(1000), myDensity(1), myRestitution(1), myFriction(0.5)
 {
 
 }

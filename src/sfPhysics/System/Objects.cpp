@@ -4,7 +4,8 @@
 
 sfp::Object::Object()
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
 	myDrawable=NULL;
@@ -15,7 +16,8 @@ mySeparatingAxisEnabled(true)
 
 sfp::Object::Object(const Shape& shape)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
 	myDrawable=NULL;
@@ -127,24 +129,29 @@ void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force
 {
 	sfp::Vector2f hebelarm=position;
 	hebelarm.SetDirection(hebelarm.GetDirection()-myRotation);
-	//momentarm/=5.f;//FIXME
 	float moment=hebelarm.CrossProduct(force);
 	Physicable::AddRotationImpulse(-moment);
-	Physicable::AddImpulse(force);
+	Physicable::AddImpulse(force);//FIXME
 }
 
 
-const sfp::Vector2f& sfp::Object::GetForce(const sf::Vector2f& position) const
+float sfp::Object::GetForce(const sf::Vector2f& position, float direction, const sf::Vector2f& referencespeed) const
 {
-/*	sfp::Vector2f force;
-	force.x=
+	sfp::Vector2f hebelarm=position; //FIXME
+	float dir=hebelarm.GetDirection();
+	hebelarm.SetDirection(dir-myRotation);
+	float moment=Physicable::myInertiaMoment;//hebelarm.CrossProduct(force);
+	float angle=Physicable::mySpeed.GetDirection()-dir;
+	moment*=std::abs(std::sin(angle*M_PI/180.f));
 	
+	sfp::Vector2f vec=GetMovement(position);
+	vec-=referencespeed;
+	float force=vec.GetForce(direction);
+	force*=Physicable::myMass;
 	
-	//=Physicable::GetImpulse();
-	
-	
-	return force;*/
+	return force;
 }
+
 
 
 
@@ -153,7 +160,7 @@ sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
 	sfp::Vector2f movement;
 	movement.x=(2*M_PI*position.GetForce())*(Physicable::myRotationSpeed/360.f);
 	float direction=position.GetDirection();
-	if(Physicable::myRotationSpeed<0) {direction+=90;} else {direction-=90;}
+	if(Physicable::myRotationSpeed<0) {direction+=90;} else {direction-=90;} //FIXME richtung richtig?
 	movement.SetDirection(direction);
 	
 	movement+=Physicable::mySpeed;
@@ -174,7 +181,8 @@ sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
 sfp::Object::Object(sf::Shape& shape, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor)
+myLengthfactor(lengthfactor),
+myIsFixed(false)
 {
 	SetShape(shape);
 }
@@ -184,7 +192,8 @@ myLengthfactor(lengthfactor)
 sfp::Object::Object(sf::Sprite& sprite, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor)
+myLengthfactor(lengthfactor),
+myIsFixed(false)
 {
 	SetSprite(sprite);
 }
@@ -194,7 +203,8 @@ myLengthfactor(lengthfactor)
 sfp::Object::Object(sf::Drawable& drawable, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor)
+myLengthfactor(lengthfactor),
+myIsFixed(false)
 {
 	SetDrawable(drawable);
 }
@@ -204,7 +214,8 @@ myLengthfactor(lengthfactor)
 sfp::Object::Object(sf::Drawable& drawable, const Shape& shape, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor)
+myLengthfactor(lengthfactor),
+myIsFixed(false)
 {
 	myDrawable=&drawable;
 	
@@ -220,7 +231,8 @@ myLengthfactor(lengthfactor)
 
 sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myIsFixed(false)
 {
 	SetShape(shape, center);
 }
@@ -229,7 +241,8 @@ mySeparatingAxisEnabled(true)
 
 sfp::Object::Object(sf::Sprite& sprite, const sf::Vector2f& center)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myIsFixed(false)
 {
 	SetSprite(sprite, center);
 }
@@ -238,7 +251,8 @@ mySeparatingAxisEnabled(true)
 
 sfp::Object::Object(sf::Drawable& drawable, const sf::Vector2f& center)
 :mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true)
+mySeparatingAxisEnabled(true),
+myIsFixed(false)
 {
 	SetDrawable(drawable, center);
 }
