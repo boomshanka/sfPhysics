@@ -2,15 +2,11 @@
 #define SFPHYSICS_OBJECTS_HPP
 
 
-#include <sfPhysics/SFML.hpp>
+#include <sfPhysics/SFML_Graphics.hpp>
+
 #include <sfPhysics/System/ShapeManager.hpp>
 #include <sfPhysics/System/Physicable.hpp>
-
 #include <sfPhysics/System/SAT.hpp>
-
-#ifdef SFML_ENABLED
-#include <sfPhysics/SFML_Graphics.hpp>
-#endif
 
 
 #include <vector>
@@ -79,15 +75,16 @@ namespace sfp
 		private:
 			sf::Drawable* myDrawable;
 			float myLengthfactor;
+			
 		public:
 			Object(sf::Shape&, float lengthfactor=1);
 			Object(sf::Sprite&, float lengthfactor=1);
 			Object(sf::Drawable&, float lengthfactor=1);
 			Object(sf::Drawable&, const Shape& shape, float lengthfactor=1);
 			
-			Object(sf::Shape&, const sf::Vector2f&);
-			Object(sf::Sprite&, const sf::Vector2f&);
-			Object(sf::Drawable&, const sf::Vector2f&);
+			Object(sf::Shape&, const sf::Vector2f&, float lengthfactor=1);
+			Object(sf::Sprite&, const sf::Vector2f&, float lengthfactor=1);
+			Object(sf::Drawable&, const sf::Vector2f&, float lengthfactor=1);
 			
 			void SetShape(sf::Shape&); //FIXME!!
 			void SetSprite(sf::Sprite&);

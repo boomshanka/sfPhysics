@@ -2,13 +2,10 @@
 #define SFPHYSICS_ENVIRONMENT_HPP
 
 
+#include <sfPhysics/SFML_Graphics.hpp>
 #include <sfPhysics/System/Objects.hpp>
 
 #include <list>
-
-#ifdef SFML_ENABLED
-#include <sfPhysics/SFML_Graphics.hpp>
-#endif 
 
 
 

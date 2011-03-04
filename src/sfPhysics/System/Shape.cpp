@@ -50,8 +50,10 @@ void sfp::Shape::ComputeArea() //FIXME warum zahlen?
 void sfp::Shape::ComputePolygonArea()
 {
 	myCenter=sf::Vector2f(0,0);
+	myInertiaMoment=0;
+	myArea=0;
 	
-	for(unsigned int i=2; i<myPoints.size();++i)
+	for(unsigned int i=2; i<myPoints.size(); ++i)
 	{
 		sfp::Vector2f line=myPoints[0]-myPoints[i-1];
 		float a=line.GetForce();
@@ -63,19 +65,37 @@ void sfp::Shape::ComputePolygonArea()
 		float area=0.25*std::sqrt((a+b+c)*(a+b-c)*(b+c-a)*(c+a-b));
 		sf::Vector2f center((myPoints[0]+myPoints[i-1]+myPoints[i])/3.f);
 		
+		//Schwerpunkte addieren
 		sfp::Vector2f diff(center-myCenter);
 		diff*=(area/(area+myArea));
 		myCenter+=diff;
+		
+		//Trägheitsmoment verschieben
+		myInertiaMoment += myArea * std::pow(diff.GetForce(),2); //FIXME völlig unabhängig vom trägheitsmoment?!
+		//Trägheitsmoment von Dreieck verschieben & addieren
+		diff=(center-(myCenter-diff))-diff;
+		myInertiaMoment += ComputeTriangleMoment(myPoints[0], myPoints[i-1], myPoints[i], area) + area * std::pow(diff.GetForce(),2); //FIXME selbe!
+		
 		myArea+=area;
 	}
 }
+
+
+float sfp::Shape::ComputeTriangleMoment(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& C, float area)
+{
+	sfp::Vector2f a(C-B);
+	sfp::Vector2f b(A-C);
+	sfp::Vector2f c(B-A);
+	
+	return (1.f/36.f * area * (std::pow(a.GetForce(), 2) + std::pow(b.GetForce(), 2) + std::pow(c.GetForce(), 2)));
+}
+
 
 
 void sfp::Shape::ComputeCircleArea()
 {
 	myArea = M_PI * myCircleRadius*myCircleRadius;
 	myInertiaMoment = 0.5 * myArea * myCircleRadius*myCircleRadius; //Später wird Dichte dazu multipliziert (Fläche*Dichte=Gewicht)
-	//std::cerr<<myInertiaMoment<<";\n"; FIXME
 }
 
 

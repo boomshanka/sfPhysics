@@ -8,6 +8,7 @@ export CPP        = colorgcc ## g++
 export CFLAGS     = -W -Wall -pedantic -g -O2 -DNDEBUG -I../include -I../src -fPIC
 export CFLAGSEXT  = -I../include -I../src -g -O2 -DNDEBUG -fPIC
 export LDFLAGS    = -shared
+export SFMLFLAGS  = -DSFML_ENABLED
 export LIBPATH    = ../lib
 export VERSION    = 1.0
 export CP         = cp
@@ -15,9 +16,22 @@ export LN         = ln
 export LNFLAGS    = -s -f
 export LIBS       = system collision
 
+
 all: sfphysics
 
+sfml: sfmlbuild sfphysics
+	
+nosfml: nosfmlbuild sfphysics
+
 sfphysics: $(LIBS)
+
+
+sfmlbuild:
+	$(SFMLFLAGS) = -DSFML_ENABLED
+	
+nosfmlbuild:
+	$(SFMLFLAGS) = -DSFML_DISABLED
+	
 
 samples:
 	cd ../examples/build && $(MAKE)
@@ -41,4 +55,5 @@ clean mrproper:
 	cd ../examples/build && $(MAKE) $@
 
 .PHONY: clean mrproper
+
 

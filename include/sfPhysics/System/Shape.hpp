@@ -72,6 +72,8 @@ namespace sfp
 			
 			void ComputePolygonArea();
 			void ComputeCircleArea();
+			
+			float ComputeTriangleMoment(const sf::Vector2f&, const sf::Vector2f&, const sf::Vector2f&, float);
 	};
 
 } // namespace

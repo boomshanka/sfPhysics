@@ -1,6 +1,6 @@
 export SRCROOT  = ..
-export CPP      = colorgcc ##g++
-export CFLAGS   = -W -Wall -ansi -g -O2 -DNDEBUG -I../../include
+export CPP      = g++
+export CFLAGS   = -W -Wall -ansi -g -O2 -DNDEBUG 
 export EXAMPLES = rocket moonlander
 
 samples: all

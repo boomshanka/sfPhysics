@@ -50,6 +50,9 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& collisionevent)
 			vec1.SetDirection(collisionevent.collisionangle.top()-90);
 			vec2.SetDirection(collisionevent.collisionangle.top()+90);
 			
+			vec1.SetForce(vec1.GetForce()*((collisionevent.firstobject->GetRestitution()+collisionevent.secondobject->GetRestitution())/2.f));
+			vec2.SetForce(vec2.GetForce()*((collisionevent.firstobject->GetRestitution()+collisionevent.secondobject->GetRestitution())/2.f));
+			
 			collisionevent.firstobject->Force(collisionevent.collisionpoints.top(), vec2);
 			collisionevent.secondobject->Force(collisionevent.collisionpoints.top(), vec1);
 			

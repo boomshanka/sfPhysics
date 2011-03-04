@@ -8,10 +8,10 @@ LINK        = $(LN) $(LNFLAGS) $(LIBNAME) $(DESTLIBDIR)/$(LIB)
 all: $(LIB)
 
 libsfphysics-system.so: $(OBJ)
-	$(CPP) $(LDFLAGS) -Wl,-soname,$(LIBNAME) -o $(FULLLIBNAME) $(OBJ)
+	$(CPP) $(LDFLAGS) -Wl,-soname,$(LIBNAME) -o $(FULLLIBNAME) $(OBJ) $(SFMLFLAGS)
 
 $(OBJ): %.o: %.cpp
-	$(CPP) -o $@ -c $< $(CFLAGS)
+	$(CPP) -o $@ -c $< $(CFLAGS) $(SFMLFLAGS)
 
 .PHONY: clean mrproper
 

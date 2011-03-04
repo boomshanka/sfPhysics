@@ -1,3 +1,0 @@
-#define SFML_ENABLED
-
-

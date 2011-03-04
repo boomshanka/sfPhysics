@@ -181,8 +181,8 @@ sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
 sfp::Object::Object(sf::Shape& shape, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	SetShape(shape);
 }
@@ -192,8 +192,8 @@ myIsFixed(false)
 sfp::Object::Object(sf::Sprite& sprite, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	SetSprite(sprite);
 }
@@ -203,8 +203,8 @@ myIsFixed(false)
 sfp::Object::Object(sf::Drawable& drawable, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	SetDrawable(drawable);
 }
@@ -214,8 +214,8 @@ myIsFixed(false)
 sfp::Object::Object(sf::Drawable& drawable, const Shape& shape, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myLengthfactor(lengthfactor),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	myDrawable=&drawable;
 	
@@ -229,30 +229,33 @@ myIsFixed(false)
 
 
 
-sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center)
+sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	SetShape(shape, center);
 }
 
 
 
-sfp::Object::Object(sf::Sprite& sprite, const sf::Vector2f& center)
+sfp::Object::Object(sf::Sprite& sprite, const sf::Vector2f& center, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	SetSprite(sprite, center);
 }
 
 
 
-sfp::Object::Object(sf::Drawable& drawable, const sf::Vector2f& center)
+sfp::Object::Object(sf::Drawable& drawable, const sf::Vector2f& center, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
-myIsFixed(false)
+myIsFixed(false),
+myLengthfactor(lengthfactor)
 {
 	SetDrawable(drawable, center);
 }
@@ -268,7 +271,7 @@ void sfp::Object::SetShape(sf::Shape& sfShape)
 {
 	myDrawable=&sfShape;
 	
-	Shape shape;
+	sfp::Shape shape;
 	for(unsigned int i=0; i<sfShape.GetPointsCount();++i)
 	{
 		shape.AddPoint(sfShape.GetPointPosition(i)/myLengthfactor);
