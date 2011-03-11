@@ -7,7 +7,7 @@
 
 
 
-#include <iostream>
+
 sfp::Collision::Collision()
 :myNoCollisionEventEnabled(false)
 {
@@ -38,22 +38,24 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& event)
 			event.second->ToGlobal(event.second->GetConvexShape(event.convexobjects.top().second).GetShapeCenter())
 		);
 		
-		if(true)//((movement.x>0 && positions.x>=0) || (movement.x<0 && positions.x<0) )||/*&&*/ ( (movement.y>0 && positions.y>=0) || (movement.y<0 && positions.y<0)))
+		
+		if(true)//((movement.x<0 && po.x>=0) || (movement.x>0 && po.x<0) )||/*&&*/ ( (movement.y<0 && po.y>=0) || (movement.y>0 && po.y<0)))
 		{
-			sfp::Vector2f r1(event.first->ToLocal(event.collisionpoint.top())); r1.Rotate(event.first->GetRotation());
-			sfp::Vector2f r2(event.second->ToLocal(event.collisionpoint.top())); r2.Rotate(event.second->GetRotation());
+			sfp::Vector2f r1(event.collisionpoint.top()-event.first->GetPosition());
+			sfp::Vector2f r2(event.collisionpoint.top()-event.second->GetPosition());
 			
 			float j=-(1+(event.first->GetRestitution()+event.second->GetRestitution())/2.f)*movement.DotProduct(event.collisionnormal.top());
 			j /= (1.f/event.first->GetMass()) + (1.f/event.second->GetMass()) +
-sfp::Vector2f(1.f/event.first->GetInertiaMoment() * r1.CrossProduct(event.collisionnormal.top()) * r1 + 1.f/event.second->GetInertiaMoment() * r2.CrossProduct(event.collisionnormal.top()) * r2).DotProduct(event.collisionnormal.top());
+			std::abs(sfp::Vector2f(1.f/event.first->GetInertiaMoment() * r1.CrossProduct(event.collisionnormal.top()) * r1 + 1.f/event.second->GetInertiaMoment() *
+			r2.CrossProduct(event.collisionnormal.top()) * r2).DotProduct(event.collisionnormal.top()));
 										//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
 			
 				
 			event.first->SetSpeed(event.first->GetSpeed() - (j/event.first->GetMass()) * event.collisionnormal.top());
 			event.second->SetSpeed(event.second->GetSpeed() + (j/event.second->GetMass()) * event.collisionnormal.top());
 			
-			event.first->SetRotationSpeed(event.first->GetRotation() - j/event.first->GetInertiaMoment() * r1.CrossProduct(event.collisionnormal.top()));
-			event.second->SetRotationSpeed(event.second->GetRotation() + j/event.second->GetInertiaMoment() * r2.CrossProduct(event.collisionnormal.top()));
+			event.first->SetRotationSpeed(event.first->GetRotationSpeed() - j/event.first->GetInertiaMoment() * r1.CrossProduct(event.collisionnormal.top()));
+			event.second->SetRotationSpeed(event.second->GetRotationSpeed() + j/event.second->GetInertiaMoment() * r2.CrossProduct(event.collisionnormal.top()));
 			
 			
 			//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
@@ -320,7 +322,7 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, unsign
 
 bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
-	sfp::Vector2f distance(second.ToGlobal(second.GetConvexShape(j).GetShapeCenter())-first.ToGlobal(first.GetConvexShape(i).GetShapeCenter()));
+	sfp::Vector2f distance(second.ToGlobal(second.GetLocalShapeCenter(j))-first.ToGlobal(first.GetLocalShapeCenter(i)));
 	if(distance.GetForce() > (first.GetConvexShape(i).GetCircleRadius()+second.GetConvexShape(j).GetCircleRadius()))
 		return false;
 	
@@ -339,16 +341,3 @@ bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsig
 
 
 
-/*			sfp::Vector2f vec1(collisionevent.firstobject->GetForce(collisionevent.firstobject->ToLocal(collisionevent.collisionpoint.top()),
-					collisionevent.collisionangle.top()+90, collisionevent.secondobject->GetSpeed()),0);
-			sfp::Vector2f vec2(collisionevent.secondobject->GetForce(collisionevent.secondobject->ToLocal(collisionevent.collisionpoint.top()),
-					collisionevent.collisionangle.top()-90, collisionevent.firstobject->GetSpeed()),0);
-			
-			vec1.SetDirection(collisionevent.collisionangle.top()-90);
-			vec2.SetDirection(collisionevent.collisionangle.top()+90);
-			
-			vec1.SetForce(vec1.GetForce()*((collisionevent.firstobject->GetRestitution()+collisionevent.secondobject->GetRestitution())/2.f));
-			vec2.SetForce(vec2.GetForce()*((collisionevent.firstobject->GetRestitution()+collisionevent.secondobject->GetRestitution())/2.f));
-			
-			collisionevent.firstobject->Force(collisionevent.collisionpoint.top(), vec2);
-			collisionevent.secondobject->Force(collisionevent.collisionpoint.top(), vec1);*/

@@ -68,7 +68,7 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 {
 	myCenter=Physicable::myCenter=center;
 	
-	delete mySeparatingAxis; //FIXME wirklich nötig?
+	delete mySeparatingAxis;
 	mySeparatingAxis=NULL;
 	
 	#ifdef SFML_ENABLED
@@ -81,15 +81,36 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 
 
 
+sf::Vector2f sfp::Object::GetLocalPoint(unsigned int index) const
+{
+	return GetPoint(index)-myCenter;
+}
+
+
+
+sf::Vector2f sfp::Object::GetLocalPoint(unsigned int shape, unsigned int index) const
+{
+	return GetConvexShape(shape).GetPoint(index)-myCenter;
+}
+
+
+
+
+sf::Vector2f sfp::Object::GetLocalShapeCenter(unsigned int shape) const
+{
+	return GetConvexShape(shape).GetShapeCenter()-myCenter;
+}
+
+
+
+
+
 sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 {
-	sf::Vector2f global=myPosition;
+	sfp::Vector2f global(local);
 	
-	sfp::Vector2f position=local-myCenter;
-	
-	position.SetDirection(position.GetDirection()-myRotation); //
-	
-	global+=position;
+	global.Rotate(myRotation);
+	global+=myPosition;
 	
 	return global;
 }
@@ -97,35 +118,16 @@ sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 
 sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 {
-	sf::Vector2f local;
+	sfp::Vector2f local(global);
 	
-	local.x = global.x-myPosition.x - myCenter.x;
-	local.y = global.y-myPosition.y - myCenter.y;
-	
-	float line = sqrt(local.x*local.x + local.y*local.y);
-	
-	float angle;
-	if(line!=0)
-	{
-		angle = asin(local.x/line);
-		if(local.y<0)
-			angle=3.141592654f-angle; //FIXME ist - wirklich richtig (nicht *)? Funktion überprüfen!!!
-	}
-	else
-	{
-		angle=0;
-	}
-	
-	angle += myRotation;
-	
-	local.x = sin(angle)*line;
-	local.y = cos(angle)*line;
+	local-=myPosition;
+	local.Rotate(-myRotation);
 	
 	return local;
 }
 
 
-void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force)
+void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force)//FIXME
 {
 	sfp::Vector2f hebelarm=position;
 	hebelarm.SetDirection(hebelarm.GetDirection()-myRotation);

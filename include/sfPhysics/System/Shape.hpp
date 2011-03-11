@@ -43,8 +43,8 @@ namespace sfp
 			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
 			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec); ComputeArea();}
 			
-			virtual void SetPointPosition(unsigned int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}
-			virtual void SetPointPosition(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec; ComputeArea(); ComputeArea();}
+			virtual void SetPointPosition(unsigned int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}//FIXME rename SetPoint
+			virtual void SetPointPosition(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec; ComputeArea(); ComputeArea();}// oder überall Position
 			
 			virtual int GetPointCount() const {return myPoints.size();}
 			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];}

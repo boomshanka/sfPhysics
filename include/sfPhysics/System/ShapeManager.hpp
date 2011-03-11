@@ -26,7 +26,7 @@ namespace sfp
 			void AddPoint(const sf::Vector2f&);
 			
 			inline void SetPointPosition(unsigned int index, float x, float y) {SetPointPosition(index,sf::Vector2f(x,y));}
-			void SetPointPosition(unsigned int, const sf::Vector2f&);
+			void SetPointPosition(unsigned int, const sf::Vector2f&); //FIXME auch Poisition weg
 			
 			inline int GetPointCount() const {return Shape::GetPointCount();}
 			inline const sf::Vector2f& GetPoint(unsigned int index) const {return Shape::GetPoint(index);}

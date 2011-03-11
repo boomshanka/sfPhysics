@@ -109,9 +109,7 @@ int main()
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
-	//pCircle.SetRotationSpeed(50);
-	
-	//std::cout<<object.GetShapeArea()<<" "<<object.GetShapeInertiaMoment()<<"\n";
+	pCircle.SetRotation(180);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -157,8 +155,8 @@ int main()
 			switch(collisionevent.CollisionType)
 			{
 				case sfp::PreciseCollision:
-				//	collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
-				//	collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+					collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
+					collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
 					
 					collision.Bounce(collisionevent);
 					break;
@@ -173,7 +171,7 @@ int main()
 		
 		world.MoveObjects();
 		
-		//std::cout<<pCircle.GetSpeed().y<<" "<<pCircle2.GetSpeed().y<<"\n";
+		std::cout<<pCircle.GetSpeed().y<<" "<<pCircle2.GetSpeed().y<<"\n";
 		
 		//Draw
 		window.Draw(shape);

@@ -58,6 +58,10 @@ namespace sfp
 			float GetRotation() const {return myRotation;}
 			const sf::Vector2f& GetCenter() const {return myCenter;}
 			
+			sf::Vector2f GetLocalPoint(unsigned int index) const;
+			sf::Vector2f GetLocalPoint(unsigned int shape, unsigned int index) const;
+			sf::Vector2f GetLocalShapeCenter(unsigned int shape) const;
+			
 			
 			sf::Vector2f ToGlobal(const sf::Vector2f&) const;
 			sf::Vector2f ToLocal(const sf::Vector2f&) const;
