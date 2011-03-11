@@ -53,7 +53,7 @@ int main()
 	bottom.SetPosition(100,500);
 	shape.SetPosition(300,200);
 	circle.SetPosition(50,50);
-	circle2.SetPosition(50,500);
+	circle2.SetPosition(50,250);
 	circle3.SetPosition(50,-200);
 	circle4.SetPosition(50,-500);
 	
@@ -97,20 +97,21 @@ int main()
 	collision.AddObject(pCircle2);
 //	collision.AddObject(plane);
 	
+	pCircle2.SetDensity(1);
+	pCircle.SetDensity(1);
 	
-	//object.SetRotation(0);
-	pCircle2.SetDensity(2);
-	pCircle.SetDensity(2);
+	pCircle2.SetSpeed(sf::Vector2f(0,-0.1));
+	pCircle.SetSpeed(sf::Vector2f(0,0.1));
 	
-	pCircle2.SetSpeed(sf::Vector2f(0,-1));
-	pCircle.SetSpeed(sf::Vector2f(0,1));
+	pCircle.SetRestitution(1);
+	pCircle2.SetRestitution(1);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
 	//pCircle.SetRotationSpeed(50);
 	
-	std::cout<<object.GetShapeArea()<<" "<<object.GetShapeInertiaMoment()<<"\n";
+	//std::cout<<object.GetShapeArea()<<" "<<object.GetShapeInertiaMoment()<<"\n";
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -172,7 +173,7 @@ int main()
 		
 		world.MoveObjects();
 		
-		std::cout<<pCircle.GetSpeed().y<<" "<<pCircle2.GetSpeed().y<<"\n";
+		//std::cout<<pCircle.GetSpeed().y<<" "<<pCircle2.GetSpeed().y<<"\n";
 		
 		//Draw
 		window.Draw(shape);

@@ -67,5 +67,15 @@ bool sfp::Physicable::SetFriction(float friction)
 }
 
 
+bool sfp::Physicable::SetInertiaMoment(float inertiamoment)
+{
+	if(inertiamoment<=0)
+		return false;
+	
+	myInertiaMoment=inertiamoment;
+	return true;
+}
+
+
 
 

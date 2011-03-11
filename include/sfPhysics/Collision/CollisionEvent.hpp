@@ -23,23 +23,23 @@ namespace sfp
 		friend class Collision;
 		
 		private:
-			sfp::Object* firstobject;
-			sfp::Object* secondobject;
+			sfp::Object* first;
+			sfp::Object* second;
 			
-			std::stack<sf::Vector2f> collisionpoints;
-			std::stack<float> collisionangle;
+			std::stack<sf::Vector2f> collisionpoint;
+			std::stack<sfp::Vector2f> collisionnormal;
 			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;
 		public:
 			CollisionEvent() : CollisionTime(0) {}
-			CollisionEvent(sfp::Object& first, sfp::Object& second) { firstobject=&first; secondobject=&second; }
+			CollisionEvent(sfp::Object& one, sfp::Object& two) { first=&one; second=&two; }
 			
 			CollisionEventType CollisionType;
 			
 			float CollisionTime;
 			
 			
-			sfp::Object& GetFirstObject() {return *firstobject;}
-			sfp::Object& GetSecondObject() {return *secondobject;}
+			sfp::Object& GetFirstObject() {return *first;}
+			sfp::Object& GetSecondObject() {return *second;}
 	};
 
 }

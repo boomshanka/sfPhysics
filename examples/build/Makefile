@@ -1,6 +1,6 @@
 export SRCROOT  = ..
 export CPP      = g++
-export CFLAGS   = -W -Wall -ansi -g -O2 -DNDEBUG 
+export CFLAGS   = -W -Wall -ansi -g -O2 -DNDEBUG
 export EXAMPLES = rocket moonlander
 
 samples: all

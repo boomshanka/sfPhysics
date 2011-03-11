@@ -59,7 +59,7 @@ namespace sfp
 			bool SetArea(float);
 			bool SetRestitution(float);
 			bool SetFriction(float);
-			//bool SetInertiaMoment(float);
+			bool SetInertiaMoment(float);
 			
 			float GetMass() const {return myMass;}
 			float GetDensity() const {return myDensity;}

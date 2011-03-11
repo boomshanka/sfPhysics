@@ -157,11 +157,8 @@ float sfp::Object::GetForce(const sf::Vector2f& position, float direction, const
 
 sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
 {
-	sfp::Vector2f movement;
-	movement.x=(2*M_PI*position.GetForce())*(Physicable::myRotationSpeed/360.f);
-	float direction=position.GetDirection();
-	if(Physicable::myRotationSpeed<0) {direction+=90;} else {direction-=90;} //FIXME richtung richtig?
-	movement.SetDirection(direction);
+	sfp::Vector2f movement(Physicable::myRotationSpeed * position);
+	movement.Rotate(myRotation);
 	
 	movement+=Physicable::mySpeed;
 	

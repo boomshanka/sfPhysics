@@ -88,6 +88,14 @@ inline void sfp::Vector2<T>::SetDirection(float direction)
 
 
 template <typename T>
+inline void sfp::Vector2<T>::Rotate(float rotation)
+{
+	SetForce(GetForce(), rotation+GetDirection());
+}
+
+
+
+template <typename T>
 inline void sfp::Vector2<T>::AddForce(T force)
 {
 	float direction=GetDirection();

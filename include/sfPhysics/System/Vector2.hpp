@@ -26,12 +26,13 @@ namespace sfp
 			Vector2(const sf::Vector2<T>& vec);
 
 			T GetForce() const;
-			T GetForce(float) const;
+			T GetForce(float direction) const;
 			float GetDirection() const;
 
 			void SetForce(T force);
 			void SetForce(T force, float direction);
 			void SetDirection(float direction);
+			void Rotate(float rotation);
 
 			void AddForce(T force);
 			void AddForce(T force, float direction);
