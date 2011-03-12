@@ -52,7 +52,10 @@ namespace sfp
 			
 			#ifdef SFML_ENABLED
 			void MoveDrawables();
+			#else
+			virtual void MoveDrawables() {}
 			#endif
+			
 	};
 	
 } // namespace sfp

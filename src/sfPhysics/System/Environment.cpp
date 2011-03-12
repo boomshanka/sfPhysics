@@ -46,10 +46,9 @@ void sfp::Environment::MoveObjects(bool moovedrawables)
 		}
 	}
 	
-	#ifdef SFML_ENABLED
 	if(moovedrawables)
 		MoveDrawables();
-	#endif
+	
 }
 
 
@@ -63,7 +62,7 @@ void sfp::Environment::MoveDrawables()
 		if((*it)->GetDrawable()!=NULL)
 		{
 			(*it)->GetDrawable()->SetPosition((*it)->GetPosition()*myLengthfactor);
-			(*it)->GetDrawable()->SetRotation((*it)->GetRotation());
+			(*it)->GetDrawable()->SetRotation(-(*it)->GetRotation());
 		}
 	}
 }

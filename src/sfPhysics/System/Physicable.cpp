@@ -19,6 +19,9 @@ bool sfp::Physicable::SetMass(float mass)
 	if(mass<=0)
 		return false;
 	
+	myInertiaMoment/=myMass;
+	myInertiaMoment*=mass;
+	
 	myMass=mass;
 	myDensity=myMass/myArea;
 	return true;
@@ -30,6 +33,9 @@ bool sfp::Physicable::SetDensity(float density)
 	if(density<=0)
 		return false;
 	
+	myInertiaMoment/=myDensity;
+	myInertiaMoment*=density;
+	
 	myDensity=density;
 	myMass=myDensity*myArea;
 	return true;
@@ -40,6 +46,9 @@ bool sfp::Physicable::SetArea(float area)
 {
 	if(area<=0)
 		return false;
+	
+	myInertiaMoment/=(myDensity*myArea);
+	myInertiaMoment*=(myDensity*area);
 	
 	myArea=area;
 	myMass=myDensity*myArea;

@@ -103,13 +103,14 @@ int main()
 	pCircle2.SetSpeed(sf::Vector2f(0,-0.1));
 	pCircle.SetSpeed(sf::Vector2f(0,0.1));
 	
-	pCircle.SetRestitution(1);
-	pCircle2.SetRestitution(1);
+	pCircle.SetRestitution(0.5);
+	pCircle2.SetRestitution(0.5);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
 	pCircle.SetRotation(180);
+	pCircle.Fix(true);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -130,7 +131,7 @@ int main()
 		
 		//FIXME Test
 		//pCircle.AddRotationSpeed(-pCircle.GetRotationSpeed()*0.1*window.GetFrameTime());
-		//pCircle.AddRotationImpulse(500*window.GetFrameTime());
+		//pCircle.Impulse(sfp::Vector2f(-1,0),sfp::Vector2f(0,-1),M_PI/6.f);
 		
 		mouse_x=Input.GetMouseX();
 		mouse_y=Input.GetMouseY();

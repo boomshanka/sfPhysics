@@ -29,6 +29,8 @@ namespace sfp
 			bool GetCollision(sfp::CollisionEvent&);
 			
 			void Bounce(sfp::CollisionEvent&);
+			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
+			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e, bool secondfixed = false);
 			
 		protected:
 			void UpdateCollisionEvents();

@@ -2,6 +2,7 @@
 
 
 
+
 sfp::Object::Object()
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
@@ -12,6 +13,7 @@ myIsFixed(false)
 	myLengthfactor=0;
 	#endif
 }
+
 
 
 sfp::Object::Object(const Shape& shape)
@@ -30,11 +32,11 @@ myIsFixed(false)
 
 
 
-
 sfp::Object::~Object()
 {
 	delete mySeparatingAxis;
 }
+
 
 
 
@@ -44,9 +46,7 @@ void sfp::Object::ComputeArea()
 	
 	SetCenter(ShapeManager::myCenter);
 	Physicable::SetArea(ShapeManager::myArea);
-	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity; //FIXME fläche muss rausgekürzt werden (bzw mit Dichte multiplizieren)
-	//std::cerr<<Physicable::myInertiaMoment<<std::endl; //FIXME
-	//in Physicable muss myInertiaMoment bei masse/dichteveränderungen angepasst werden!
+	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
 }
 
 
@@ -80,7 +80,6 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 
 
 
-
 sf::Vector2f sfp::Object::GetLocalPoint(unsigned int index) const
 {
 	return GetPoint(index)-myCenter;
@@ -104,7 +103,6 @@ sf::Vector2f sfp::Object::GetLocalShapeCenter(unsigned int shape) const
 
 
 
-
 sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 {
 	sfp::Vector2f global(local);
@@ -114,6 +112,7 @@ sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 	
 	return global;
 }
+
 
 
 sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
@@ -127,33 +126,16 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 }
 
 
-void sfp::Object::Force(const sf::Vector2f& position, const sfp::Vector2f& force)//FIXME
+
+
+void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse)
 {
-	sfp::Vector2f hebelarm=position;
-	hebelarm.SetDirection(hebelarm.GetDirection()-myRotation);
-	float moment=hebelarm.CrossProduct(force);
-	Physicable::AddRotationImpulse(-moment);
-	Physicable::AddImpulse(force);//FIXME
-}
-
-
-float sfp::Object::GetForce(const sf::Vector2f& position, float direction, const sf::Vector2f& referencespeed) const
-{
-	sfp::Vector2f hebelarm=position; //FIXME
-	float dir=hebelarm.GetDirection();
-	hebelarm.SetDirection(dir-myRotation);
-	float moment=Physicable::myInertiaMoment;//hebelarm.CrossProduct(force);
-	float angle=Physicable::mySpeed.GetDirection()-dir;
-	moment*=std::abs(std::sin(angle*M_PI/180.f));
+	normal.Normalize();
+	position.Rotate(myRotation);
 	
-	sfp::Vector2f vec=GetMovement(position);
-	vec-=referencespeed;
-	float force=vec.GetForce(direction);
-	force*=Physicable::myMass;
-	
-	return force;
+	AddSpeed((impulse/Physicable::myMass) * normal);
+	AddRotationSpeed(impulse/Physicable::myInertiaMoment * position.CrossProduct(normal));
 }
-
 
 
 
@@ -169,13 +151,16 @@ sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
 
 
 
+
 //------------------------------------------------------------------------------------------//
 									/*SFML_Graphics*/
 //------------------------------------------------------------------------------------------//
 
 
 
+
 #ifdef SFML_ENABLED
+
 
 sfp::Object::Object(sf::Shape& shape, float lengthfactor)
 :mySeparatingAxis(NULL),
@@ -226,8 +211,6 @@ myLengthfactor(lengthfactor)
 
 
 
-
-
 sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center, float lengthfactor)
 :mySeparatingAxis(NULL),
 mySeparatingAxisEnabled(true),
@@ -263,6 +246,7 @@ myLengthfactor(lengthfactor)
 
 
 // ------------------------- End of constructor ------------------------- //
+
 
 
 
@@ -305,6 +289,7 @@ void sfp::Object::SetDrawable(sf::Drawable& drawable)
 
 
 
+
 void sfp::Object::SetLengthFactor(float factor)
 {/*FIXME
 	factor=
@@ -322,4 +307,5 @@ void sfp::Object::SetLengthFactor(float factor)
 
 
 #endif // SFML_ENABLED
+
 

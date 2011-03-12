@@ -41,32 +41,79 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& event)
 		
 		if(true)//((movement.x<0 && po.x>=0) || (movement.x>0 && po.x<0) )||/*&&*/ ( (movement.y<0 && po.y>=0) || (movement.y>0 && po.y<0)))
 		{
-			sfp::Vector2f r1(event.collisionpoint.top()-event.first->GetPosition());
-			sfp::Vector2f r2(event.collisionpoint.top()-event.second->GetPosition());
-			
-			float j=-(1+(event.first->GetRestitution()+event.second->GetRestitution())/2.f)*movement.DotProduct(event.collisionnormal.top());
-			j /= (1.f/event.first->GetMass()) + (1.f/event.second->GetMass()) +
-			std::abs(sfp::Vector2f(1.f/event.first->GetInertiaMoment() * r1.CrossProduct(event.collisionnormal.top()) * r1 + 1.f/event.second->GetInertiaMoment() *
-			r2.CrossProduct(event.collisionnormal.top()) * r2).DotProduct(event.collisionnormal.top()));
-										//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
-			
-				
-			event.first->SetSpeed(event.first->GetSpeed() - (j/event.first->GetMass()) * event.collisionnormal.top());
-			event.second->SetSpeed(event.second->GetSpeed() + (j/event.second->GetMass()) * event.collisionnormal.top());
-			
-			event.first->SetRotationSpeed(event.first->GetRotationSpeed() - j/event.first->GetInertiaMoment() * r1.CrossProduct(event.collisionnormal.top()));
-			event.second->SetRotationSpeed(event.second->GetRotationSpeed() + j/event.second->GetInertiaMoment() * r2.CrossProduct(event.collisionnormal.top()));
-			
-			
-			//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
-			
-			
+			if(event.first->IsFixed())
+			{
+				float restitution = (event.first->GetRestitution()+event.second->GetRestitution()) / 2.f;
+				BounceFixed(*event.second, event.collisionpoint.top(), -event.collisionnormal.top(), movement, restitution, true);
+			}
+			else if(event.second->IsFixed())
+			{
+				float restitution = (event.first->GetRestitution()+event.second->GetRestitution()) / 2.f;
+				BounceFixed(*event.first, event.collisionpoint.top(), event.collisionnormal.top(), movement, restitution);
+			}
+			else
+			{
+				Bounce(*event.first, *event.second, event.collisionpoint.top(), event.collisionnormal.top(), movement);
+			}
 		}
 		
 		event.collisionpoint.pop();
 		event.collisionnormal.pop();
 		event.convexobjects.pop();
 	}
+}
+
+
+
+void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr)
+{
+	sfp::Vector2f r1(P-first.GetPosition());
+	sfp::Vector2f r2(P-second.GetPosition());
+			
+	float j=-(1+(first.GetRestitution()+second.GetRestitution())/2.f)*vr.DotProduct(n);
+	j /= 1.f/first.GetMass() + 1.f/second.GetMass() + //FIXME std::abs?
+	std::abs(sfp::Vector2f(1.f/first.GetInertiaMoment() * r1.CrossProduct(n) * r1 + 1.f/second.GetInertiaMoment() *
+	r2.CrossProduct(n) * r2).DotProduct(n));
+						//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
+	
+	
+	first.SetSpeed(first.GetSpeed() - (j/first.GetMass()) * n);
+	second.SetSpeed(second.GetSpeed() + (j/second.GetMass()) * n);
+	
+	first.SetRotationSpeed(first.GetRotationSpeed() - j/first.GetInertiaMoment() * r1.CrossProduct(n));
+	second.SetRotationSpeed(second.GetRotationSpeed() + j/second.GetInertiaMoment() * r2.CrossProduct(n));
+	
+	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
+	
+	
+}
+
+
+
+void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e, bool secondfixed)
+{
+	sfp::Vector2f r1(P-object.GetPosition());
+			
+	float j=-++e*vr.DotProduct(n);
+	j /= 1.f/object.GetMass() + //FIXME std::abs?
+	std::abs(sfp::Vector2f(1.f/object.GetInertiaMoment() * r1.CrossProduct(n) * r1).DotProduct(n));
+						//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
+	
+	
+	if(!secondfixed)
+	{
+		object.SetSpeed(object.GetSpeed() - (j/object.GetMass()) * n);
+		object.SetRotationSpeed(object.GetRotationSpeed() - j/object.GetInertiaMoment() * r1.CrossProduct(n));
+	}
+	else
+	{
+		object.SetSpeed(object.GetSpeed() + (j/object.GetMass()) * n);
+		object.SetRotationSpeed(object.GetRotationSpeed() + j/object.GetInertiaMoment() * r1.CrossProduct(n));
+	}
+	
+	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
+	
+	
 }
 
 

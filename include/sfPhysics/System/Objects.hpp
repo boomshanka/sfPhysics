@@ -66,8 +66,9 @@ namespace sfp
 			sf::Vector2f ToGlobal(const sf::Vector2f&) const;
 			sf::Vector2f ToLocal(const sf::Vector2f&) const;
 			
-			void Force(const sf::Vector2f& position, const sfp::Vector2f& force);
-			float GetForce(const sf::Vector2f& position, float direction, const sf::Vector2f& referencespeed = sf::Vector2f(0,0)) const;
+			void Impulse(const sfp::Vector2f& position, sfp::Vector2f impulse) {Impulse(position, impulse, impulse.GetForce());}
+			void Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse);
+			//Ist getimpulse möglich?
 			
 			sfp::Vector2f GetMovement(const sfp::Vector2f& position) const;
 			
