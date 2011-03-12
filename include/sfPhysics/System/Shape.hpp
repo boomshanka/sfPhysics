@@ -31,6 +31,7 @@ namespace sfp
 			std::vector<sf::Vector2f> myPoints;
 			
 			float myCircleRadius;
+			sfp::Vector2f myPlaneNormal;
 			
 			sf::Vector2f myCenter;
 			float myArea;
@@ -52,6 +53,9 @@ namespace sfp
 			virtual float GetCircleRadius() const {return myCircleRadius;}
 			virtual void SetCircleRadius(float radius) {myCircleRadius=radius;}
 			
+			virtual const sfp::Vector2f& GetPlaneNormal() const {return myPlaneNormal;}
+			virtual void SetPlaneNormal(const sfp::Vector2f& normal) {myPlaneNormal=normal; myPlaneNormal.Normalize();}
+			
 			virtual ShapeType GetShapeType() const {return myShapeType;}
 			virtual void SetShapeType(ShapeType type) {myShapeType=type;}
 			
@@ -65,6 +69,7 @@ namespace sfp
 			static Shape Rectangle();
 			static Shape Line();
 			static Shape Plane(const sf::Vector2f&, float);
+			static Shape Plane(const sf::Vector2f&, sfp::Vector2f);
 			static Shape Circle(const sf::Vector2f&, float);
 			
 		protected:

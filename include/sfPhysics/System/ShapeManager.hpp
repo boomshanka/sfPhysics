@@ -34,6 +34,9 @@ namespace sfp
 			inline float GetCircleRadius() const {return Shape::GetCircleRadius();}
 			inline void SetCircleRadius(float radius) {Shape::SetCircleRadius(radius);}
 			
+			const sfp::Vector2f& GetPlaneNormal() const {return Shape::GetPlaneNormal();}
+			void SetPlaneNormal(const sfp::Vector2f& normal) {Shape::SetPlaneNormal(normal);}
+			
 			inline ShapeType GetShapeType() const {return Shape::GetShapeType();}
 			inline void SetShapeType(ShapeType type) {Shape::SetShapeType(type);}
 			

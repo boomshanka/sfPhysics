@@ -38,6 +38,7 @@ namespace sfp
 			
 			// //
 			void ComputeArea();//FIXME überlegen, wann sie aufgerufen wird und schauen, ob man bei Shape & ShapeManager aufrufen von ComputeArea sparen kann. Überschreiben prüfen
+			void SetShape(const Shape&);
 			
 			void EnableSeparatingAxis(bool enabled) {mySeparatingAxisEnabled=enabled;}
 			bool IsSeparatingAxisEnabled() const {return mySeparatingAxisEnabled;}

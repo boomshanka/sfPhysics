@@ -20,14 +20,15 @@ namespace sfp
 			sfp::Vector2f mySpeed;
 			float myRotationSpeed;
 			
-			sf::Vector2f myCenter;	//Center of gravity/mass
-			float myArea;			//Fläche
-			float myInertiaMoment;	//Trägheitsmoment
+			sf::Vector2f myCenter;		//Center of gravity/mass
+			float myArea;				//Fläche
+			float myInertiaMoment;		//Trägheitsmoment
 			
-			float myMass;			//Masse
-			float myDensity;		//Dichte
-			float myRestitution;	//Abprallkraft
-			float myFriction;		//Reibung
+			float myMass;				//Masse
+			float myDensity;			//Dichte
+			float myRestitution;		//Abprallkraft
+			float myDynamicFriction;	//Dynamische Reibung
+			float myStaticFriction;		//Statische Reibung
 			
 		public:
 			Physicable();
@@ -59,13 +60,16 @@ namespace sfp
 			bool SetArea(float);
 			bool SetRestitution(float);
 			bool SetFriction(float);
+			bool SetDynamicFriction(float);
+			bool SetStaticFriction(float);
 			bool SetInertiaMoment(float);
 			
 			float GetMass() const {return myMass;}
 			float GetDensity() const {return myDensity;}
 			float GetArea() const {return myArea;}
 			float GetRestitution() const {return myRestitution;}
-			float GetFriction() const {return myFriction;}
+			float GetDynamicFriction() const {return myDynamicFriction;}
+			float GetStaticFriction() const {return myStaticFriction;}
 			float GetInertiaMoment() const {return myInertiaMoment;}
 			
 	};

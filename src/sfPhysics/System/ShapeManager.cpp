@@ -42,7 +42,7 @@ void sfp::ShapeManager::SetShape(const Shape& shape) //FIXME zeigt this möglich
 
 
 void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt noch nicht!
-{
+{//FIXME shapetypen prüfen und ggf gleich in liste pushen (plane, circle usw)
 	myConvexShapes.clear();
 	myConvexShapes.push_back(Shape(*this));
 	

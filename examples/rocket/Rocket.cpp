@@ -54,7 +54,7 @@ int main()
 	shape.SetPosition(300,200);
 	circle.SetPosition(50.1,50);
 	circle2.SetPosition(50,250);
-	circle3.SetPosition(50,-200);
+	circle3.SetPosition(250,250);
 	circle4.SetPosition(50,-500);
 	
 	
@@ -66,9 +66,8 @@ int main()
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	foo.SetShapeType(sfp::Polygon);
 	
-	sfp::Object plane(sfp::Shape::Plane(sf::Vector2f(0,0),-90));
-	plane.SetPosition(sf::Vector2f(8,12));
-	plane.Fix(true);
+	sfp::Object plane(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
+	plane.SetPosition(sf::Vector2f(16,12));
 	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
@@ -81,9 +80,9 @@ int main()
 	world.AddObject(object);
 	world.AddObject(pCircle);
 	world.AddObject(pCircle2);
-	//world.AddObject(pCircle3);
+	world.AddObject(pCircle3);
 	//world.AddObject(pCircle4);
-//	world.AddObject(plane);
+	world.AddObject(plane);
 	
 	collision.AddObject(object);
 	collision.AddObject(foo);
@@ -91,22 +90,24 @@ int main()
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle);
 	collision.AddObject(pCircle2);
-//	collision.AddObject(plane);
+	collision.AddObject(plane);
 	
 	pCircle2.SetDensity(1);
 	pCircle.SetDensity(1);
 	
 	pCircle2.SetSpeed(sf::Vector2f(0,-0.1));
-	pCircle.SetSpeed(sf::Vector2f(0,0.1));
+//	pCircle.SetSpeed(sf::Vector2f(0,0.1));
 	
-	pCircle.SetRestitution(0.8);
-	pCircle2.SetRestitution(0.8);
+	pCircle.SetRestitution(0.9);
+	pCircle2.SetRestitution(1);
+	pCircle3.SetRestitution(1);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
 	pCircle.SetRotation(180);
 	pCircle2.Fix(true);
+	pCircle3.Fix(true);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -152,8 +153,8 @@ int main()
 			switch(collisionevent.CollisionType)
 			{
 				case sfp::PreciseCollision:
-					collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
-					collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+					//collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
+					//collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
 					
 					collision.Bounce(collisionevent);
 					break;
@@ -168,7 +169,6 @@ int main()
 		
 		world.MoveObjects();
 		
-		std::cout<<pCircle.GetSpeed().y<<" "<<pCircle2.GetSpeed().y<<"\n";
 		
 		//Draw
 		window.Draw(shape);

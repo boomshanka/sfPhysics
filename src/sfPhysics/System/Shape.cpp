@@ -71,10 +71,10 @@ void sfp::Shape::ComputePolygonArea()
 		myCenter+=diff;
 		
 		//Trägheitsmoment verschieben
-		myInertiaMoment += myArea * std::pow(diff.GetForce(),2); //FIXME völlig unabhängig vom trägheitsmoment?!
+		myInertiaMoment += myArea * std::pow(diff.GetForce(),2);
 		//Trägheitsmoment von Dreieck verschieben & addieren
 		diff=(center-(myCenter-diff))-diff;
-		myInertiaMoment += ComputeTriangleMoment(myPoints[0], myPoints[i-1], myPoints[i], area) + area * std::pow(diff.GetForce(),2); //FIXME selbe!
+		myInertiaMoment += ComputeTriangleMoment(myPoints[0], myPoints[i-1], myPoints[i], area) + area * std::pow(diff.GetForce(),2);
 		
 		myArea+=area;
 	}
@@ -119,13 +119,22 @@ sfp::Shape sfp::Shape::Line()
 
 sfp::Shape sfp::Shape::Plane(const sf::Vector2f& center, float angle)
 {
+	sfp::Vector2f normal(1,0);
+	normal.SetDirection(angle);
+	return Plane(center, normal);
+}
+
+
+sfp::Shape sfp::Shape::Plane(const sf::Vector2f& center, sfp::Vector2f normal)
+{
 	Shape shape;
 	
 	shape.myShapeType=sfp::Plane;
 	shape.myCenter=center;
-	shape.myCircleRadius=angle;
+	shape.myPlaneNormal=normal;
 	
 	shape.myArea=1;
+	shape.myInertiaMoment=1;
 	
 	return shape;
 }

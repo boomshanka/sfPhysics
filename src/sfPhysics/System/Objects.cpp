@@ -10,7 +10,7 @@ myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
 	myDrawable=NULL;
-	myLengthfactor=0;
+	myLengthfactor=1;
 	#endif
 }
 
@@ -23,11 +23,20 @@ myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
 	myDrawable=NULL;
-	myLengthfactor=0;
+	myLengthfactor=1;
 	#endif
 	
 	ShapeManager::SetShape(shape);
-	ComputeArea();
+	if(ShapeManager::myShapeType==sfp::Plane)
+	{
+		myIsFixed=true;
+	}
+	else
+	{
+		SetCenter(ShapeManager::myCenter);
+		Physicable::SetArea(ShapeManager::myArea);
+		Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	}
 }
 
 
@@ -35,6 +44,24 @@ myIsFixed(false)
 sfp::Object::~Object()
 {
 	delete mySeparatingAxis;
+}
+
+
+
+
+void sfp::Object::SetShape(const Shape& shape)
+{
+	ShapeManager::SetShape(shape);
+	if(ShapeManager::myShapeType==sfp::Plane)
+	{
+		myIsFixed=true;
+	}
+	else
+	{
+		SetCenter(ShapeManager::myCenter);
+		Physicable::SetArea(ShapeManager::myArea);
+		Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	}
 }
 
 
@@ -203,8 +230,18 @@ myLengthfactor(lengthfactor)
 {
 	myDrawable=&drawable;
 	
-	ShapeManager::SetShape(shape);//FIXME was ist mit Lengthfactor?
-	ComputeArea();
+	ShapeManager::SetShape(shape);
+	if(ShapeManager::myShapeType==sfp::Plane)
+	{
+		myIsFixed=true;
+	}//FIXME was ist mit Lengthfactor?
+	else
+	{
+		SetCenter(ShapeManager::myCenter);
+		Physicable::SetArea(ShapeManager::myArea);
+		Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	}
+	
 	myPosition=drawable.GetPosition()/myLengthfactor;
 	myRotation=drawable.GetRotation();
 }
