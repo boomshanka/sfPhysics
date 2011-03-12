@@ -14,7 +14,7 @@ export VERSION    = 1.0
 export CP         = cp
 export LN         = ln
 export LNFLAGS    = -s -f
-export LIBS       = system collision
+export LIBS       = system
 
 
 all: sfphysics

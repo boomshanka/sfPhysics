@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include <sfPhysics/System.hpp>
-#include <sfPhysics/Collision.hpp>
+
 
 
 int main()
@@ -52,7 +52,7 @@ int main()
 	
 	bottom.SetPosition(100,500);
 	shape.SetPosition(300,200);
-	circle.SetPosition(50,50);
+	circle.SetPosition(50.1,50);
 	circle2.SetPosition(50,250);
 	circle3.SetPosition(50,-200);
 	circle4.SetPosition(50,-500);
@@ -69,10 +69,6 @@ int main()
 	sfp::Object plane(sfp::Shape::Plane(sf::Vector2f(0,0),-90));
 	plane.SetPosition(sf::Vector2f(8,12));
 	plane.Fix(true);
-	
-	pCircle.SetDensity(2);
-	pCircle3.SetDensity(2);
-	pCircle4.SetDensity(2);
 	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
@@ -103,14 +99,14 @@ int main()
 	pCircle2.SetSpeed(sf::Vector2f(0,-0.1));
 	pCircle.SetSpeed(sf::Vector2f(0,0.1));
 	
-	pCircle.SetRestitution(0.5);
-	pCircle2.SetRestitution(0.5);
+	pCircle.SetRestitution(0.8);
+	pCircle2.SetRestitution(0.8);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
 	pCircle.SetRotation(180);
-	pCircle.Fix(true);
+	pCircle2.Fix(true);
 	
 	while (window.IsOpened()) // Window Loop //
 	{

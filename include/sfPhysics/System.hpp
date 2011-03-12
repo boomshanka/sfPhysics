@@ -12,7 +12,9 @@
 #include <sfPhysics/System/Shape.hpp>
 #include <sfPhysics/System/ShapeManager.hpp>
 #include <sfPhysics/System/Objects.hpp>
-#include <sfPhysics/System/SAT.hpp> //FIXME rüber ins Collisionpack
+#include <sfPhysics/System/SAT.hpp>
+#include <sfPhysics/System/CollisionEvent.hpp>
+#include <sfPhysics/System/Collision.hpp>
 
 
 #endif // SYSTEM_PACK

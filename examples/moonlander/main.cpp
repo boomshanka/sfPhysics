@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include <sfPhysics/System.hpp>
-#include <sfPhysics/Collision.hpp>
+
 
 
 int main()
@@ -56,10 +56,16 @@ int main()
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle4);
 	
-	pCircle1.SetSpeed(sf::Vector2f(4.7,2));
+	pCircle1.SetSpeed(sf::Vector2f(5,2));
 	pCircle2.SetSpeed(sf::Vector2f(5,-2));
-	pCircle3.SetSpeed(sf::Vector2f(-5,2.3));
-	pCircle4.SetSpeed(sf::Vector2f(-5.1,-2));
+	pCircle3.SetSpeed(sf::Vector2f(-5,2));
+	pCircle4.SetSpeed(sf::Vector2f(-5,-2));
+	
+	pCircle1.SetDensity(2);
+	pCircle2.SetDensity(1);
+	pCircle3.SetDensity(1);
+	pCircle4.SetDensity(0.5);
+	
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -124,6 +130,7 @@ int main()
 		
 		if(pCircle4.GetPosition().y<1 || pCircle4.GetPosition().y>11)
 			pCircle4.SetSpeed(pCircle4.GetSpeed()*sfp::Vector2f(1,-1));
+		
 		
 		
 		world.MoveObjects();
