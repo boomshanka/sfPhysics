@@ -54,7 +54,7 @@ int main()
 	shape.SetPosition(300,200);
 	circle.SetPosition(50.1,50);
 	circle2.SetPosition(50,250);
-	circle3.SetPosition(250,250);
+	circle3.SetPosition(255,250);
 	circle4.SetPosition(50,-500);
 	
 	
@@ -99,8 +99,9 @@ int main()
 //	pCircle.SetSpeed(sf::Vector2f(0,0.1));
 	
 	pCircle.SetRestitution(0.9);
-	pCircle2.SetRestitution(1);
-	pCircle3.SetRestitution(1);
+	pCircle2.SetRestitution(0.9);
+	pCircle3.SetRestitution(0.9);
+	plane.SetRestitution(0.4);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;

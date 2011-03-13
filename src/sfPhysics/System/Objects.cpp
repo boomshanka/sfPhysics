@@ -27,16 +27,15 @@ myIsFixed(false)
 	#endif
 	
 	ShapeManager::SetShape(shape);
+	
 	if(ShapeManager::myShapeType==sfp::Plane)
 	{
 		myIsFixed=true;
 	}
-	else
-	{
-		SetCenter(ShapeManager::myCenter);
-		Physicable::SetArea(ShapeManager::myArea);
-		Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
-	}
+	
+	SetCenter(ShapeManager::myCenter);
+	Physicable::SetArea(ShapeManager::myArea);
+	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
 }
 
 
@@ -56,12 +55,10 @@ void sfp::Object::SetShape(const Shape& shape)
 	{
 		myIsFixed=true;
 	}
-	else
-	{
-		SetCenter(ShapeManager::myCenter);
-		Physicable::SetArea(ShapeManager::myArea);
-		Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
-	}
+	
+	SetCenter(ShapeManager::myCenter);
+	Physicable::SetArea(ShapeManager::myArea);
+	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
 }
 
 
@@ -234,13 +231,12 @@ myLengthfactor(lengthfactor)
 	if(ShapeManager::myShapeType==sfp::Plane)
 	{
 		myIsFixed=true;
+		
 	}//FIXME was ist mit Lengthfactor?
-	else
-	{
-		SetCenter(ShapeManager::myCenter);
-		Physicable::SetArea(ShapeManager::myArea);
-		Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
-	}
+	
+	SetCenter(ShapeManager::myCenter);
+	Physicable::SetArea(ShapeManager::myArea);
+	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
 	
 	myPosition=drawable.GetPosition()/myLengthfactor;
 	myRotation=drawable.GetRotation();

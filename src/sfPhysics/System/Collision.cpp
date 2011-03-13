@@ -352,12 +352,12 @@ return false;
 bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {//FIXME
 	sfp::Vector2f hyp(first.ToGlobal(first.GetLocalShapeCenter(i))-second.ToGlobal(second.GetLocalShapeCenter(j)));
-	float distance(std::cos(std::abs(hyp.GetDirection()-first.GetPlaneNormal().GetDirection())*M_PI/180.f) * hyp.GetForce());
+	float distance(std::abs(std::cos((first.GetPlaneNormal().GetDirection()-hyp.GetDirection())*M_PI/180.f)) * hyp.GetForce());
 	
 	if(distance > second.GetConvexShape(j).GetCircleRadius())
 		return false;
 	
-	myCollisionEvents.top().collisionpoint.push(-first.GetPlaneNormal()*distance);
+	myCollisionEvents.top().collisionpoint.push(second.ToGlobal(second.GetLocalShapeCenter(j))-first.GetPlaneNormal()*distance);
 	myCollisionEvents.top().collisionnormal.push(first.GetPlaneNormal());
 	myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
 	

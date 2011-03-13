@@ -39,6 +39,13 @@ int main()
 	sfp::Object pCircle3(circle3, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	
+	sfp::Object plane1(sfp::Shape::Plane(sf::Vector2f(0,0), sfp::Vector2f(0,1)));
+	sfp::Object plane2(sfp::Shape::Plane(sf::Vector2f(0,0), sfp::Vector2f(1,0)));
+	sfp::Object plane3(sfp::Shape::Plane(sf::Vector2f(0,0), sfp::Vector2f(-1,0)));
+	sfp::Object plane4(sfp::Shape::Plane(sf::Vector2f(0,0), sfp::Vector2f(0,-1)));
+	plane3.SetPosition(sf::Vector2f(16,12));
+	plane4.SetPosition(sf::Vector2f(16,12));
+	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
@@ -56,13 +63,18 @@ int main()
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle4);
 	
+	collision.AddObject(plane1);
+	collision.AddObject(plane2);
+	collision.AddObject(plane3);
+	collision.AddObject(plane4);
+	
 	pCircle1.SetSpeed(sf::Vector2f(5,2));
 	pCircle2.SetSpeed(sf::Vector2f(5,-2));
 	pCircle3.SetSpeed(sf::Vector2f(-5,2));
 	pCircle4.SetSpeed(sf::Vector2f(-5,-2));
 	
-	pCircle1.SetDensity(2);
-	pCircle2.SetDensity(1);
+	pCircle1.SetDensity(3);
+	pCircle2.SetDensity(2);
 	pCircle3.SetDensity(1);
 	pCircle4.SetDensity(0.5);
 	
@@ -85,9 +97,6 @@ int main()
 	//	if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
 		
 		
-		// Play God
-		world.RenderGravity();
-		
 		while(collision.GetCollision(collisionevent))
 		{
 			
@@ -107,30 +116,8 @@ int main()
 			}
 		}
 		
-		if(pCircle1.GetPosition().x<1 || pCircle1.GetPosition().x>15)
-			pCircle1.SetSpeed(pCircle1.GetSpeed()*sfp::Vector2f(-1,1));
-			
-		if(pCircle2.GetPosition().x<1 || pCircle2.GetPosition().x>15)
-			pCircle2.SetSpeed(pCircle2.GetSpeed()*sfp::Vector2f(-1,1));
-		
-		if(pCircle3.GetPosition().x<1 || pCircle3.GetPosition().x>15)
-			pCircle3.SetSpeed(pCircle3.GetSpeed()*sfp::Vector2f(-1,1));
-		
-		if(pCircle4.GetPosition().x<1 || pCircle4.GetPosition().x>15)
-			pCircle4.SetSpeed(pCircle4.GetSpeed()*sfp::Vector2f(-1,1));
-			
-		if(pCircle1.GetPosition().y<1 || pCircle1.GetPosition().y>11)
-			pCircle1.SetSpeed(pCircle1.GetSpeed()*sfp::Vector2f(1,-1));
-			
-		if(pCircle2.GetPosition().y<1 || pCircle2.GetPosition().y>11)
-			pCircle2.SetSpeed(pCircle2.GetSpeed()*sfp::Vector2f(1,-1));
-		
-		if(pCircle3.GetPosition().y<1 || pCircle3.GetPosition().y>11)
-			pCircle3.SetSpeed(pCircle3.GetSpeed()*sfp::Vector2f(1,-1));
-		
-		if(pCircle4.GetPosition().y<1 || pCircle4.GetPosition().y>11)
-			pCircle4.SetSpeed(pCircle4.GetSpeed()*sfp::Vector2f(1,-1));
-		
+		// Play God
+		world.RenderGravity();
 		
 		
 		world.MoveObjects();
