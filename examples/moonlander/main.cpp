@@ -68,10 +68,10 @@ int main()
 	collision.AddObject(plane3);
 	collision.AddObject(plane4);
 	
-	pCircle1.SetSpeed(sf::Vector2f(5,2));
-	pCircle2.SetSpeed(sf::Vector2f(5,-2));
-	pCircle3.SetSpeed(sf::Vector2f(-5,2));
-	pCircle4.SetSpeed(sf::Vector2f(-5,-2));
+	pCircle1.SetVelocity(sf::Vector2f(5,2));
+	pCircle2.SetVelocity(sf::Vector2f(5,-2));
+	pCircle3.SetVelocity(sf::Vector2f(-5,2));
+	pCircle4.SetVelocity(sf::Vector2f(-5,-2));
 	
 	pCircle1.SetDensity(3);
 	pCircle2.SetDensity(2);

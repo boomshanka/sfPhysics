@@ -36,8 +36,8 @@ namespace sfp
 		friend class Object;
 		
 		private:
-			sfp::Vector2f mySpeed;
-			float myRotationSpeed;
+			sfp::Vector2f myVelocity;
+			float myRotationVelocity;
 			
 			sf::Vector2f myCenter;		//Center of gravity/mass
 			float myArea;				//Fläche
@@ -52,26 +52,26 @@ namespace sfp
 		public:
 			Physicable();
 			
-			void SetSpeed(const sfp::Vector2f& speed) {mySpeed=speed;}
-			void AddSpeed(const sfp::Vector2f& speed) {mySpeed+=speed;}
+			void SetVelocity(const sfp::Vector2f& velocity) {myVelocity=velocity;}
+			void AddVelocity(const sfp::Vector2f& velocity) {myVelocity+=velocity;}
 			
-			void SetImpulse(const sfp::Vector2f& impulse) {mySpeed= impulse/myMass;}
-			void AddImpulse(const sfp::Vector2f& impulse) {mySpeed+= impulse/myMass;}
+			void SetImpulse(const sfp::Vector2f& impulse) {myVelocity= impulse/myMass;}
+			void AddImpulse(const sfp::Vector2f& impulse) {myVelocity+= impulse/myMass;}
 			
-			void SetRotationSpeed(float speed) {myRotationSpeed=speed;}
-			void AddRotationSpeed(float speed) {myRotationSpeed+=speed;}
+			void SetRotationVelocity(float velocity) {myRotationVelocity=velocity;}
+			void AddRotationVelocity(float velocity) {myRotationVelocity+=velocity;}
 			
-			void SetRotationImpulse(float impulse) {myRotationSpeed=impulse/myInertiaMoment;}
-			void AddRotationImpulse(float impulse) {myRotationSpeed+=impulse/myInertiaMoment;}
+			void SetRotationImpulse(float impulse) {myRotationVelocity=impulse/myInertiaMoment;}
+			void AddRotationImpulse(float impulse) {myRotationVelocity+=impulse/myInertiaMoment;}
 			
 			
-			const sfp::Vector2f& GetSpeed() const {return mySpeed;}
-			sfp::Vector2f GetImpulse() const {return mySpeed*myMass;}
+			const sfp::Vector2f& GetVelocity() const {return myVelocity;}
+			sfp::Vector2f GetImpulse() const {return myVelocity*myMass;}
 			
-			float GetRotationSpeed() const {return myRotationSpeed;}
-			float GetRotationImpulse() const {return myRotationSpeed*myInertiaMoment;}
+			float GetRotationVelocity() const {return myRotationVelocity;}
+			float GetRotationImpulse() const {return myRotationVelocity*myInertiaMoment;}
 			
-			void RemoveForces() {mySpeed=sfp::Vector2f(0,0); myRotationSpeed=0;}
+			void RemoveForces() {myVelocity=sfp::Vector2f(0,0); myRotationVelocity=0;}
 			
 			
 			bool SetMass(float);

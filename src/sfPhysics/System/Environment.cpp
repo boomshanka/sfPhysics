@@ -44,7 +44,7 @@ void sfp::Environment::RenderGravity()
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
 		if(!(*it)->IsFixed())
-			(*it)->AddSpeed(myGravity*myFrameTime);
+			(*it)->AddVelocity(myGravity*myFrameTime);
 	}
 }
 
@@ -60,8 +60,8 @@ void sfp::Environment::MoveObjects(bool moovedrawables)
 		}
 		else
 		{
-			(*it)->Rotate((*it)->GetRotationSpeed()*myFrameTime*myTimefactor);
-			(*it)->Move((*it)->GetSpeed()*myFrameTime*myTimefactor);
+			(*it)->Rotate((*it)->GetRotationVelocity()*myFrameTime*myTimefactor);
+			(*it)->Move((*it)->GetVelocity()*myFrameTime*myTimefactor);
 		}
 	}
 	

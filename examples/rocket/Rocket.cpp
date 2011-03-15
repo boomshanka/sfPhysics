@@ -95,8 +95,8 @@ int main()
 	pCircle2.SetDensity(1);
 	pCircle.SetDensity(1);
 	
-	pCircle2.SetSpeed(sf::Vector2f(0,-0.1));
-//	pCircle.SetSpeed(sf::Vector2f(0,0.1));
+	pCircle2.SetVelocity(sf::Vector2f(0,-0.1));
+//	pCircle.SetVelocity(sf::Vector2f(0,0.1));
 	
 	pCircle.SetRestitution(0.9);
 	pCircle2.SetRestitution(0.9);
@@ -128,7 +128,7 @@ int main()
 		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
 		
 		//FIXME Test
-		//pCircle.AddRotationSpeed(-pCircle.GetRotationSpeed()*0.1*window.GetFrameTime());
+		//pCircle.AddRotationVelocity(-pCircle.GetRotationVelocity()*0.1*window.GetFrameTime());
 		//pCircle.Impulse(sfp::Vector2f(-1,0),sfp::Vector2f(0,-1),M_PI/6.f);
 		
 		mouse_x=Input.GetMouseX();

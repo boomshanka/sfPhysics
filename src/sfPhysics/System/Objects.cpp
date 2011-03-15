@@ -175,18 +175,18 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 	normal.Normalize();
 	position.Rotate(myRotation);
 	
-	AddSpeed((impulse/Physicable::myMass) * normal);
-	AddRotationSpeed(impulse/Physicable::myInertiaMoment * position.CrossProduct(normal));
+	AddVelocity((impulse/Physicable::myMass) * normal);
+	AddRotationVelocity(impulse/Physicable::myInertiaMoment * position.CrossProduct(normal));
 }
 
 
 
 sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
 {
-	sfp::Vector2f movement(Physicable::myRotationSpeed * position);
+	sfp::Vector2f movement(Physicable::myRotationVelocity * position);
 	movement.Rotate(myRotation);
 	
-	movement+=Physicable::mySpeed;
+	movement+=Physicable::myVelocity;
 	
 	return movement;
 }
