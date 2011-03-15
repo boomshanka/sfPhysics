@@ -88,18 +88,18 @@ void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::
 	sfp::Vector2f r1(P-first.GetPosition());
 	sfp::Vector2f r2(P-second.GetPosition());
 			
-	float j=-(1+(first.GetRestitution()+second.GetRestitution())/2.f)*vr.DotProduct(n);
+	float j=-(1+(first.GetRestitution()+second.GetRestitution())/2.f) * DotProduct(vr, n);
 	j /= 1.f/first.GetMass() + 1.f/second.GetMass() + //FIXME std::abs?
-	std::abs(sfp::Vector2f(1.f/first.GetInertiaMoment() * r1.CrossProduct(n) * r1 + 1.f/second.GetInertiaMoment() *
-	r2.CrossProduct(n) * r2).DotProduct(n));
+	std::abs(DotProduct((1.f/first.GetInertiaMoment() * CrossProduct(r1, n) * r1 + 1.f/second.GetInertiaMoment() *
+	CrossProduct(r2, n) * r2), n));
 						//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
 	
 	
 	first.SetVelocity(first.GetVelocity() - (j/first.GetMass()) * n);
 	second.SetVelocity(second.GetVelocity() + (j/second.GetMass()) * n);
 	
-	first.SetRotationVelocity(first.GetRotationVelocity() - j/first.GetInertiaMoment() * r1.CrossProduct(n));
-	second.SetRotationVelocity(second.GetRotationVelocity() + j/second.GetInertiaMoment() * r2.CrossProduct(n));
+	first.SetRotationVelocity(first.GetRotationVelocity() - j/first.GetInertiaMoment() * CrossProduct(r1, n));
+	second.SetRotationVelocity(second.GetRotationVelocity() + j/second.GetInertiaMoment() * CrossProduct(r2, n));
 	
 	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
 	
@@ -112,21 +112,21 @@ void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, co
 {
 	sfp::Vector2f r1(P-object.GetPosition());
 			
-	float j=-++e*vr.DotProduct(n);
+	float j= - ++e * DotProduct(vr, n);
 	j /= 1.f/object.GetMass() + //FIXME std::abs?
-	std::abs(sfp::Vector2f(1.f/object.GetInertiaMoment() * r1.CrossProduct(n) * r1).DotProduct(n));
+	std::abs(DotProduct((1.f/object.GetInertiaMoment() * CrossProduct(r1, n) * r1), n));
 						//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
 	
 	
 	if(!secondfixed)
 	{
 		object.SetVelocity(object.GetVelocity() - (j/object.GetMass()) * n);
-		object.SetRotationVelocity(object.GetRotationVelocity() - j/object.GetInertiaMoment() * r1.CrossProduct(n));
+		object.SetRotationVelocity(object.GetRotationVelocity() - j/object.GetInertiaMoment() * CrossProduct(r1, n));
 	}
 	else
 	{
 		object.SetVelocity(object.GetVelocity() + (j/object.GetMass()) * n);
-		object.SetRotationVelocity(object.GetRotationVelocity() + j/object.GetInertiaMoment() * r1.CrossProduct(n));
+		object.SetRotationVelocity(object.GetRotationVelocity() + j/object.GetInertiaMoment() * CrossProduct(r1, n));
 	}
 	
 	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt

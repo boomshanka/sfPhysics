@@ -176,7 +176,7 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 	position.Rotate(myRotation);
 	
 	AddVelocity((impulse/Physicable::myMass) * normal);
-	AddRotationVelocity(impulse/Physicable::myInertiaMoment * position.CrossProduct(normal));
+	AddRotationVelocity(impulse/Physicable::myInertiaMoment * CrossProduct(position, normal));
 }
 
 

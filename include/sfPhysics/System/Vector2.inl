@@ -141,26 +141,10 @@ inline void sfp::Vector2<T>::Normalize()
 
 
 template <typename T>
-inline float sfp::Vector2<T>::DotProduct(const sf::Vector2<T>& vector) const
-{
-	return sf::Vector2<T>::x*vector.x + sf::Vector2<T>::y*vector.y;
-}
-
-
-template <typename T>
-inline float sfp::Vector2<T>::CrossProduct(const sf::Vector2<T>& vector) const
-{
-	return sf::Vector2<T>::x*vector.y - sf::Vector2<T>::y*vector.x;
-}
-
-
-
-template <typename T>
 inline sfp::Vector2<T> sfp::Vector2<T>::GetNormal() const
 {
 	return sfp::Vector2<T>(-sf::Vector2<T>::y, sf::Vector2<T>::x);
 }
-
 
 
 
@@ -196,6 +180,21 @@ inline sfp::Vector2<T>& operator /=(sfp::Vector2<T>& left, const sfp::Vector2<T>
 	left.y/=right.y;
 	
 	return left;
+}
+
+
+
+template <typename T>
+inline float CrossProduct(const sf::Vector2<T>& left, const sf::Vector2<T>& right)
+{
+	return left.x*right.y - left.y*right.x;
+}
+
+
+template <typename T>
+inline float DotProduct(const sf::Vector2<T>& left, const sf::Vector2<T>& right)
+{
+	return left.x*right.x + left.y*right.y;
 }
 
 

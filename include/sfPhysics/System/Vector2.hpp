@@ -43,27 +43,24 @@ namespace sfp
 			Vector2();
 			Vector2(T x, T y);
 			Vector2(const sf::Vector2<T>& vec);
-
+			
 			T GetForce() const;
 			T GetForce(float direction) const;
 			float GetDirection() const;
-
+			
 			void SetForce(T force);
 			void SetForce(T force, float direction);
 			void SetDirection(float direction);
 			void Rotate(float rotation);
-
+			
 			void AddForce(T force);
 			void AddForce(T force, float direction);
 			void Normalize();
 			
-			float DotProduct(const sf::Vector2<T>&) const;
-			float CrossProduct(const sf::Vector2<T>&) const;
-			
 			sfp::Vector2<T> GetNormal() const;
 	};
 	
-	
+	//FIXME sf::Vector2<T> ?
 	template <typename T>
 	Vector2<T> operator *(const Vector2<T>& left, const Vector2<T>& right);
 	
@@ -77,6 +74,13 @@ namespace sfp
 	Vector2<T>& operator /=(Vector2<T>& left, const Vector2<T>& right);
 	
 	
+	template <typename T>
+	float CrossProduct(const sf::Vector2<T>& left, const sf::Vector2<T>& right);
+	
+	template <typename T>
+	float DotProduct(const sf::Vector2<T>& left, const sf::Vector2<T>& right);
+	
+	
 	
 	#include <sfPhysics/System/Vector2.inl>
 	
@@ -85,7 +89,7 @@ namespace sfp
 	typedef Vector2<int>   Vector2i;
 	typedef Vector2<float> Vector2f;
 	
-		
+	
 } // namespace
 
 
