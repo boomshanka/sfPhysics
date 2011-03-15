@@ -39,9 +39,9 @@ void sfp::ShapeManager::AddPoint(const sf::Vector2f& vec)
 
 
 
-void sfp::ShapeManager::SetPointPosition(unsigned int index, const sf::Vector2f& vec)
+void sfp::ShapeManager::SetPoint(unsigned int index, const sf::Vector2f& vec)
 {
-	Shape::SetPointPosition(index, vec);
+	Shape::SetPoint(index, vec);
 	
 	ComputeConvexShapes();
 	ComputeArea();
@@ -49,7 +49,7 @@ void sfp::ShapeManager::SetPointPosition(unsigned int index, const sf::Vector2f&
 
 
 
-void sfp::ShapeManager::SetShape(const Shape& shape) //FIXME zeigt this möglicherweise auf Shape?
+void sfp::ShapeManager::SetShape(const Shape& shape)
 {
 	Shape* thisshape=this;
 	*thisshape=shape;
