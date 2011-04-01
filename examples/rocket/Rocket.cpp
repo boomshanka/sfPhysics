@@ -98,7 +98,7 @@ int main()
 	
 	collision.AddObject(object);
 	collision.AddObject(foo);
-//	collision.AddObject(pCircle4);
+	collision.AddObject(pCircle4);
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle);
 	collision.AddObject(pCircle2);
@@ -109,11 +109,11 @@ int main()
 	pCircle2.SetDensity(1);
 	pCircle.SetDensity(1);
 	
-	pCircle.SetRestitution(0.6);
+	pCircle.SetRestitution(0.5);
 	pCircle2.SetRestitution(0.9);
 	pCircle3.SetRestitution(0.9);
 	pCircle4.SetRestitution(0.4);
-	plane.SetRestitution(0);
+	plane.SetRestitution(0.3);
 	plane2->SetRestitution(0.6);
 	plane3->SetRestitution(0.6);
 	
@@ -124,9 +124,9 @@ int main()
 	pCircle3.Fix(true);
 	pCircle4.Fix(true);
 	
-	pCircle.SetRotation(90);
+//	pCircle.SetRotation(90);
 //	pCircle.SetRotationVelocity(90);
-	pCircle.SetInertiaMoment(0.8);
+//	pCircle.SetInertiaMoment(0.8);
 
 	
 	while (window.IsOpened()) // Window Loop //

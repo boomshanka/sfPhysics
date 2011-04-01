@@ -91,7 +91,7 @@ namespace sfp
 			void Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse);
 			//Ist getimpulse möglich?
 			
-			sfp::Vector2f GetMovement(const sfp::Vector2f& position, const sfp::Vector2f& normal) const;
+			sfp::Vector2f GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const;
 			
 			bool IsFixed() {return myIsFixed;}
 			void Fix(bool fix) {myIsFixed=fix;}

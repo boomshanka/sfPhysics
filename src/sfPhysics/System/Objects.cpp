@@ -215,12 +215,14 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 
 
 
-sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position, const sfp::Vector2f& normal) const
+sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const
 {
-	sfp::Vector2f movement(position-myCenter);
-	movement.Rotate(myRotation);
+	position-=myCenter;
+	position.Rotate(myRotation);
 	
-	movement*=/*CrossProduct(movement, normal) */ Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f;
+	sfp::Vector2f movement(normal * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f)); //FIXME ist das noch nötig?
+	
+	movement*=CrossProduct(position, normal);
 	movement+=Physicable::myVelocity;
 	
 	return movement;
