@@ -46,7 +46,7 @@ myIsFixed(false)
 	
 	ShapeManager::SetShape(shape);
 	
-	if(ShapeManager::myShapeType==sfp::Plane)
+	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
 	{
 		myIsFixed=true;
 	}
@@ -54,6 +54,10 @@ myIsFixed(false)
 	SetCenter(ShapeManager::myCenter);
 	Physicable::SetArea(ShapeManager::myArea);
 	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	
+	myLocalBox=ShapeManager::GetShapeBox();
+	myLocalBox.Left -= myCenter.x;
+	myLocalBox.Top -= myCenter.y;
 }
 
 
@@ -69,7 +73,7 @@ sfp::Object::~Object()
 void sfp::Object::SetShape(const Shape& shape)
 {
 	ShapeManager::SetShape(shape);
-	if(ShapeManager::myShapeType==sfp::Plane)
+	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
 	{
 		myIsFixed=true;
 	}
@@ -77,18 +81,10 @@ void sfp::Object::SetShape(const Shape& shape)
 	SetCenter(ShapeManager::myCenter);
 	Physicable::SetArea(ShapeManager::myArea);
 	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
-}
-
-
-
-
-void sfp::Object::ComputeArea()
-{
-	ShapeManager::ComputeArea();
 	
-	SetCenter(ShapeManager::myCenter);
-	Physicable::SetArea(ShapeManager::myArea);
-	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	myLocalBox=ShapeManager::GetShapeBox();
+	myLocalBox.Left -= myCenter.x;
+	myLocalBox.Top -= myCenter.y;
 }
 
 
@@ -107,7 +103,10 @@ void sfp::Object::ComputeSeparatingAxis()
 
 
 void sfp::Object::SetCenter(const sf::Vector2f& center)
-{
+{//FIXME InertiaMoment neu berechnen
+	if(!ShapeManager::IsUpdated())
+		Update();
+	
 	myCenter=Physicable::myCenter=center;
 	
 	delete mySeparatingAxis;
@@ -121,40 +120,15 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 
 
 
-
-sf::Vector2f sfp::Object::GetLocalPoint(unsigned int index) const
-{
-	return GetPoint(index)-myCenter;
-}
-
-
-
-sf::Vector2f sfp::Object::GetLocalPoint(unsigned int shape, unsigned int index) const
-{
-	return GetConvexShape(shape).GetPoint(index)-myCenter;
-}
-
-
-
-
-sf::Vector2f sfp::Object::GetLocalShapeCenter(unsigned int shape) const
-{
-	return GetConvexShape(shape).GetShapeCenter()-myCenter;
-}
-
-
-
-
 sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 {
-	sfp::Vector2f global(local);
+	sfp::Vector2f global(local-myCenter);
 	
 	global.Rotate(myRotation);
 	global+=myPosition;
 	
 	return global;
 }
-
 
 
 sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
@@ -164,7 +138,66 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 	local-=myPosition;
 	local.Rotate(-myRotation);
 	
-	return local;
+	return local+myCenter;
+}
+
+
+
+const sfp::FloatBox& sfp::Object::GetLocalBox()
+{
+	if(!ShapeManager::IsUpdated())
+		Update();
+	
+	return myLocalBox;
+}
+
+
+sfp::FloatBox sfp::Object::GetBoundingBox()
+{
+	sf::Vector2f vec(ToGlobal(sf::Vector2f(GetLocalBox().Left,myLocalBox.Top)));
+	
+	sfp::FloatBox back;
+	
+	back.Left=vec.x;
+	back.Width=vec.x;
+	back.Top=vec.y;
+	back.Height=vec.y;
+	
+	vec = ToGlobal(ToGlobal(sf::Vector2f(myLocalBox.Left+myLocalBox.Width,myLocalBox.Top)));
+	if(back.Left>vec.x)
+		back.Left=vec.x;
+	else if(back.Width<vec.x)
+		back.Width=vec.x;
+	if(back.Top>vec.y)
+		back.Top=vec.y;
+	else if(back.Height<vec.y)
+		back.Height=vec.y;
+	
+	vec = ToGlobal(ToGlobal(sf::Vector2f(myLocalBox.Left+myLocalBox.Width,myLocalBox.Top+myLocalBox.Height)));
+	if(back.Left>vec.x)
+		back.Left=vec.x;
+	else if(back.Width<vec.x)
+		back.Width=vec.x;
+	if(back.Top>vec.y)
+		back.Top=vec.y;
+	else if(back.Height<vec.y)
+		back.Height=vec.y;
+	
+	vec = ToGlobal(ToGlobal(sf::Vector2f(myLocalBox.Left,myLocalBox.Top+myLocalBox.Height)));
+	if(back.Left>vec.x)
+		back.Left=vec.x;
+	else if(back.Width<vec.x)
+		back.Width=vec.x;
+	if(back.Top>vec.y)
+		back.Top=vec.y;
+	else if(back.Height<vec.y)
+		back.Height=vec.y;
+	
+	
+	back.Width-=back.Left;
+	back.Height-=back.Top;
+	
+	return back;
 }
 
 
@@ -172,7 +205,8 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 
 void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse)
 {
-	normal.Normalize();
+//	normal.Normalize();
+	position-=myCenter;
 	position.Rotate(myRotation);
 	
 	AddVelocity((impulse/Physicable::myMass) * normal);
@@ -181,16 +215,31 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 
 
 
-sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position) const
+sfp::Vector2f sfp::Object::GetMovement(const sfp::Vector2f& position, const sfp::Vector2f& normal) const
 {
-	sfp::Vector2f movement(Physicable::myRotationVelocity * position);
+	sfp::Vector2f movement(position-myCenter);
 	movement.Rotate(myRotation);
 	
+	movement*=/*CrossProduct(movement, normal) */ Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f;
 	movement+=Physicable::myVelocity;
 	
 	return movement;
 }
 
+
+
+void sfp::Object::Update()
+{
+	ShapeManager::Update();
+	
+	SetCenter(ShapeManager::myCenter);
+	Physicable::SetArea(ShapeManager::myArea);
+	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	
+	myLocalBox=ShapeManager::GetShapeBox();
+	myLocalBox.Left -= myCenter.x;
+	myLocalBox.Top -= myCenter.y;
+}
 
 
 /******************************************************************************
@@ -242,16 +291,12 @@ myLengthfactor(lengthfactor)
 {
 	myDrawable=&drawable;
 	
-	ShapeManager::SetShape(shape);
-	if(ShapeManager::myShapeType==sfp::Plane)
+	SetShape(shape);
+	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
 	{
 		myIsFixed=true;
 		
 	}//FIXME was ist mit Lengthfactor?
-	
-	SetCenter(ShapeManager::myCenter);
-	Physicable::SetArea(ShapeManager::myArea);
-	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
 	
 	myPosition=drawable.GetPosition()/myLengthfactor;
 	myRotation=drawable.GetRotation();
@@ -306,9 +351,7 @@ void sfp::Object::SetShape(sf::Shape& sfShape)
 	{
 		shape.AddPoint(sfShape.GetPointPosition(i)/myLengthfactor);
 	}
-	ShapeManager::SetShape(shape);
-	
-	ComputeArea();
+	SetShape(shape);
 	
 	myPosition=sfShape.GetPosition()/myLengthfactor;
 	myRotation=sfShape.GetRotation();

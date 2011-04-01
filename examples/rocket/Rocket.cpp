@@ -19,21 +19,23 @@ int main()
 //	360°	→	1,0
 	
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Physics Test");
-	window.EnableVerticalSync(true);
+	sf::Image* image = new sf::Image();
+	image->LoadFromFile("kreis.png");
+	sf::Sprite kreise(*image);
 	
 	sf::Event event;
 	const sf::Input& Input = window.GetInput();
 	int mouse_x, mouse_y;
 	
 	
-	sf::Shape shape, bottom, circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
+	sf::Shape shape, bottom,// circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
 	circle2=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
 	circle3=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
 	circle4=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
 	
-	circle.SetPointColor(0,sf::Color::Yellow);
+//	circle.SetPointColor(0,sf::Color::Yellow);
 	circle2.SetPointColor(0,sf::Color::Yellow);
-	circle.SetPointColor(1,sf::Color::Yellow);
+//	circle.SetPointColor(1,sf::Color::Yellow);
 	circle2.SetPointColor(1,sf::Color::Yellow);
 	
 	//sfp::Object pShape(shape); sfp::Object pBottom(bottom); sfp::Object pBalken(balken);
@@ -52,63 +54,80 @@ int main()
 	
 	bottom.SetPosition(100,500);
 	shape.SetPosition(300,200);
-	circle.SetPosition(50.1,50);
+	kreise.SetPosition(152.5,50);
 	circle2.SetPosition(50,250);
 	circle3.SetPosition(255,250);
-	circle4.SetPosition(50,-500);
+	circle4.SetPosition(152.5,470);
 	
 	
 	sfp::Object object(shape,50);
 	sfp::Object foo(bottom,50);
-	sfp::Object pCircle(circle, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
+	sfp::Object pCircle(kreise, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
+	pCircle.AddConvexShape(sfp::Shape::Circle(sf::Vector2f(3,1),1));
+	pCircle.Update();
+	//pCircle.SetPosition(sf::Vector2f(3.125,2));
+	
 	sfp::Object pCircle2(circle2, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle3(circle3, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
-	foo.SetShapeType(sfp::Polygon);
+	foo.SetShapeType(sfp::Shape::Type::Polygon);
 	
 	sfp::Object plane(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
+	sfp::Object* plane2 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(-1,0)));
+	sfp::Object* plane3 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(1,0)));
 	plane.SetPosition(sf::Vector2f(16,12));
+	plane2->SetPosition(sf::Vector2f(6.1,0));
+	plane3->SetPosition(sf::Vector2f(0,0));
 	
 	sfp::Collision collision;
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
 	
 	world.SetLengthFactor(50);
-	world.SetGravity(sf::Vector2f(0,0));
+	world.SetGravity(sf::Vector2f(0,10));
 	//world.SetTimeFactor(1);
 	
 	world.AddObject(object);
 	world.AddObject(pCircle);
 	world.AddObject(pCircle2);
 	world.AddObject(pCircle3);
-	//world.AddObject(pCircle4);
+	world.AddObject(pCircle4);
 	world.AddObject(plane);
+	world.AddObject(*plane2);
+	world.AddObject(*plane3);
 	
 	collision.AddObject(object);
 	collision.AddObject(foo);
-	collision.AddObject(pCircle4);
+//	collision.AddObject(pCircle4);
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle);
 	collision.AddObject(pCircle2);
 	collision.AddObject(plane);
+	collision.AddObject(*plane2);
+	collision.AddObject(*plane3);
 	
 	pCircle2.SetDensity(1);
 	pCircle.SetDensity(1);
 	
-	pCircle2.SetVelocity(sf::Vector2f(0,-0.1));
-//	pCircle.SetVelocity(sf::Vector2f(0,0.1));
-	
-	pCircle.SetRestitution(0.9);
+	pCircle.SetRestitution(0.6);
 	pCircle2.SetRestitution(0.9);
 	pCircle3.SetRestitution(0.9);
-	plane.SetRestitution(0.4);
+	pCircle4.SetRestitution(0.4);
+	plane.SetRestitution(0);
+	plane2->SetRestitution(0.6);
+	plane3->SetRestitution(0.6);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
-	pCircle.SetRotation(180);
 	pCircle2.Fix(true);
 	pCircle3.Fix(true);
+	pCircle4.Fix(true);
+	
+	pCircle.SetRotation(90);
+//	pCircle.SetRotationVelocity(90);
+	pCircle.SetInertiaMoment(0.8);
+
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -129,7 +148,7 @@ int main()
 		
 		//FIXME Test
 		//pCircle.AddRotationVelocity(-pCircle.GetRotationVelocity()*0.1*window.GetFrameTime());
-		//pCircle.Impulse(sfp::Vector2f(-1,0),sfp::Vector2f(0,-1),M_PI/6.f);
+//		pCircle.Impulse(sfp::Vector2f(0,1),sfp::Vector2f(0,-1),M_PI/3.f);
 		
 		mouse_x=Input.GetMouseX();
 		mouse_y=Input.GetMouseY();
@@ -173,22 +192,24 @@ int main()
 		
 		//Draw
 		window.Draw(shape);
-		window.Draw(circle);
+		window.Draw(kreise);
 		window.Draw(circle2);
 		window.Draw(circle3);
 		window.Draw(circle4);
-		window.Draw(bottom);
+	//	window.Draw(bottom);
 		
 		window.Display();
 		window.Clear(sf::Color(0, 0, 150));
 		
 		shape.SetColor(sf::Color::White);
 		bottom.SetColor(sf::Color::White);
-		circle.SetColor(sf::Color::White);
+		kreise.SetColor(sf::Color::White);
 		circle2.SetColor(sf::Color::White);
 		circle3.SetColor(sf::Color::White);
 		circle4.SetColor(sf::Color::White);
 	} // Window Loop //
+	
+	delete image;
 	
 	#define HAU return
 	#define WOLFRAM 0

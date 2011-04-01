@@ -22,20 +22,19 @@
 
 
 sfp::Shape::Shape()
-:myShapeType(Polygon), myCircleRadius(0)
+:myCircleRadius(0)
 {
-
+	type.myShapeType = Shape::Type::Polygon;
 }
 
 
 
 sfp::Shape::Shape(const Shape& shape)
-:myShapeType(shape.myShapeType),
-myPoints(shape.myPoints),
-myCircleRadius(shape.myCircleRadius),
+:myPoints(shape.myPoints),
+myCircleRadius(shape.myCircleRadius), myPlaneNormal(shape.myPlaneNormal),
 myCenter(shape.myCenter), myArea(shape.myArea), myInertiaMoment(shape.myInertiaMoment)
 {
-	
+	type.myShapeType = shape.type.myShapeType;
 }
 
 
@@ -46,9 +45,9 @@ void sfp::Shape::ComputeArea() //FIXME warum zahlen?
 	myArea=0;
 	myInertiaMoment=0;
 	
-	switch(myShapeType)
+	switch(type.myShapeType)
 	{
-		case Polygon:
+		case Shape::Type::Polygon:
 			ComputePolygonArea();
 			break;
 		
@@ -148,7 +147,7 @@ sfp::Shape sfp::Shape::Plane(const sf::Vector2f& center, sfp::Vector2f normal)
 {
 	Shape shape;
 	
-	shape.myShapeType=sfp::Plane;
+	shape.type.myShapeType=sfp::Shape::Type::Plane;
 	shape.myCenter=center;
 	shape.myPlaneNormal=normal;
 	
@@ -163,7 +162,7 @@ sfp::Shape sfp::Shape::Circle(const sf::Vector2f& center, float radius)
 {
 	Shape shape;
 	
-	shape.myShapeType=sfp::Circle;
+	shape.type.myShapeType=sfp::Shape::Type::Circle;
 	shape.myCenter=center;
 	shape.myCircleRadius=radius;
 	

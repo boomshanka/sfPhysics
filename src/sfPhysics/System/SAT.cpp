@@ -27,20 +27,20 @@ void sfp::SeparatingAxis::ComputeSeperatingAxix(sfp::Object& object)
 	
 	switch(object.GetShapeType())
 	{
-		case sfp::Plane:
+		case sfp::Shape::Type::Plane:
 			
 			break;
 			
-		case sfp::Rectangle:
+		case sfp::Shape::Type::Rectangle:
 			AddAx(object.ToGlobal(object.GetPoint(0)), object.ToGlobal(object.GetPoint(1)));
 			AddAx(object.ToGlobal(object.GetPoint(1)), object.ToGlobal(object.GetPoint(2)));
 			break;
 			
-/*		case sfp::Line:
+/*		case sfp::Shape::Type::Line:
 			AddAx(object.ToGlobal(object.GetPoint(0)), object.ToGlobal(object.GetPoint(1)));
 			break;*/
 		
-		case sfp::Polygon:
+		case sfp::Shape::Type::Polygon:
 			if(object.GetPointCount()>1)
 				AddAx(object.ToGlobal(object.GetPoint(object.GetPointCount()-1)),object.ToGlobal(object.GetPoint(0)));
 			for(int i=1;i<object.GetPointCount();++i)

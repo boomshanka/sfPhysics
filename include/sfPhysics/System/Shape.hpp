@@ -29,32 +29,38 @@
 
 namespace sfp
 {
-	enum ShapeType
-	{
-		Polygon = 0,
-		Rectangle = 1,
-//		Line,
-		Plane = 3,
-		Circle = 4,
-		NegCircle = 5
-	};
-	
-	
+
 	class Shape
 	{
 		friend class ShapeManager;
 		friend class Object;
 		
+		public:
+			struct Type
+			{
+			enum ShapeType
+			{
+				Polygon = 0,
+				Rectangle = 1,
+//				Line,
+				Plane = 3,
+				Circle = 4,
+				NegCircle = 5,
+				Unknown = 9
+			} myShapeType;
+			};
+			
 		private:
-			ShapeType myShapeType;
+			Type type;
+		
 			std::vector<sf::Vector2f> myPoints;
 			
 			float myCircleRadius;
 			sfp::Vector2f myPlaneNormal;
 			
 			sf::Vector2f myCenter;
-			float myArea;
-			float myInertiaMoment; // Ist unabhängig von der Masse
+			float myArea;			
+			float myInertiaMoment;	// Ist unabhängig von der Masse
 		public:
 			Shape();
 			Shape(const Shape&);
@@ -75,8 +81,8 @@ namespace sfp
 			virtual const sfp::Vector2f& GetPlaneNormal() const {return myPlaneNormal;}
 			virtual void SetPlaneNormal(const sfp::Vector2f& normal) {myPlaneNormal=normal; myPlaneNormal.Normalize();}
 			
-			virtual ShapeType GetShapeType() const {return myShapeType;}
-			virtual void SetShapeType(ShapeType type) {myShapeType=type;}
+			virtual Type::ShapeType GetShapeType() const {return type.myShapeType;}
+			virtual void SetShapeType(Type::ShapeType newtype) {type.myShapeType=newtype;}
 			
 			
 			virtual const sf::Vector2f& GetShapeCenter() const {return myCenter;}
@@ -92,7 +98,7 @@ namespace sfp
 			static Shape Circle(const sf::Vector2f&, float);
 			
 		protected:
-			virtual void ComputeArea();
+			void ComputeArea(); //FIXME Umbenennen?
 			
 			void ComputePolygonArea();
 			void ComputeCircleArea();
@@ -101,6 +107,7 @@ namespace sfp
 	};
 
 } // namespace
+
 
 #endif // SFPHYSICS_SHAPE_HPP
 

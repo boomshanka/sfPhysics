@@ -23,6 +23,7 @@
 
 
 sfp::ShapeManager::ShapeManager()
+:myIsUpdated(true)
 {
 	myConvexShapes.push_back(Shape());//FIXME
 }
@@ -33,8 +34,7 @@ void sfp::ShapeManager::AddPoint(const sf::Vector2f& vec)
 {
 	Shape::AddPoint(vec);
 	
-	ComputeConvexShapes();
-	ComputeArea();
+	myIsUpdated=false;
 }
 
 
@@ -43,8 +43,7 @@ void sfp::ShapeManager::SetPoint(unsigned int index, const sf::Vector2f& vec)
 {
 	Shape::SetPoint(index, vec);
 	
-	ComputeConvexShapes();
-	ComputeArea();
+	myIsUpdated=false;
 }
 
 
@@ -54,16 +53,80 @@ void sfp::ShapeManager::SetShape(const Shape& shape)
 	Shape* thisshape=this;
 	*thisshape=shape;
 	
+	myConvexShapes.clear();
+	myConvexShapes.push_back(Shape(*this));
+	
+	Update();
+}
+
+
+
+
+void sfp::ShapeManager::Update()
+{
 	ComputeConvexShapes();
 	ComputeArea();
+	ComputeBox();
+	
+	myIsUpdated=true;
 }
 
 
 
 void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt noch nicht!
-{//FIXME shapetypen prüfen und ggf gleich in liste pushen (plane, circle usw)
-	myConvexShapes.clear();
-	myConvexShapes.push_back(Shape(*this));
+{
+	Shape::type.myShapeType = Shape::Type::Polygon;
+	Shape::myPoints.clear();
+	
+	for(unsigned int i=0; i<myConvexShapes.size(); ++i)
+	{
+		switch(myConvexShapes[i].GetShapeType())
+		{
+			case Shape::Type::Polygon:
+				
+				
+				break;
+			
+			case Shape::Type::Rectangle:
+				
+				break;
+			
+			case Shape::Type::Circle:
+				if(Shape::type.myShapeType==Shape::Type::Polygon)
+				{
+					Shape::type.myShapeType = Shape::Type::Circle;
+				}
+				else if(Shape::type.myShapeType!=Shape::Type::Circle)
+				{
+					Shape::type.myShapeType = Shape::Type::Unknown;
+				}
+				
+				break;
+			
+			case Shape::Type::Plane:
+				if(Shape::type.myShapeType==Shape::Type::Polygon)
+				{
+					Shape::type.myShapeType = Shape::Type::Plane;
+				}
+				else if(Shape::type.myShapeType!=Shape::Type::Plane)
+				{
+					Shape::type.myShapeType = Shape::Type::Unknown;
+				}
+				
+				break;
+				
+		}
+	}
+	
+	if(Shape::myPoints.size()>0)
+	{
+		if(Shape::type.myShapeType != Shape::Type::Polygon)
+			Shape::type.myShapeType = Shape::Type::Unknown;
+		
+		//FIXME polygon erstellen und in konvexe trennen
+	}
+	
+	
 	
 	/*
 	if(Shape::GetPointCount()>0)
@@ -110,9 +173,8 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 }
 
 
-
 void sfp::ShapeManager::ComputeArea()
-{
+{//FIXME dafür sorgen, dass alle Shapes geupdated sind
 	Shape::myCenter=sf::Vector2f(0,0);
 	Shape::myArea=0;
 	Shape::myInertiaMoment=0;
@@ -132,6 +194,40 @@ void sfp::ShapeManager::ComputeArea()
 		
 		//Fläche addieren
 		myArea+=myConvexShapes[i].GetShapeArea();
+	}
+}
+
+
+void sfp::ShapeManager::ComputeBox()
+{
+	if(Shape::type.myShapeType==sfp::Shape::Type::Polygon && Shape::myPoints.size()!=0) //FIXME switch
+	{
+		myBox.Left=myBox.Width=Shape::myPoints[0].x;
+		myBox.Top=myBox.Height=Shape::myPoints[0].y;
+		
+		for(unsigned int i=1; i<Shape::myPoints.size(); ++i)
+		{
+			if(myBox.Left>Shape::myPoints[i].x)
+				myBox.Left=Shape::myPoints[i].x;
+			else if(myBox.Width<Shape::myPoints[i].x)
+				myBox.Width=Shape::myPoints[i].x;
+			
+			if(myBox.Top>Shape::myPoints[i].y)
+				myBox.Top=Shape::myPoints[i].y;
+			else if(myBox.Height<Shape::myPoints[i].y)
+				myBox.Height=Shape::myPoints[i].y;
+			
+		}
+	}
+	else if(Shape::type.myShapeType==sfp::Shape::Type::Circle)
+	{
+		myBox.Left = Shape::myCenter.x - Shape::myCircleRadius;
+		myBox.Top = Shape::myCenter.y - Shape::myCircleRadius;
+		myBox.Width = myBox.Height = Shape::myCircleRadius * 2.f;
+	}
+	else if(Shape::type.myShapeType==sfp::Shape::Type::Rectangle)
+	{
+	
 	}
 }
 

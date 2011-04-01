@@ -19,14 +19,14 @@
 
 
 template <typename T>
-inline Rect<T>::Rect()
+inline Box<T>::Box()
 {
 
 }
 
 
 template <typename T>
-Rect<T>::Rect(T left, T top, T width, T height) :
+Box<T>::Box(T left, T top, T width, T height) :
 sf::Rect<T>(left, top, width, height)
 {
 
@@ -34,13 +34,11 @@ sf::Rect<T>(left, top, width, height)
 
 
 template <typename T>
-Rect<T>::Rect(const Vector2<T>& position, const Vector2<T>& size) :
+Box<T>::Box(const Vector2<T>& position, const Vector2<T>& size) :
 sf::Rect<T>(position, size)
 {
 
 }
-
-
 
 
 

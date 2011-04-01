@@ -47,6 +47,7 @@ namespace sfp
 			
 			std::stack<sf::Vector2f> collisionpoint;
 			std::stack<sfp::Vector2f> collisionnormal;
+			std::stack<sfp::Vector2f> overlap;
 			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;
 		public:
 			CollisionEvent() : CollisionTime(0) {}

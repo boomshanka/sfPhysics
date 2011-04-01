@@ -27,6 +27,8 @@
 #include <sfPhysics/System/Physicable.hpp>
 #include <sfPhysics/System/SAT.hpp>
 
+#include <sfPhysics/System/Box.hpp>
+
 
 #include <vector>
 
@@ -49,14 +51,14 @@ namespace sfp
 			
 			float mySatRotation;
 			
+			sfp::FloatBox myLocalBox;
+			
 			bool myIsFixed;
 		public:
 			Object();
 			Object(const Shape&);
 			~Object();
 			
-			// //
-			void ComputeArea();//FIXME überlegen, wann sie aufgerufen wird und schauen, ob man bei Shape & ShapeManager aufrufen von ComputeArea sparen kann. Überschreiben prüfen
 			void SetShape(const Shape&);
 			
 			void EnableSeparatingAxis(bool enabled) {mySeparatingAxisEnabled=enabled;}
@@ -78,23 +80,23 @@ namespace sfp
 			float GetRotation() const {return myRotation;}
 			const sf::Vector2f& GetCenter() const {return myCenter;}
 			
-			sf::Vector2f GetLocalPoint(unsigned int index) const;
-			sf::Vector2f GetLocalPoint(unsigned int shape, unsigned int index) const;
-			sf::Vector2f GetLocalShapeCenter(unsigned int shape) const;
-			
-			
 			sf::Vector2f ToGlobal(const sf::Vector2f&) const;
 			sf::Vector2f ToLocal(const sf::Vector2f&) const;
+			
+			const sfp::FloatBox& GetLocalBox();
+			sfp::FloatBox GetBoundingBox();
+			
 			
 			void Impulse(const sfp::Vector2f& position, sfp::Vector2f impulse) {Impulse(position, impulse, impulse.GetForce());}
 			void Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse);
 			//Ist getimpulse möglich?
 			
-			sfp::Vector2f GetMovement(const sfp::Vector2f& position) const;
+			sfp::Vector2f GetMovement(const sfp::Vector2f& position, const sfp::Vector2f& normal) const;
 			
 			bool IsFixed() {return myIsFixed;}
 			void Fix(bool fix) {myIsFixed=fix;}
 			
+			void Update();
 			
 			#ifdef SFML_ENABLED //FIXME lengthfactor darf nie null sein!!
 		private:

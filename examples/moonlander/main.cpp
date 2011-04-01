@@ -78,6 +78,16 @@ int main()
 	pCircle3.SetDensity(1);
 	pCircle4.SetDensity(0.5);
 	
+	pCircle1.SetRestitution(1);
+	pCircle2.SetRestitution(1);
+	pCircle3.SetRestitution(1);
+	pCircle4.SetRestitution(1);
+	
+	plane1.SetRestitution(1);
+	plane2.SetRestitution(1);
+	plane3.SetRestitution(1);
+	plane4.SetRestitution(1);
+	
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -116,6 +126,9 @@ int main()
 			}
 		}
 		
+		std::cout<<pCircle1.GetImpulse().GetForce()-pCircle2.GetImpulse().GetForce()-pCircle3.GetImpulse().GetForce()-pCircle4.GetImpulse().GetForce()<<"\n";
+		
+		
 		// Play God
 		world.RenderGravity();
 		
@@ -135,6 +148,13 @@ int main()
 		circle2.SetColor(sf::Color::White);
 		circle3.SetColor(sf::Color::White);
 		circle4.SetColor(sf::Color::White);
+		
+		pCircle1.SetRotationVelocity(0);
+		pCircle2.SetRotationVelocity(0);
+		pCircle3.SetRotationVelocity(0);
+		pCircle4.SetRotationVelocity(0);
+		
+		
 	} // Window Loop //
 	
 	return 0;
