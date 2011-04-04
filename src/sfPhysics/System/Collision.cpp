@@ -136,7 +136,7 @@ void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, co
 
 
 
-bool sfp::Collision::GetCollision(sfp::CollisionEvent& event)
+bool sfp::Collision::PollCollision(sfp::CollisionEvent& event)
 {
 	if(myCollisionEvents.empty())
 	{
@@ -215,18 +215,18 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							case Shape::Type::Polygon:
 							case Shape::Type::Rectangle:
 								//if(BoundingBoxes)
-									if(PolygonPolygon(first,second)) //FIXME beidseitig!
+									if(PolygonPolygon(first,second, i, j)) //FIXME beidseitig!
 										isCollided=true;
 							break;
 							
 							case Shape::Type::Plane:
-								if(PolygonPlane(first,second))
+								if(PolygonPlane(first,second, i, j))
 									isCollided=true;
 							break;
 							
 							case Shape::Type::Circle:
 								//if(BoundingBoxes)
-									if(PolygonCircle(first,second))
+									if(PolygonCircle(first,second, i, j))
 										isCollided=true;
 							break;
 							
@@ -244,7 +244,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						{
 							case Shape::Type::Polygon:
 							case Shape::Type::Rectangle:
-								if(PolygonPlane(second,first))
+								if(PolygonPlane(second,first, j, i))
 									isCollided=true;
 							break;
 							
@@ -271,7 +271,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							case Shape::Type::Polygon:
 							case Shape::Type::Rectangle:
 								//if(BoundingBoxes)
-									if(PolygonCircle(second,first))
+									if(PolygonCircle(second,first, j, i))
 										isCollided=true;
 							break;
 							
@@ -313,27 +313,37 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 
 
 
-bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second) //FIXME Rewrite + kollisionspunkte rausfinden!! event beschreiben
+bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b) //FIXME Rewrite + kollisionspunkte rausfinden!! event beschreiben
 {
 	for(int i=0; i<first.GetSeparatingAxis().GetAxisCount(); ++i)
 	{
-		float firstmax=0; float secondmax=0;
-		float firstmin=0; float secondmin=0;
+		float firstmax = 0;
+		float firstmin = 1;
 		
-		if(first.GetPointCount()>1)
-			firstmax=firstmin=first.ToGlobal(first.GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;
-		for(int j=1;j<first.GetPointCount();++j)
+		if(first.GetConvexShape(a).GetPointCount() > 1) //FIXME!! Separating Axis für einzelene convexe objekte berechnen!! SA von beiden objekten benutzen!!
+			firstmax = firstmin = 
+			first.ToGlobal(first.GetConvexShape(a).GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetConvexShape(a).GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;
+		
+		for(int j=1; j<first.GetConvexShape(a).GetPointCount(); ++j)
 		{
-			float tmp=first.ToGlobal(first.GetPoint(j)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetPoint(j)).y*first.GetSeparatingAxis().GetAx(i).y;
+			float tmp = first.ToGlobal(first.GetConvexShape(a).GetPoint(j)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetConvexShape(a).GetPoint(j)).y*first.GetSeparatingAxis().GetAx(i).y;
 			
-			if(tmp>firstmax)
-				{firstmax=tmp;}
-			else if(tmp<firstmin)
-				{firstmin=tmp;}
+			if(tmp > firstmax)
+				firstmax=tmp;
+			
+			else if(tmp < firstmin)
+				firstmin=tmp;
+			
 		}
 		
-		if(second.GetPointCount()>1)
-			secondmax=secondmin=second.ToGlobal(second.GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+second.ToGlobal(second.GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;
+		
+		float secondmax = 0;
+		float secondmin = 1;
+		
+		if(second.GetConvexShape(b).GetPointCount() > 1)
+			secondmax = secondmin = 
+			second.ToGlobal(second.GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+second.ToGlobal(second.GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;
+		
 		for(int j=1;j<second.GetPointCount();++j)
 		{
 			float tmp=second.ToGlobal(second.GetPoint(j)).x*first.GetSeparatingAxis().GetAx(i).x+second.ToGlobal(second.GetPoint(j)).y*first.GetSeparatingAxis().GetAx(i).y;
@@ -344,23 +354,28 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second) //F
 				{secondmin=tmp;}
 		
 		}
+		
 		if(firstmax < secondmin || firstmin > secondmax)
 			return false;
+		
 	}
+	
 	return true;
 }
 
 
 
-bool sfp::Collision::PolygonPlane(sfp::Object& first, sfp::Object& second)
+bool sfp::Collision::PolygonPlane(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
+if(i!=j) second; first;
 return false;
 }
 
 
 
-bool sfp::Collision::PolygonCircle(sfp::Object& first, sfp::Object& second)
+bool sfp::Collision::PolygonCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
+if(i!=j) second; first;
 return false;
 }
 

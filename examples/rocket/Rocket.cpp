@@ -57,7 +57,7 @@ int main()
 	kreise.SetPosition(152.5,50);
 	circle2.SetPosition(50,250);
 	circle3.SetPosition(255,250);
-	circle4.SetPosition(152.5,470);
+	circle4.SetPosition(152.5,500);
 	
 	
 	sfp::Object object(shape,50);
@@ -110,8 +110,8 @@ int main()
 	pCircle.SetDensity(1);
 	
 	pCircle.SetRestitution(0.5);
-	pCircle2.SetRestitution(0.9);
-	pCircle3.SetRestitution(0.9);
+	pCircle2.SetRestitution(0.6);
+	pCircle3.SetRestitution(0.6);
 	pCircle4.SetRestitution(0.4);
 	plane.SetRestitution(0.3);
 	plane2->SetRestitution(0.6);
@@ -167,7 +167,7 @@ int main()
 		// Play God
 		world.RenderGravity();
 		
-		while(collision.GetCollision(collisionevent))
+		while(collision.PollCollision(collisionevent))
 		{
 			
 			switch(collisionevent.CollisionType)

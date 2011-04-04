@@ -45,7 +45,7 @@ namespace sfp
 			
 			void AddObject(sfp::Object& object) {myObjects.push_back(&object);}
 			
-			bool GetCollision(sfp::CollisionEvent&);
+			bool PollCollision(sfp::CollisionEvent&);
 			
 			void Bounce(sfp::CollisionEvent&);
 			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
@@ -55,9 +55,9 @@ namespace sfp
 			void UpdateCollisionEvents();
 			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
-			bool PolygonPolygon(sfp::Object&, sfp::Object&);
-			bool PolygonPlane(sfp::Object&, sfp::Object&);
-			bool PolygonCircle(sfp::Object&, sfp::Object&);
+			bool PolygonPolygon(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
+			bool PolygonPlane(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
+			bool PolygonCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 			bool PlaneCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 			bool CircleCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 	};

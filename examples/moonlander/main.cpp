@@ -107,7 +107,7 @@ int main()
 	//	if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
 		
 		
-		while(collision.GetCollision(collisionevent))
+		while(collision.PollCollision(collisionevent))
 		{
 			
 			switch(collisionevent.CollisionType)
@@ -148,11 +148,6 @@ int main()
 		circle2.SetColor(sf::Color::White);
 		circle3.SetColor(sf::Color::White);
 		circle4.SetColor(sf::Color::White);
-		
-		pCircle1.SetRotationVelocity(0);
-		pCircle2.SetRotationVelocity(0);
-		pCircle3.SetRotationVelocity(0);
-		pCircle4.SetRotationVelocity(0);
 		
 		
 	} // Window Loop //
