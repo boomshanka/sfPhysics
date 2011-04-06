@@ -40,12 +40,13 @@ namespace sfp
 			{
 			enum ShapeType
 			{
-				Polygon = 0,
-				Rectangle = 1,
+				Nothing = 0,
+				Polygon = 1,
+				Rectangle = 2,
 //				Line,
-				Plane = 3,
-				Circle = 4,
-				NegCircle = 5,
+				Plane = 4,
+				Circle = 5,
+				NegCircle = 6,
 				Unknown = 9
 			} myShapeType;
 			};

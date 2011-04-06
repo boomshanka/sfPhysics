@@ -24,7 +24,7 @@
 sfp::Shape::Shape()
 :myCircleRadius(0)
 {
-	type.myShapeType = Shape::Type::Polygon;
+	type.myShapeType = Shape::Type::Nothing;
 }
 
 
@@ -48,14 +48,11 @@ void sfp::Shape::ComputeArea() //FIXME warum zahlen?
 	switch(type.myShapeType)
 	{
 		case Shape::Type::Polygon:
+		case Shape::Type::Rectangle: //FIXME
 			ComputePolygonArea();
 			break;
 		
-		case 1:
-			ComputePolygonArea();
-			break;
-		
-		case 4:
+		case Shape::Type::Circle:
 			ComputeCircleArea();
 			break;
 		

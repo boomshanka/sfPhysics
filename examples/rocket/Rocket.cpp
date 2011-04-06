@@ -124,9 +124,8 @@ int main()
 	pCircle3.Fix(true);
 	pCircle4.Fix(true);
 	
-//	pCircle.SetRotation(90);
-//	pCircle.SetRotationVelocity(90);
-//	pCircle.SetInertiaMoment(0.8);
+	pCircle.SetRotation(90);
+//	pCircle.SetRotationVelocity(5000);
 
 	
 	while (window.IsOpened()) // Window Loop //

@@ -233,6 +233,9 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							case Shape::Type::NegCircle:
 								//FIXME
 							break;
+							
+							default:
+							break;
 						}
 					}
 				break;
@@ -258,6 +261,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							break;
 							
 							case Shape::Type::Plane:
+							default:
 							break;
 						}
 					}
@@ -289,6 +293,9 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							case Shape::Type::NegCircle:
 								//FIXME
 							break;
+							
+							default:
+							break;
 						}
 					}
 				break;
@@ -301,6 +308,9 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						
 						}
 					}
+				break;
+				
+				default:
 				break;
 			}
 		}

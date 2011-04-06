@@ -75,7 +75,7 @@ void sfp::ShapeManager::Update()
 
 void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt noch nicht!
 {
-	Shape::type.myShapeType = Shape::Type::Polygon;
+	Shape::type.myShapeType = Shape::Type::Nothing;
 	Shape::myPoints.clear();
 	
 	for(unsigned int i=0; i<myConvexShapes.size(); ++i)
@@ -83,47 +83,43 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 		switch(myConvexShapes[i].GetShapeType())
 		{
 			case Shape::Type::Polygon:
-				
+				if(Shape::type.myShapeType==Shape::Type::Nothing || Shape::type.myShapeType==Shape::Type::Rectangle)
+					Shape::type.myShapeType = Shape::Type::Polygon;
+				else if(Shape::type.myShapeType!=Shape::Type::Polygon)
+					Shape::type.myShapeType = Shape::Type::Unknown;
 				
 				break;
 			
 			case Shape::Type::Rectangle:
+				if(Shape::type.myShapeType==Shape::Type::Nothing)
+					Shape::type.myShapeType = Shape::Type::Rectangle;
+				else if(Shape::type.myShapeType!=Shape::Type::Rectangle && Shape::type.myShapeType!=Shape::Type::Polygon)
+					Shape::type.myShapeType = Shape::Type::Unknown;
 				
 				break;
 			
 			case Shape::Type::Circle:
-				if(Shape::type.myShapeType==Shape::Type::Polygon)
-				{
+				if(Shape::type.myShapeType==Shape::Type::Nothing)
 					Shape::type.myShapeType = Shape::Type::Circle;
-				}
 				else if(Shape::type.myShapeType!=Shape::Type::Circle)
-				{
 					Shape::type.myShapeType = Shape::Type::Unknown;
-				}
 				
 				break;
 			
 			case Shape::Type::Plane:
-				if(Shape::type.myShapeType==Shape::Type::Polygon)
-				{
+				if(Shape::type.myShapeType==Shape::Type::Nothing)
 					Shape::type.myShapeType = Shape::Type::Plane;
-				}
 				else if(Shape::type.myShapeType!=Shape::Type::Plane)
-				{
 					Shape::type.myShapeType = Shape::Type::Unknown;
-				}
 				
 				break;
 				
+			default:
+				myConvexShapes.erase(myConvexShapes.begin()+i);
+				--i;
+				break;
+				
 		}
-	}
-	
-	if(Shape::myPoints.size()>0)
-	{
-		if(Shape::type.myShapeType != Shape::Type::Polygon)
-			Shape::type.myShapeType = Shape::Type::Unknown;
-		
-		//FIXME polygon erstellen und in konvexe trennen
 	}
 	
 	
@@ -226,6 +222,10 @@ void sfp::ShapeManager::ComputeBox()
 		myBox.Width = myBox.Height = Shape::myCircleRadius * 2.f;
 	}
 	else if(Shape::type.myShapeType==sfp::Shape::Type::Rectangle)
+	{
+	
+	}
+	switch(Shape::type.myShapeType)
 	{
 	
 	}
