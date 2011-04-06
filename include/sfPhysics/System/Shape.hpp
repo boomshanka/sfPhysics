@@ -68,10 +68,10 @@ namespace sfp
 			virtual ~Shape() {}
 			
 			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
-			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec); ComputeArea();}
+			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec); Update();} //FIXME Update aufrufen?
 			
 			virtual void SetPoint(unsigned int index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
-			virtual void SetPoint(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec; ComputeArea();}
+			virtual void SetPoint(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec; Update();} //FIXME s.o.
 			
 			virtual int GetPointCount() const {return myPoints.size();}
 			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];}
@@ -99,7 +99,9 @@ namespace sfp
 			static Shape Circle(const sf::Vector2f&, float);
 			
 		protected:
-			void ComputeArea(); //FIXME Umbenennen?
+			void Update();
+			
+		private:
 			
 			void ComputePolygonArea();
 			void ComputeCircleArea();

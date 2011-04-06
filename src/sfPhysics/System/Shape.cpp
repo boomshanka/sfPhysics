@@ -40,7 +40,7 @@ myCenter(shape.myCenter), myArea(shape.myArea), myInertiaMoment(shape.myInertiaM
 
 
 
-void sfp::Shape::ComputeArea() //FIXME warum zahlen?
+void sfp::Shape::Update()
 {
 	myArea=0;
 	myInertiaMoment=0;
@@ -121,7 +121,7 @@ sfp::Shape sfp::Shape::Rectangle()
 	Shape shape;
 	
 	return shape;
-}//FIXME jeweils ein ComputeArea();
+}//FIXME jeweils ein Update();
 
 
 sfp::Shape sfp::Shape::Line()
@@ -163,7 +163,7 @@ sfp::Shape sfp::Shape::Circle(const sf::Vector2f& center, float radius)
 	shape.myCenter=center;
 	shape.myCircleRadius=radius;
 	
-	shape.ComputeArea();
+	shape.Update();
 	
 	return shape;
 }

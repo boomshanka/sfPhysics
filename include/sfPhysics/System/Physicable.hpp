@@ -31,6 +31,7 @@
 
 namespace sfp
 {
+	
 	class Physicable
 	{
 		friend class Object;
@@ -92,8 +93,9 @@ namespace sfp
 			float GetInertiaMoment() const {return myInertiaMoment;}
 			
 	};
+	
+} // namespace
 
-} // Namespace
 
 #endif // SFPHYSICS_PHYSICABLE_HPP
 

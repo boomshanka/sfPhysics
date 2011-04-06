@@ -96,10 +96,8 @@ void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::
 	sfp::Vector2f r2(P-second.GetPosition());
 			
 	float j=-(1+(first.GetRestitution()+second.GetRestitution())/2.f) * DotProduct(vr, n);
-	j /= 1.f/first.GetMass() + 1.f/second.GetMass() + //FIXME std::abs?
-	std::abs(DotProduct((1.f/first.GetInertiaMoment() * CrossProduct(r1, n) * r1 + 1.f/second.GetInertiaMoment() *
-	CrossProduct(r2, n) * r2), n));
-						//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
+	j /= 1.f/first.GetMass() + 1.f/second.GetMass() +
+	std::abs(DotProduct((1.f/first.GetInertiaMoment() * CrossProduct(r1, n) * r1 + 1.f/second.GetInertiaMoment() * CrossProduct(r2, n) * r2), n));
 	
 	
 	first.SetVelocity(first.GetVelocity() - (j/first.GetMass()) * n);
@@ -118,12 +116,9 @@ void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::
 void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e)
 {
 	sfp::Vector2f r1(P-object.GetPosition());
-//	sfp::Vector2f rn(r1); rn.Normalize();
 			
 	float j= - ++e * DotProduct(vr, n);
-	j /= 1.f/object.GetMass() + //FIXME std::abs?
-	std::abs(DotProduct((1.f/object.GetInertiaMoment() * CrossProduct(r1, n) * r1), n));
-						//FIXME wird aus dem ×r1 und ×r2 ein *r1 / *r2 (dimensionen!)?
+	j /= 1.f/object.GetMass() + std::abs(DotProduct((1.f/object.GetInertiaMoment() * CrossProduct(r1, n) * r1), n));
 	
 	object.SetVelocity(object.GetVelocity() - (j/object.GetMass()) * n);
 	object.SetRotationVelocity(object.GetRotationVelocity() - j/object.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
