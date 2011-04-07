@@ -22,9 +22,7 @@
 
 
 sfp::Object::Object()
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false)
+:myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
 	myDrawable=NULL;
@@ -35,16 +33,14 @@ myIsFixed(false)
 
 
 sfp::Object::Object(const Shape& shape)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false)
+:myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
 	myDrawable=NULL;
 	myLengthfactor=1;
 	#endif
 	
-	ShapeManager::SetShape(shape);
+	ShapeManager::SetShape(shape); //FIXME warum nicht SetShape() benutzen?
 	
 	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
 	{
@@ -64,7 +60,7 @@ myIsFixed(false)
 
 sfp::Object::~Object()
 {
-	delete mySeparatingAxis;
+	
 }
 
 
@@ -90,27 +86,12 @@ void sfp::Object::SetShape(const Shape& shape)
 
 
 
-void sfp::Object::ComputeSeparatingAxis()
-{
-	if(mySatRotation!=myRotation || mySeparatingAxis==NULL)
-	{
-		delete mySeparatingAxis;
-		mySeparatingAxis=new sfp::SeparatingAxis(*this);
-		mySatRotation=myRotation;
-	}
-}
-
-
-
 void sfp::Object::SetCenter(const sf::Vector2f& center)
 {//FIXME InertiaMoment neu berechnen
 	if(!ShapeManager::IsUpdated())
 		Update();
 	
 	myCenter=Physicable::myCenter=center;
-	
-	delete mySeparatingAxis;
-	mySeparatingAxis=NULL;
 	
 	#ifdef SFML_ENABLED
 	if(myDrawable!=NULL)
@@ -253,9 +234,7 @@ void sfp::Object::Update()
 
 
 sfp::Object::Object(sf::Shape& shape, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	SetShape(shape);
@@ -264,9 +243,7 @@ myLengthfactor(lengthfactor)
 
 
 sfp::Object::Object(sf::Sprite& sprite, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	SetSprite(sprite);
@@ -275,9 +252,7 @@ myLengthfactor(lengthfactor)
 
 
 sfp::Object::Object(sf::Drawable& drawable, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	SetDrawable(drawable);
@@ -286,9 +261,7 @@ myLengthfactor(lengthfactor)
 
 
 sfp::Object::Object(sf::Drawable& drawable, const Shape& shape, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	myDrawable=&drawable;
@@ -307,9 +280,7 @@ myLengthfactor(lengthfactor)
 
 
 sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	SetShape(shape, center);
@@ -318,9 +289,7 @@ myLengthfactor(lengthfactor)
 
 
 sfp::Object::Object(sf::Sprite& sprite, const sf::Vector2f& center, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	SetSprite(sprite, center);
@@ -329,18 +298,13 @@ myLengthfactor(lengthfactor)
 
 
 sfp::Object::Object(sf::Drawable& drawable, const sf::Vector2f& center, float lengthfactor)
-:mySeparatingAxis(NULL),
-mySeparatingAxisEnabled(true),
-myIsFixed(false),
+:myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
 	SetDrawable(drawable, center);
 }
 
 
-/******************************************************************************
- **                           End of constructor                             **
- ******************************************************************************/
 
 
 

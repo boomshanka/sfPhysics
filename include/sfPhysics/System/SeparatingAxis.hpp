@@ -20,14 +20,25 @@
 #ifndef SFPHYSICS_SEPARATINGAXIS_HPP
 #define SFPHYSICS_SEPARATINGAXIS_HPP
 
+#include <vector>
+
+#include <sfPhysics/System/Vector2.hpp>
+
 
 
 namespace sfp
 {
-	
 	class SeparatingAxis
 	{
-	
+		private:
+			
+		public:
+			SeparatingAxis();
+			SeparatingAxis(const std::vector<sf::Vector2f>&);
+			
+			void ComputeSeparatingAxis(const std::vector<sf::Vector2f>&);
+			
+			void UpdateRotation(float) const;
 	};
 	
 } // namespace

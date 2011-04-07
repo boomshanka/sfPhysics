@@ -22,7 +22,8 @@
 
 
 sfp::Shape::Shape()
-:myCircleRadius(0)
+:mySeparatingAxis(NULL),
+myCircleRadius(0)
 {
 	type.myShapeType = Shape::Type::Nothing;
 }
@@ -30,7 +31,7 @@ sfp::Shape::Shape()
 
 
 sfp::Shape::Shape(const Shape& shape)
-:myPoints(shape.myPoints),
+:myPoints(shape.myPoints), mySeparatingAxis(NULL),
 myCircleRadius(shape.myCircleRadius), myPlaneNormal(shape.myPlaneNormal),
 myCenter(shape.myCenter), myArea(shape.myArea), myInertiaMoment(shape.myInertiaMoment)
 {
@@ -45,11 +46,15 @@ void sfp::Shape::Update()
 	myArea=0;
 	myInertiaMoment=0;
 	
+	delete mySeparatingAxis;
+	mySeparatingAxis=NULL;
+	
 	switch(type.myShapeType)
 	{
 		case Shape::Type::Polygon:
 		case Shape::Type::Rectangle: //FIXME
 			ComputePolygonArea();
+			mySeparatingAxis = new SeparatingAxis(myPoints);
 			break;
 		
 		case Shape::Type::Circle:

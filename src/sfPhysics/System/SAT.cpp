@@ -21,7 +21,7 @@
 
 
 
-void sfp::SeparatingAxis::ComputeSeperatingAxix(sfp::Object& object)
+void sfp::SAT::ComputeSeperatingAxix(sfp::Object& object)
 {
 	//pop objects FIXME
 	
@@ -57,7 +57,7 @@ void sfp::SeparatingAxis::ComputeSeperatingAxix(sfp::Object& object)
 
 
 
-void sfp::SeparatingAxis::AddAx(const sf::Vector2f& first, const sf::Vector2f& second)
+void sfp::SAT::AddAx(const sf::Vector2f& first, const sf::Vector2f& second)
 {
 	myAxis.push_back(sf::Vector2f(-(first.y-second.y),first.x-second.x));
 	

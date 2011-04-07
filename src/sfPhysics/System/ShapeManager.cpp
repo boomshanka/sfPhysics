@@ -73,7 +73,7 @@ void sfp::ShapeManager::Update()
 
 
 
-void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt noch nicht!
+void sfp::ShapeManager::ComputeConvexShapes() //FIXME Shape::Update bei jedem Shapetype aufrufen. Polygone testen, ob sie konvex/konkav sind und zerlegen.
 {
 	Shape::type.myShapeType = Shape::Type::Nothing;
 	Shape::myPoints.clear();
@@ -88,6 +88,8 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 				else if(Shape::type.myShapeType!=Shape::Type::Polygon)
 					Shape::type.myShapeType = Shape::Type::Unknown;
 				
+				//FIXME in konvexe trennen und alle shapes updaten!
+				myConvexShapes[i].Update();
 				break;
 			
 			case Shape::Type::Rectangle:
@@ -96,6 +98,7 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 				else if(Shape::type.myShapeType!=Shape::Type::Rectangle && Shape::type.myShapeType!=Shape::Type::Polygon)
 					Shape::type.myShapeType = Shape::Type::Unknown;
 				
+				myConvexShapes[i].Update();
 				break;
 			
 			case Shape::Type::Circle:
@@ -104,6 +107,7 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 				else if(Shape::type.myShapeType!=Shape::Type::Circle)
 					Shape::type.myShapeType = Shape::Type::Unknown;
 				
+				myConvexShapes[i].Update();
 				break;
 			
 			case Shape::Type::Plane:
@@ -112,6 +116,7 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 				else if(Shape::type.myShapeType!=Shape::Type::Plane)
 					Shape::type.myShapeType = Shape::Type::Unknown;
 				
+				myConvexShapes[i].Update();
 				break;
 				
 			default:
@@ -170,26 +175,29 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME!!! diese funktion stimmt n
 
 
 void sfp::ShapeManager::ComputeArea()
-{//FIXME dafür sorgen, dass alle Shapes geupdated sind
+{
 	Shape::myCenter=sf::Vector2f(0,0);
 	Shape::myArea=0;
 	Shape::myInertiaMoment=0;
 	
 	for(unsigned int i=0; i<myConvexShapes.size(); ++i)
 	{
-		//Schwerpunkte addieren
-		sfp::Vector2f diff(myConvexShapes[i].GetShapeCenter()-myCenter);
-		diff*=(myConvexShapes[i].GetShapeArea()/(myConvexShapes[i].GetShapeArea()+myArea));
-		myCenter+=diff;
+		if(myConvexShapes[i].GetShapeType()!=Shape::Type::Plane)
+		{
+			//Schwerpunkte addieren
+			sfp::Vector2f diff(myConvexShapes[i].GetShapeCenter()-myCenter);
+			diff*=(myConvexShapes[i].GetShapeArea()/(myConvexShapes[i].GetShapeArea()+myArea));
+			myCenter+=diff;
 		
-		//Trägheitsmoment verschieben
-		myInertiaMoment += myArea * std::pow(diff.GetForce(),2);
-		//Trägheitsmoment von Objekt verschieben & addieren
-		diff=(myConvexShapes[i].GetShapeCenter()-(myCenter-diff))-diff;
-		myInertiaMoment += myConvexShapes[i].GetShapeInertiaMoment() + myConvexShapes[i].GetShapeArea() * std::pow(diff.GetForce(),2);
+			//Trägheitsmoment verschieben
+			myInertiaMoment += myArea * std::pow(diff.GetForce(),2);
+			//Trägheitsmoment von Objekt verschieben & addieren
+			diff=(myConvexShapes[i].GetShapeCenter()-(myCenter-diff))-diff;
+			myInertiaMoment += myConvexShapes[i].GetShapeInertiaMoment() + myConvexShapes[i].GetShapeArea() * std::pow(diff.GetForce(),2);
 		
-		//Fläche addieren
-		myArea+=myConvexShapes[i].GetShapeArea();
+			//Fläche addieren
+			myArea+=myConvexShapes[i].GetShapeArea();
+		}
 	}
 }
 

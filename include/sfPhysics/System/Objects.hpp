@@ -25,7 +25,6 @@
 
 #include <sfPhysics/System/ShapeManager.hpp>
 #include <sfPhysics/System/Physicable.hpp>
-#include <sfPhysics/System/SAT.hpp>
 
 #include <sfPhysics/System/Box.hpp>
 
@@ -36,20 +35,12 @@
 
 namespace sfp
 {
-	class SeparatingAxis;
-	
-	
 	class Object : public ShapeManager, public Physicable
 	{
 		private:
 			sf::Vector2f myPosition;
 			sf::Vector2f myCenter;
 			float myRotation;
-			
-			sfp::SeparatingAxis* mySeparatingAxis;
-			bool mySeparatingAxisEnabled;
-			
-			float mySatRotation;
 			
 			sfp::FloatBox myLocalBox;
 			
@@ -60,12 +51,6 @@ namespace sfp
 			~Object();
 			
 			void SetShape(const Shape&);
-			
-			void EnableSeparatingAxis(bool enabled) {mySeparatingAxisEnabled=enabled;}
-			bool IsSeparatingAxisEnabled() const {return mySeparatingAxisEnabled;}
-			
-			void ComputeSeparatingAxis();
-			sfp::SeparatingAxis& GetSeparatingAxis() {return *mySeparatingAxis;}
 			
 			// //
 			void SetPosition(const sf::Vector2f& position) {myPosition=position;}

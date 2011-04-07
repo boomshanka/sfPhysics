@@ -22,6 +22,7 @@
 
 
 #include <sfPhysics/System/Vector2.hpp>
+#include <sfPhysics/System/SeparatingAxis.hpp>
 
 #include <vector>
 
@@ -56,6 +57,8 @@ namespace sfp
 		
 			std::vector<sf::Vector2f> myPoints;
 			
+			SeparatingAxis* mySeparatingAxis;
+			
 			float myCircleRadius;
 			sfp::Vector2f myPlaneNormal;
 			
@@ -65,7 +68,7 @@ namespace sfp
 		public:
 			Shape();
 			Shape(const Shape&);
-			virtual ~Shape() {}
+			virtual ~Shape() {delete mySeparatingAxis;}
 			
 			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
 			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec); Update();} //FIXME Update aufrufen?
@@ -90,6 +93,7 @@ namespace sfp
 			virtual float GetShapeArea() const {return myArea;}
 			virtual float GetShapeInertiaMoment() const {return myInertiaMoment;}
 			
+			const SeparatingAxis& GetSeparatingAxis() const {return *mySeparatingAxis;}
 			
 			
 			static Shape Rectangle();
@@ -102,7 +106,6 @@ namespace sfp
 			void Update();
 			
 		private:
-			
 			void ComputePolygonArea();
 			void ComputeCircleArea();
 			

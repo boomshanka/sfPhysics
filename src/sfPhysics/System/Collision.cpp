@@ -27,7 +27,7 @@
 
 
 sfp::Collision::Collision()
-:myNoCollisionEventEnabled(false)
+:myNoCollisionEventEnabled(false) //FIXME myCollisionEventEnabled(true)
 {
 }
 
@@ -135,13 +135,6 @@ bool sfp::Collision::PollCollision(sfp::CollisionEvent& event)
 {
 	if(myCollisionEvents.empty())
 	{
-		//Compute SAT
-		for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
-		{
-			if((*it)->IsSeparatingAxisEnabled())
-				(*it)->ComputeSeparatingAxis();
-		}
-		
 		UpdateCollisionEvents();
 	}
 	else
@@ -181,146 +174,143 @@ void sfp::Collision::UpdateCollisionEvents()
 			}
 		}
 	}
-}
+} //FIXME Rename UpdateCollision, wahlweise Events deaktivieren, Funktion zum Ableiten implementieren. Quadtree?
 
 
 
 
 bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 {
-	//FIXME: Rewrite der funktion. Verschiedene Objekttypen müssen speziell behandelt werden.
-	//		 Bei Kollision werden Punkte und konvexe Formen im Event gespeichert!
+	//FIXME BoundingBoxes
 	
-	myCollisionEvents.top().CollisionType=sfp::BoundingBox; //FIXME
+	myCollisionEvents.top().CollisionType=NoCollision; //sfp::BoundingBox; //FIXME
 	
-	if(first.IsSeparatingAxisEnabled() && second.IsSeparatingAxisEnabled())
+	bool isCollided=false;
+	
+	for(unsigned int i=0; i<first.GetConvexShapeCount(); ++i) //Schleife für die konkaven Formen von Obj 1
 	{
-		bool isCollided=false;
-		
-		for(unsigned int i=0; i<first.GetConvexShapeCount(); ++i) //Schleife für die konkaven Formen von Obj 1
+		switch(first.GetConvexShape(i).GetShapeType())
 		{
-			switch(first.GetConvexShape(i).GetShapeType())
-			{
-				case Shape::Type::Polygon:
-				case Shape::Type::Rectangle:
-					for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
+			case Shape::Type::Polygon:
+			case Shape::Type::Rectangle:
+				for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
+				{
+					switch(second.GetConvexShape(j).GetShapeType())
 					{
-						switch(second.GetConvexShape(j).GetShapeType())
-						{
-							case Shape::Type::Polygon:
-							case Shape::Type::Rectangle:
-								//if(BoundingBoxes)
-									if(PolygonPolygon(first,second, i, j)) //FIXME beidseitig!
-										isCollided=true;
-							break;
-							
-							case Shape::Type::Plane:
-								if(PolygonPlane(first,second, i, j))
+						case Shape::Type::Polygon:
+						case Shape::Type::Rectangle:
+							//if(BoundingBoxes)
+								if(PolygonPolygon(first,second, i, j)) //FIXME beidseitig!
 									isCollided=true;
-							break;
-							
-							case Shape::Type::Circle:
-								//if(BoundingBoxes)
-									if(PolygonCircle(first,second, i, j))
-										isCollided=true;
-							break;
-							
-							case Shape::Type::NegCircle:
-								//FIXME
-							break;
-							
-							default:
-							break;
-						}
-					}
-				break;
-					
-				case Shape::Type::Plane:
-					for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
-					{
-						switch(second.GetConvexShape(j).GetShapeType())
-						{
-							case Shape::Type::Polygon:
-							case Shape::Type::Rectangle:
-								if(PolygonPlane(second,first, j, i))
-									isCollided=true;
-							break;
-							
-							case Shape::Type::Circle:
-								if(PlaneCircle(first,second, i, j))
-									isCollided=true;
-							break;
-							
-							case Shape::Type::NegCircle:
-								//FIXME
-							break;
-							
-							case Shape::Type::Plane:
-							default:
-							break;
-						}
-					}
-				break;
-					
-				case Shape::Type::Circle:
-					for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
-					{
-						switch(second.GetConvexShape(j).GetShapeType())
-						{
-							case Shape::Type::Polygon:
-							case Shape::Type::Rectangle:
-								//if(BoundingBoxes)
-									if(PolygonCircle(second,first, j, i))
-										isCollided=true;
-							break;
-							
-							case Shape::Type::Plane:
-								if(PlaneCircle(second,first, j, i))
-									isCollided=true;
-							break;
-							
-							case Shape::Type::Circle:
-								//if(BoundingBoxes)
-									if(CircleCircle(first,second, i, j))
-										isCollided=true;
-							break;
-							
-							case Shape::Type::NegCircle:
-								//FIXME
-							break;
-							
-							default:
-							break;
-						}
-					}
-				break;
-				
-				case Shape::Type::NegCircle:
-					for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
-					{
-						//switch(second.GetConvexShape(j).GetShapeType())
-						{
+						break;
 						
-						}
+						case Shape::Type::Plane:
+							if(PolygonPlane(first,second, i, j))
+								isCollided=true;
+						break;
+						
+						case Shape::Type::Circle:
+							//if(BoundingBoxes)
+								if(PolygonCircle(first,second, i, j))
+									isCollided=true;
+						break;
+						
+						case Shape::Type::NegCircle:
+							//FIXME
+						break;
+						
+						default:
+						break;
 					}
-				break;
+				}
+			break;
+					
+			case Shape::Type::Plane:
+				for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
+				{
+					switch(second.GetConvexShape(j).GetShapeType())
+					{
+						case Shape::Type::Polygon:
+						case Shape::Type::Rectangle:
+							if(PolygonPlane(second,first, j, i))
+								isCollided=true;
+						break;
+						
+						case Shape::Type::Circle:
+							if(PlaneCircle(first,second, i, j))
+								isCollided=true;
+						break;
+						
+						case Shape::Type::NegCircle:
+							//FIXME
+						break;
+						
+						case Shape::Type::Plane:
+						default:
+						break;
+					}
+				}
+			break;
 				
-				default:
-				break;
-			}
+			case Shape::Type::Circle:
+				for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
+				{
+					switch(second.GetConvexShape(j).GetShapeType())
+					{
+						case Shape::Type::Polygon:
+						case Shape::Type::Rectangle:
+							//if(BoundingBoxes)
+								if(PolygonCircle(second,first, j, i))
+									isCollided=true;
+						break;
+						
+						case Shape::Type::Plane:
+							if(PlaneCircle(second,first, j, i))
+								isCollided=true;
+						break;
+						
+						case Shape::Type::Circle:
+							//if(BoundingBoxes)
+								if(CircleCircle(first,second, i, j))
+									isCollided=true;
+						break;
+						
+						case Shape::Type::NegCircle:
+							//FIXME
+						break;
+						
+						default:
+						break;
+					}
+				}
+			break;
+			
+			case Shape::Type::NegCircle:
+				for(unsigned int j=0; j<second.GetConvexShapeCount(); ++j) //Von Objekt 2
+				{
+					//switch(second.GetConvexShape(j).GetShapeType())
+					{
+					
+					}
+				}
+			break;
+			
+			default:
+			break;
 		}
-		
-		return isCollided;
 	}
 	
-	return false;
+	return isCollided;
 }
 
 
 
 bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b) //FIXME Rewrite + kollisionspunkte rausfinden!! event beschreiben
 {
-	for(int i=0; i<first.GetSeparatingAxis().GetAxisCount(); ++i)
+	first.GetConvexShape(a).GetSeparatingAxis().UpdateRotation(first.GetRotation());
+	second.GetConvexShape(b).GetSeparatingAxis().UpdateRotation(second.GetRotation());
+	
+/*	for(int i=0; i<first.GetSeparatingAxis().GetAxisCount(); ++i)
 	{
 		float firstmax = 0;
 		float firstmin = 1;
@@ -365,14 +355,14 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 		
 	}
 	
-	return true;
+	return true;*/ return false;
 }
 
 
 
 bool sfp::Collision::PolygonPlane(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
-if(i!=j) second; first;
+if(i!=j) {;}
 return false;
 }
 
@@ -380,7 +370,7 @@ return false;
 
 bool sfp::Collision::PolygonCircle(sfp::Object& first, sfp::Object& second, unsigned int i, unsigned int j)
 {
-if(i!=j) second; first;
+if(i!=j) {;}
 return false;
 }
 

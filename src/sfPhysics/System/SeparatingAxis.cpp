@@ -21,3 +21,30 @@
 
 
 
+sfp::SeparatingAxis::SeparatingAxis()
+{
+
+}
+
+
+sfp::SeparatingAxis::SeparatingAxis(const std::vector<sf::Vector2f>& points)
+{
+	ComputeSeparatingAxis(points);
+}
+
+
+
+void sfp::SeparatingAxis::ComputeSeparatingAxis(const std::vector<sf::Vector2f>& points)
+{
+
+}
+
+
+
+void sfp::SeparatingAxis::UpdateRotation(float rotation) const
+{
+
+}
+
+
+

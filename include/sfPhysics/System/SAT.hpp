@@ -31,15 +31,15 @@ namespace sfp
 {
 	class Object;
 
-	class SeparatingAxis
+	class SAT
 	{
 		private:
 			std::vector<sf::Vector2f> myAxis;
 		public:
-			SeparatingAxis() {}
-			SeparatingAxis(sfp::Object& object) {ComputeSeperatingAxix(object);}
+			SAT() {}
+			SAT(sfp::Object& object) {ComputeSeperatingAxix(object);}
 			
-			~SeparatingAxis() {}
+			~SAT() {}
 			
 			void ComputeSeperatingAxix(sfp::Object&);
 			
