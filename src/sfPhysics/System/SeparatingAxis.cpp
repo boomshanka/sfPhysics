@@ -22,12 +22,14 @@
 
 
 sfp::SeparatingAxis::SeparatingAxis()
+:myRotation(0)
 {
 
 }
 
 
 sfp::SeparatingAxis::SeparatingAxis(const std::vector<sf::Vector2f>& points)
+:myRotation(0)
 {
 	ComputeSeparatingAxis(points);
 }
@@ -36,14 +38,29 @@ sfp::SeparatingAxis::SeparatingAxis(const std::vector<sf::Vector2f>& points)
 
 void sfp::SeparatingAxis::ComputeSeparatingAxis(const std::vector<sf::Vector2f>& points)
 {
-
+	if(points.size()>2)
+		myAxis.push_back(sfp::Vector2f(-(points[0].y-points[points.size()-1].y),points[0].x-points[points.size()-1].x));;
+	
+	for(size_t i = 1; i < points.size(); ++i)
+	{
+		myAxis.push_back(sfp::Vector2f(-(points[i].y-points[i-1].y),points[i].x-points[i-1].x));
+	}
 }
 
 
 
 void sfp::SeparatingAxis::UpdateRotation(float rotation) const
 {
-
+	if(myRotation!=rotation)
+	{
+		for(size_t i = 0; i < myAxis.size(); ++i)
+		{
+			myAxis[i].Rotate(rotation-myRotation);
+		}
+		
+		myRotation = rotation;
+	
+	}
 }
 
 

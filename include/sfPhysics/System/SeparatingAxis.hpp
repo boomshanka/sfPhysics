@@ -31,6 +31,9 @@ namespace sfp
 	class SeparatingAxis
 	{
 		private:
+			mutable std::vector<sfp::Vector2f> myAxis;
+			
+			mutable float myRotation;
 			
 		public:
 			SeparatingAxis();
@@ -39,6 +42,11 @@ namespace sfp
 			void ComputeSeparatingAxis(const std::vector<sf::Vector2f>&);
 			
 			void UpdateRotation(float) const;
+			float GetRotation() const {return myRotation;}
+			
+			size_t GetAxisCount() const {return myAxis.size();}
+			const sfp::Vector2f& GetAx(size_t i) const {return myAxis[i];}
+			
 	};
 	
 } // namespace

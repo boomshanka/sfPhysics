@@ -77,8 +77,10 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& event)
 			if(direction<90 || direction>270) //FIXME if stimmt nicht
 				Bounce(*event.first, *event.second, event.collisionpoint.top(), event.collisionnormal.top(), movement);
 			
-			event.first->Move(event.overlap.top()/2.f);
-			event.second->Move(-event.overlap.top()/2.f);
+			float factor = event.first->GetMass() / (event.first->GetMass() + event.second->GetMass()); //FIXME Testen!
+			
+			event.first->Move(event.overlap.top() * factor);
+			event.second->Move(-event.overlap.top() * (1-factor));
 		}
 		
 		event.collisionpoint.pop();
@@ -183,9 +185,9 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 {
 	//FIXME BoundingBoxes
 	
-	myCollisionEvents.top().CollisionType=NoCollision; //sfp::BoundingBox; //FIXME
+	myCollisionEvents.top().CollisionType = NoCollision; //sfp::BoundingBox; //FIXME
 	
-	bool isCollided=false;
+	bool isCollided = false;
 	
 	for(unsigned int i=0; i<first.GetConvexShapeCount(); ++i) //Schleife für die konkaven Formen von Obj 1
 	{
@@ -310,44 +312,48 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 	first.GetConvexShape(a).GetSeparatingAxis().UpdateRotation(first.GetRotation());
 	second.GetConvexShape(b).GetSeparatingAxis().UpdateRotation(second.GetRotation());
 	
-/*	for(int i=0; i<first.GetSeparatingAxis().GetAxisCount(); ++i)
+	if(first.GetConvexShape(a).GetPointCount() > 1 && second.GetConvexShape(b).GetPointCount() > 1)
 	{
-		float firstmax = 0;
-		float firstmin = 1;
-		
-		if(first.GetConvexShape(a).GetPointCount() > 1) //FIXME!! Separating Axis für einzelene convexe objekte berechnen!! SA von beiden objekten benutzen!!
-			firstmax = firstmin = 
-			first.ToGlobal(first.GetConvexShape(a).GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetConvexShape(a).GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;
-		
-		for(int j=1; j<first.GetConvexShape(a).GetPointCount(); ++j)
+		if(ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b))
 		{
-			float tmp = first.ToGlobal(first.GetConvexShape(a).GetPoint(j)).x*first.GetSeparatingAxis().GetAx(i).x+first.ToGlobal(first.GetConvexShape(a).GetPoint(j)).y*first.GetSeparatingAxis().GetAx(i).y;
+				myCollisionEvents.top().collisionpoint.push(sf::Vector2f());
+				myCollisionEvents.top().collisionnormal.push(sf::Vector2f());
+				myCollisionEvents.top().overlap.push(sf::Vector2f());
+				myCollisionEvents.top().convexobjects.push(std::make_pair(a,b)); //FIXME! im event werden a/b möglichwerweise andersrum gespeichert!
+	
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+
+bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b)
+{
+	for(unsigned int i=0; i < first.GetConvexShape(a).GetSeparatingAxis().GetAxisCount(); ++i) //FIXME size_t
+	{
+		float firstmin = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), first.ToGlobal(first.GetConvexShape(a).GetPoint(0)));
+		float firstmax = firstmin;
+		
+		for(int j=1; j < first.GetConvexShape(a).GetPointCount(); ++j)
+		{
+			float tmp = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), first.ToGlobal(first.GetConvexShape(a).GetPoint(j)));
 			
-			if(tmp > firstmax)
-				firstmax=tmp;
-			
-			else if(tmp < firstmin)
-				firstmin=tmp;
-			
+			if(tmp > firstmax) firstmax=tmp;
+			else if(tmp < firstmin) firstmin=tmp;
 		}
 		
 		
-		float secondmax = 0;
-		float secondmin = 1;
+		float secondmin = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), second.ToGlobal(second.GetConvexShape(b).GetPoint(0)));
+		float secondmax = secondmin;
 		
-		if(second.GetConvexShape(b).GetPointCount() > 1)
-			secondmax = secondmin = 
-			second.ToGlobal(second.GetPoint(0)).x*first.GetSeparatingAxis().GetAx(i).x+second.ToGlobal(second.GetPoint(0)).y*first.GetSeparatingAxis().GetAx(i).y;
-		
-		for(int j=1;j<second.GetPointCount();++j)
+		for(int j=1; j < second.GetConvexShape(b).GetPointCount(); ++j)
 		{
-			float tmp=second.ToGlobal(second.GetPoint(j)).x*first.GetSeparatingAxis().GetAx(i).x+second.ToGlobal(second.GetPoint(j)).y*first.GetSeparatingAxis().GetAx(i).y;
+			float tmp = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), second.ToGlobal(second.GetConvexShape(b).GetPoint(j)));
 			
-			if(tmp>secondmax)
-				{secondmax=tmp;}
-			else if(tmp<secondmin)
-				{secondmin=tmp;}
-		
+			if(tmp > secondmax) secondmax=tmp;
+			else if(tmp < secondmin) secondmin=tmp;
 		}
 		
 		if(firstmax < secondmin || firstmin > secondmax)
@@ -355,7 +361,7 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 		
 	}
 	
-	return true;*/ return false;
+	return true;
 }
 
 

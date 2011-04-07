@@ -40,20 +40,7 @@ sfp::Object::Object(const Shape& shape)
 	myLengthfactor=1;
 	#endif
 	
-	ShapeManager::SetShape(shape); //FIXME warum nicht SetShape() benutzen?
-	
-	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
-	{
-		myIsFixed=true;
-	}
-	
-	SetCenter(ShapeManager::myCenter);
-	Physicable::SetArea(ShapeManager::myArea);
-	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
-	
-	myLocalBox=ShapeManager::GetShapeBox();
-	myLocalBox.Left -= myCenter.x;
-	myLocalBox.Top -= myCenter.y;
+	SetShape(shape);
 }
 
 
@@ -317,6 +304,7 @@ void sfp::Object::SetShape(sf::Shape& sfShape)
 	{
 		shape.AddPoint(sfShape.GetPointPosition(i)/myLengthfactor);
 	}
+	shape.SetShapeType(Shape::Type::Polygon);
 	SetShape(shape);
 	
 	myPosition=sfShape.GetPosition()/myLengthfactor;

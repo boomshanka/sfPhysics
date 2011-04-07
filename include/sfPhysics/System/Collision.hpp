@@ -38,7 +38,7 @@ namespace sfp
 			std::list<sfp::Object*> myObjects;
 			std::stack<CollisionEvent> myCollisionEvents;
 			
-			bool myNoCollisionEventEnabled;
+			bool myNoCollisionEventEnabled; //FIXME Rename/Remove
 		public:
 			Collision();
 			~Collision();
@@ -47,12 +47,7 @@ namespace sfp
 			
 			bool PollCollision(sfp::CollisionEvent&);
 			
-			void Bounce(sfp::CollisionEvent&);
-			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
-			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e);
 			
-		protected:
-			void UpdateCollisionEvents();
 			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
 			bool PolygonPolygon(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
@@ -60,6 +55,16 @@ namespace sfp
 			bool PolygonCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 			bool PlaneCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
 			bool CircleCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
+			
+			void Bounce(sfp::CollisionEvent&);
+			
+		private:
+			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
+			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e);
+			
+			void UpdateCollisionEvents();
+			
+			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b);
 	};
 }
 

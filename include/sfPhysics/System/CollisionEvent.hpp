@@ -33,8 +33,8 @@ namespace sfp
 	enum CollisionEventType
 	{
 		NoCollision = 0,
-		BoundingBox,
-		PreciseCollision
+		BoundingBox = 1,
+		PreciseCollision = 2
 	};
 
 	class CollisionEvent

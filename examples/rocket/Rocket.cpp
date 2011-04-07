@@ -62,6 +62,7 @@ int main()
 	
 	sfp::Object object(shape,50);
 	sfp::Object foo(bottom,50);
+	
 	sfp::Object pCircle(kreise, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	pCircle.AddConvexShape(sfp::Shape::Circle(sf::Vector2f(3,1),1));
 	pCircle.Update();
@@ -120,9 +121,9 @@ int main()
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
-	pCircle2.Fix(true);
-	pCircle3.Fix(true);
-	pCircle4.Fix(true);
+//	pCircle2.Fix(true);
+//	pCircle3.Fix(true);
+//	pCircle4.Fix(true);
 	
 	pCircle.SetRotation(90);
 //	pCircle.SetRotationVelocity(5000);
@@ -172,8 +173,10 @@ int main()
 			switch(collisionevent.CollisionType)
 			{
 				case sfp::PreciseCollision:
-					//collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
-					//collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+					if(collisionevent.GetFirstObject().GetDrawable()!=NULL)
+						collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
+					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
+						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
 					
 					collision.Bounce(collisionevent);
 					break;
@@ -191,11 +194,11 @@ int main()
 		
 		//Draw
 		window.Draw(shape);
+		window.Draw(bottom);
 		window.Draw(kreise);
 		window.Draw(circle2);
 		window.Draw(circle3);
 		window.Draw(circle4);
-	//	window.Draw(bottom);
 		
 		window.Display();
 		window.Clear(sf::Color(0, 0, 150));
