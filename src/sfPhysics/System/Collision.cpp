@@ -202,19 +202,28 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						case Shape::Type::Polygon:
 						case Shape::Type::Rectangle:
 							//if(BoundingBoxes)
-								if(PolygonPolygon(first,second, i, j)) //FIXME beidseitig!
+								if(PolygonPolygon(first,second, i, j))
+								{
 									isCollided=true;
+									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								}
 						break;
 						
 						case Shape::Type::Plane:
 							if(PolygonPlane(first,second, i, j))
+							{
 								isCollided=true;
+								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+							}
 						break;
 						
 						case Shape::Type::Circle:
 							//if(BoundingBoxes)
 								if(PolygonCircle(first,second, i, j))
+								{
 									isCollided=true;
+									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								}
 						break;
 						
 						case Shape::Type::NegCircle:
@@ -235,12 +244,19 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						case Shape::Type::Polygon:
 						case Shape::Type::Rectangle:
 							if(PolygonPlane(second,first, j, i))
+							{
 								isCollided=true;
+								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								myCollisionEvents.top().collisionnormal.top()*=-1.f;
+							}
 						break;
 						
 						case Shape::Type::Circle:
 							if(PlaneCircle(first,second, i, j))
+							{
 								isCollided=true;
+								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+							}
 						break;
 						
 						case Shape::Type::NegCircle:
@@ -263,18 +279,29 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						case Shape::Type::Rectangle:
 							//if(BoundingBoxes)
 								if(PolygonCircle(second,first, j, i))
+								{
 									isCollided=true;
+									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+									myCollisionEvents.top().collisionnormal.top()*=-1.f;
+								}
 						break;
 						
 						case Shape::Type::Plane:
 							if(PlaneCircle(second,first, j, i))
+							{
 								isCollided=true;
+								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								myCollisionEvents.top().collisionnormal.top()*=-1.f;
+							}
 						break;
 						
 						case Shape::Type::Circle:
 							//if(BoundingBoxes)
 								if(CircleCircle(first,second, i, j))
+								{
 									isCollided=true;
+									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								}
 						break;
 						
 						case Shape::Type::NegCircle:
@@ -316,10 +343,9 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 	{
 		if(ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b))
 		{
-				myCollisionEvents.top().collisionpoint.push(sf::Vector2f());
+				myCollisionEvents.top().collisionpoint.push(sf::Vector2f()); //FIXME CollEvent in ComputePP
 				myCollisionEvents.top().collisionnormal.push(sf::Vector2f());
 				myCollisionEvents.top().overlap.push(sf::Vector2f());
-				myCollisionEvents.top().convexobjects.push(std::make_pair(a,b)); //FIXME! im event werden a/b möglichwerweise andersrum gespeichert!
 	
 			return true;
 		}
@@ -393,7 +419,6 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, unsign
 	myCollisionEvents.top().collisionpoint.push(second.ToGlobal(second.GetConvexShape(j).GetShapeCenter())-first.GetConvexShape(i).GetPlaneNormal()*distance);
 	myCollisionEvents.top().collisionnormal.push(first.GetPlaneNormal());
 	myCollisionEvents.top().overlap.push(first.GetConvexShape(i).GetPlaneNormal()*(second.GetConvexShape(j).GetCircleRadius()-distance));
-	myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
 	
 	return true;
 }
@@ -416,7 +441,6 @@ bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsig
 	distance+=first.ToGlobal(first.GetConvexShape(i).GetShapeCenter()); //FIXME
 	
 	myCollisionEvents.top().collisionpoint.push(distance);
-	myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
 	
 	return true;
 }
