@@ -40,6 +40,8 @@ namespace sfp
 			float myLengthfactor;
 			
 			float myFrameTime;
+			
+			bool myMoveDrawableEnabled;
 		public:
 			Environment();
 			~Environment();
@@ -56,6 +58,8 @@ namespace sfp
 			const sf::Vector2f& GetGravity() const {return myGravity;}
 			void SetGravity(const sf::Vector2f& gravity) {myGravity=gravity;}
 			
+			void EnableMoveDrawable(bool enabled) {myMoveDrawableEnabled=enabled;}
+			
 			void AddObject(sfp::Object& newobject) {myObjects.push_back(&newobject);}
 			
 			unsigned int GetObjectCount() const {return myObjects.size();}
@@ -67,12 +71,12 @@ namespace sfp
 			
 			void RenderGravity();
 			
-			void MoveObjects(bool moovedrawables=true);
+			void MoveObjects();
 			
 			#ifdef SFML_ENABLED
-			void MoveDrawables();
+			void MoveDrawable();
 			#else
-			virtual void MoveDrawables() {}
+			virtual void MoveDrawable() {}
 			#endif
 			
 	};

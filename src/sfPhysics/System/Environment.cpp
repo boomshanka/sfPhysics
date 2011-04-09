@@ -50,7 +50,7 @@ void sfp::Environment::RenderGravity()
 
 
 
-void sfp::Environment::MoveObjects(bool moovedrawables)
+void sfp::Environment::MoveObjects()
 {
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
@@ -62,11 +62,18 @@ void sfp::Environment::MoveObjects(bool moovedrawables)
 		{
 			(*it)->Rotate((*it)->GetRotationVelocity()*myFrameTime*myTimefactor);
 			(*it)->Move((*it)->GetVelocity()*myFrameTime*myTimefactor);
+			
+			//Move Intersection
+			while((*it)->GetIntersection().size()>0)
+			{
+				(*it)->Move((*it)->GetIntersection().top().first);
+				(*it)->GetIntersection().pop();
+			}
 		}
 	}
 	
-	if(moovedrawables)
-		MoveDrawables();
+	if(myMoveDrawableEnabled)
+		MoveDrawable();
 	
 }
 
@@ -74,7 +81,7 @@ void sfp::Environment::MoveObjects(bool moovedrawables)
 
 #ifdef SFML_ENABLED
 
-void sfp::Environment::MoveDrawables()
+void sfp::Environment::MoveDrawable()
 {
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{

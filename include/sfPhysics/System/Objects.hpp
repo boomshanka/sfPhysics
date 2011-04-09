@@ -30,6 +30,8 @@
 
 
 #include <vector>
+#include <stack>
+#include <utility>
 
 
 
@@ -45,6 +47,8 @@ namespace sfp
 			sfp::FloatBox myLocalBox;
 			
 			bool myIsFixed;
+			
+			std::stack<std::pair<sf::Vector2f, sf::Vector2f> > myIntersection;
 		public:
 			Object();
 			Object(const Shape&);
@@ -80,6 +84,9 @@ namespace sfp
 			
 			bool IsFixed() {return myIsFixed;}
 			void Fix(bool fix) {myIsFixed=fix;}
+			
+			void AddIntersection(const sf::Vector2f& first, const sf::Vector2f& second) {myIntersection.push(std::make_pair(first, second));}
+			std::stack<std::pair<sf::Vector2f, sf::Vector2f> >& GetIntersection() {return myIntersection;}
 			
 			void Update();
 			

@@ -19,6 +19,8 @@ int main()
 //	360°	→	1,0
 	
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Physics Test");
+	window.EnableVerticalSync(true);
+	
 	sf::Image* image = new sf::Image();
 	image->LoadFromFile("kreis.png");
 	sf::Sprite kreise(*image);
@@ -73,10 +75,10 @@ int main()
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	foo.SetShapeType(sfp::Shape::Type::Polygon);
 	
-	sfp::Object plane(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
+	sfp::Object* plane = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
 	sfp::Object* plane2 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(-1,0)));
 	sfp::Object* plane3 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(1,0)));
-	plane.SetPosition(sf::Vector2f(16,12));
+	plane->SetPosition(sf::Vector2f(16,12));
 	plane2->SetPosition(sf::Vector2f(6.1,0));
 	plane3->SetPosition(sf::Vector2f(0,0));
 	
@@ -93,17 +95,17 @@ int main()
 	world.AddObject(pCircle2);
 	world.AddObject(pCircle3);
 	world.AddObject(pCircle4);
-	world.AddObject(plane);
+	world.AddObject(*plane);
 	world.AddObject(*plane2);
 	world.AddObject(*plane3);
 	
-	collision.AddObject(object);
-	collision.AddObject(foo);
+//	collision.AddObject(object);
+//	collision.AddObject(foo);
 	collision.AddObject(pCircle4);
 	collision.AddObject(pCircle3);
 	collision.AddObject(pCircle);
 	collision.AddObject(pCircle2);
-	collision.AddObject(plane);
+	collision.AddObject(*plane);
 	collision.AddObject(*plane2);
 	collision.AddObject(*plane3);
 	
@@ -114,16 +116,16 @@ int main()
 	pCircle2.SetRestitution(0.6);
 	pCircle3.SetRestitution(0.6);
 	pCircle4.SetRestitution(0.4);
-	plane.SetRestitution(0.3);
+	plane->SetRestitution(0.3);
 	plane2->SetRestitution(0.6);
 	plane3->SetRestitution(0.6);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
-//	pCircle2.Fix(true);
-//	pCircle3.Fix(true);
-//	pCircle4.Fix(true);
+	pCircle2.Fix(true);
+	pCircle3.Fix(true);
+	pCircle4.Fix(true);
 	
 	pCircle.SetRotation(90);
 //	pCircle.SetRotationVelocity(5000);
@@ -173,10 +175,10 @@ int main()
 			switch(collisionevent.CollisionType)
 			{
 				case sfp::PreciseCollision:
-					if(collisionevent.GetFirstObject().GetDrawable()!=NULL)
-						collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
-					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
-						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+//					if(collisionevent.GetFirstObject().GetDrawable()!=NULL)
+//						collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
+//					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
+//						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
 					
 					collision.Bounce(collisionevent);
 					break;

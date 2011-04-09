@@ -55,7 +55,7 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& event)
 			float restitution = (event.first->GetRestitution()+event.second->GetRestitution()) / 2.f;
 			BounceFixed(*event.second, event.collisionpoint.top(), -event.collisionnormal.top(), movement, restitution);
 			
-			event.second->Move(-event.overlap.top());
+			event.second->AddIntersection(-event.intersection.top(), sf::Vector2f()); //FIXME
 		}
 		else if(event.second->IsFixed())
 		{
@@ -64,7 +64,7 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& event)
 			float restitution = (event.first->GetRestitution()+event.second->GetRestitution()) / 2.f;
 			BounceFixed(*event.first, event.collisionpoint.top(), event.collisionnormal.top(), movement, restitution);
 			
-			event.first->Move(event.overlap.top());
+			event.first->AddIntersection(event.intersection.top(), sf::Vector2f()); //FIXME
 		}
 		else
 		{
@@ -79,13 +79,13 @@ void sfp::Collision::Bounce(sfp::CollisionEvent& event)
 			
 			float factor = event.first->GetMass() / (event.first->GetMass() + event.second->GetMass()); //FIXME Testen!
 			
-			event.first->Move(event.overlap.top() * factor);
-			event.second->Move(-event.overlap.top() * (1-factor));
+			event.first->AddIntersection(event.intersection.top() * factor, sf::Vector2f()); //FIXME
+			event.second->AddIntersection(-event.intersection.top() * (1-factor), sf::Vector2f()); //FIXME
 		}
 		
 		event.collisionpoint.pop();
 		event.collisionnormal.pop();
-		event.overlap.pop();
+		event.intersection.pop();
 		event.convexobjects.pop();
 	}
 }
@@ -345,7 +345,7 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 		{
 				myCollisionEvents.top().collisionpoint.push(sf::Vector2f()); //FIXME CollEvent in ComputePP
 				myCollisionEvents.top().collisionnormal.push(sf::Vector2f());
-				myCollisionEvents.top().overlap.push(sf::Vector2f());
+				myCollisionEvents.top().intersection.push(sf::Vector2f());
 	
 			return true;
 		}
@@ -418,7 +418,7 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, unsign
 	
 	myCollisionEvents.top().collisionpoint.push(second.ToGlobal(second.GetConvexShape(j).GetShapeCenter())-first.GetConvexShape(i).GetPlaneNormal()*distance);
 	myCollisionEvents.top().collisionnormal.push(first.GetPlaneNormal());
-	myCollisionEvents.top().overlap.push(first.GetConvexShape(i).GetPlaneNormal()*(second.GetConvexShape(j).GetCircleRadius()-distance));
+	myCollisionEvents.top().intersection.push(first.GetConvexShape(i).GetPlaneNormal()*(second.GetConvexShape(j).GetCircleRadius()-distance));
 	
 	return true;
 }
@@ -433,8 +433,8 @@ bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsig
 		return false;
 	
 	myCollisionEvents.top().collisionnormal.push(distance); myCollisionEvents.top().collisionnormal.top().Normalize();
-	myCollisionEvents.top().overlap.push(myCollisionEvents.top().collisionnormal.top());
-	myCollisionEvents.top().overlap.top()*= -dis; //FIXME warum -
+	myCollisionEvents.top().intersection.push(myCollisionEvents.top().collisionnormal.top());
+	myCollisionEvents.top().intersection.top()*= -dis; //FIXME warum -
 	
 	distance.SetForce(first.GetConvexShape(i).GetCircleRadius()-((first.GetConvexShape(i).GetCircleRadius()+
 			 second.GetConvexShape(j).GetCircleRadius())-distance.GetForce())/2.f);
