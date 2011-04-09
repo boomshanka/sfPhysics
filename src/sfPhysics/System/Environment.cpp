@@ -22,7 +22,7 @@
 
 
 sfp::Environment::Environment()
-: myGravity(sf::Vector2f(0,10)), myTimefactor(1), myLengthfactor(1), myFrameTime(0)
+: myGravity(sf::Vector2f(0,10)), myTimefactor(1), myLengthfactor(1), myFrameTime(0), myMoveDrawableEnabled(true)
 {
 	
 }
@@ -60,15 +60,15 @@ void sfp::Environment::MoveObjects()
 		}
 		else
 		{
-			(*it)->Rotate((*it)->GetRotationVelocity()*myFrameTime*myTimefactor);
-			(*it)->Move((*it)->GetVelocity()*myFrameTime*myTimefactor);
-			
 			//Move Intersection
 			while((*it)->GetIntersection().size()>0)
 			{
 				(*it)->Move((*it)->GetIntersection().top().first);
 				(*it)->GetIntersection().pop();
 			}
+			
+			(*it)->Rotate((*it)->GetRotationVelocity()*myFrameTime*myTimefactor);
+			(*it)->Move((*it)->GetVelocity()*myFrameTime*myTimefactor);
 		}
 	}
 	
