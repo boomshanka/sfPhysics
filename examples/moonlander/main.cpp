@@ -106,8 +106,6 @@ int main()
 	//	if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63*window.GetFrameTime(),0));
 	//	if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
 		
-		std::cout<<pCircle1->GetVelocity().GetForce()<<"\n";
-		
 		while(collision.PollCollision(collisionevent))
 		{
 			

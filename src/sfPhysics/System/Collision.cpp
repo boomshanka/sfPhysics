@@ -18,7 +18,7 @@
 
 
 #include <sfPhysics/System/Collision.hpp>
-#include <sfPhysics/System/SAT.hpp>
+#include <sfPhysics/System/Line.hpp>
 
 
 #define _USE_MATH_DEFINES
@@ -341,14 +341,7 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 	
 	if(first.GetConvexShape(a).GetPointCount() > 1 && second.GetConvexShape(b).GetPointCount() > 1)
 	{
-		if(ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b))
-		{
-				myCollisionEvents.top().collisionpoint.push(sf::Vector2f()); //FIXME CollEvent in ComputePP
-				myCollisionEvents.top().collisionnormal.push(sf::Vector2f());
-				myCollisionEvents.top().intersection.push(sf::Vector2f());
-	
-			return true;
-		}
+		return ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b);
 	}
 	
 	return false;
@@ -387,7 +380,21 @@ bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& seco
 		
 	}
 	
+	ComputePolygonPolygonCollision(first, second, a, b);
+	
 	return true;
+}
+
+
+void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b)
+{
+	sfp::Vector2f r1; sfp::Vector2f r2;
+	
+	
+	
+	myCollisionEvents.top().collisionpoint.push((r1+r2)/2.f); 
+	myCollisionEvents.top().collisionnormal.push(sf::Vector2f());//DotProduct(r2-r1, r2-r1)); //FIXME second-first vllt umdrehen? stimmt das überhaupt?
+	myCollisionEvents.top().intersection.push(sf::Vector2f()); //FIXME
 }
 
 

@@ -65,6 +65,7 @@ namespace sfp
 			void UpdateCollisionEvents();
 			
 			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b);
+			void ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b);
 	};
 }
 
