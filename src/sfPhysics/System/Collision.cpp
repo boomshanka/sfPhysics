@@ -25,7 +25,7 @@
 #include <cmath>
 
 
-#include<iostream>
+
 sfp::Collision::Collision()
 :myNoCollisionEventEnabled(false) //FIXME myCollisionEventEnabled(true)
 {
@@ -341,9 +341,11 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 	
 	if(first.GetConvexShape(a).GetPointCount() > 1 && second.GetConvexShape(b).GetPointCount() > 1)
 	{
-		if(ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b))
+		sfp::Vector2f vec1, vec2;
+		if(ComputePolygonPolygon(first, second, a, b, vec1) && ComputePolygonPolygon(second, first, a, b, vec2))
 		{
 			ComputePolygonPolygonCollision(first, second, a, b);
+			myCollisionEvents.top().intersection.push(ComputeMTD(first, second, a, b, vec1, vec2));
 			return true;
 		}
 	}
@@ -352,14 +354,16 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, uns
 }
 
 
-bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b)
+bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b, sfp::Vector2f& vec)
 {
-	for(unsigned int i=0; i < first.GetConvexShape(a).GetSeparatingAxis().GetAxisCount(); ++i) //FIXME size_t
+	bool first_iteration = true;
+	
+	for(size_t i = 0; i < first.GetConvexShape(a).GetSeparatingAxis().GetAxisCount(); ++i) //FIXME size_t
 	{
 		float firstmin = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), first.ToGlobal(first.GetConvexShape(a).GetPoint(0)));
 		float firstmax = firstmin;
 		
-		for(int j=1; j < first.GetConvexShape(a).GetPointCount(); ++j)
+		for(size_t j=1; j < first.GetConvexShape(a).GetPointCount(); ++j)
 		{
 			float tmp = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), first.ToGlobal(first.GetConvexShape(a).GetPoint(j)));
 			
@@ -371,7 +375,7 @@ bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& seco
 		float secondmin = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), second.ToGlobal(second.GetConvexShape(b).GetPoint(0)));
 		float secondmax = secondmin;
 		
-		for(int j=1; j < second.GetConvexShape(b).GetPointCount(); ++j)
+		for(size_t j=1; j < second.GetConvexShape(b).GetPointCount(); ++j)
 		{
 			float tmp = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), second.ToGlobal(second.GetConvexShape(b).GetPoint(j)));
 			
@@ -382,6 +386,25 @@ bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& seco
 		if(firstmax < secondmin || firstmin > secondmax)
 			return false;
 		
+		
+		float k1 = firstmax - secondmin;
+		float k2 = secondmax - firstmin;
+
+		sfp::Vector2f tmp;
+		if(std::abs(k1) < std::abs(k2))
+			tmp = first.GetConvexShape(a).GetSeparatingAxis().GetAx(i) * k1;
+		else
+			tmp = first.GetConvexShape(a).GetSeparatingAxis().GetAx(i) * k2;
+		
+		if(first_iteration)
+		{
+			vec = tmp;
+			first_iteration = false;
+		}
+		else if(tmp.x*tmp.x + tmp.y*tmp.y < vec.x*vec.x + vec.y*vec.y)
+		{
+			vec = tmp;
+		}
 	}
 	
 	return true;
@@ -433,11 +456,10 @@ void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Obj
 				firstpoint = false;
 			}
 		}
-	}std::cout<<p1.x<<" "<<p1.y<<" | "<<p2.x<<" "<<p2.y<<"\n";
+	}
 	
 	myCollisionEvents.top().collisionpoint.push((p1+p2)/2.f);
-	myCollisionEvents.top().collisionnormal.push(sf::Vector2f(0, 1));//DotProduct(r2-r1, r2-r1)); //FIXME second-first vllt umdrehen? stimmt das überhaupt?
-	myCollisionEvents.top().intersection.push(sf::Vector2f(0,0)); //FIXME
+	myCollisionEvents.top().collisionnormal.push(sf::Vector2f(0, -1));//DotProduct(r2-r1, r2-r1)); //FIXME second-first vllt umdrehen? stimmt das überhaupt?
 }
 
 
@@ -495,6 +517,19 @@ bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, unsig
 	return true;
 }
 
+
+
+
+sfp::Vector2f sfp::Collision::ComputeMTD
+(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b, const sfp::Vector2f& vec1, const sfp::Vector2f& vec2)
+{
+	const sfp::Vector2f* vec = vec1.GetForce() < vec2.GetForce() ? &vec1 : &vec2;
+
+    if(DotProduct(*vec, second.ToGlobal(second.GetConvexShape(a).GetShapeCenter()) - first.ToGlobal(first.GetConvexShape(b).GetShapeCenter())) < 0)
+        return *vec;
+    else
+        return -(*vec);
+}
 
 
 

@@ -119,6 +119,8 @@ int main()
 	plane->SetRestitution(0.3);
 	plane2->SetRestitution(0.6);
 	plane3->SetRestitution(0.6);
+	foo->SetRestitution(0.5);
+	object.SetRestitution(0.4);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
@@ -127,12 +129,18 @@ int main()
 	pCircle3.Fix(true);
 	pCircle4.Fix(true);
 	
+	foo->Fix(true);
+	
+	object.SetRotation(45);
+	
 	pCircle.SetRotation(90);
 //	pCircle.SetRotationVelocity(5000);
 
 	
 	while (window.IsOpened()) // Window Loop //
 	{
+//		std::cout<<"-\n";
+		
 		world.UpdateFrameTime(window.GetFrameTime());
 		
 		while(window.PollEvent(event))

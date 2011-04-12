@@ -39,11 +39,15 @@ sfp::SeparatingAxis::SeparatingAxis(const std::vector<sf::Vector2f>& points)
 void sfp::SeparatingAxis::ComputeSeparatingAxis(const std::vector<sf::Vector2f>& points)
 {
 	if(points.size()>2)
-		myAxis.push_back(sfp::Vector2f(-(points[0].y-points[points.size()-1].y),points[0].x-points[points.size()-1].x));;
+	{
+		myAxis.push_back(sfp::Vector2f(-(points[0].y-points[points.size()-1].y),points[0].x-points[points.size()-1].x));
+		myAxis.back().Normalize();
+	}
 	
 	for(size_t i = 1; i < points.size(); ++i)
 	{
 		myAxis.push_back(sfp::Vector2f(-(points[i].y-points[i-1].y),points[i].x-points[i-1].x));
+		myAxis.back().Normalize();
 	}
 }
 

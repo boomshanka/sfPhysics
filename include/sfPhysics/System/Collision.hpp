@@ -58,14 +58,17 @@ namespace sfp
 			
 			void Bounce(sfp::CollisionEvent&);
 			
+			
 		private:
 			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
 			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e);
 			
 			void UpdateCollisionEvents();
 			
-			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b);
+			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b, sfp::Vector2f&);
 			void ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b);
+			
+			sfp::Vector2f ComputeMTD(sfp::Object&, sfp::Object&, unsigned int, unsigned int, const sfp::Vector2f&, const sfp::Vector2f&);
 	};
 }
 
