@@ -93,7 +93,7 @@ int main()
 	{
 		world->UpdateFrameTime(window.GetFrameTime());
 		
-		while(window.GetEvent(event))
+		while(window.PollEvent(event))
 		{
 			if (event.Type == sf::Event::Closed) window.Close();
 			

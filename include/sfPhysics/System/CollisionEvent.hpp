@@ -51,11 +51,11 @@ namespace sfp
 			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;
 		public:
 			CollisionEvent() : CollisionTime(0) {}
-			CollisionEvent(sfp::Object& one, sfp::Object& two) { first=&one; second=&two; }
+			CollisionEvent(sfp::Object& one, sfp::Object& two) {first=&one; second=&two;}
 			
 			CollisionEventType CollisionType;
 			
-			float CollisionTime;
+			float CollisionTime; //FIXME
 			
 			
 			sfp::Object& GetFirstObject() {return *first;}

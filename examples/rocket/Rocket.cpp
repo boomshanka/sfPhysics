@@ -30,8 +30,8 @@ int main()
 	int mouse_x, mouse_y;
 	
 	
-	sf::Shape shape, bottom,// circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
-	circle2=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
+	sf::Shape shape; sf::Shape* bottom = new sf::Shape();// circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
+	sf::Shape circle2=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
 	circle3=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
 	circle4=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
 	
@@ -42,20 +42,20 @@ int main()
 	
 	//sfp::Object pShape(shape); sfp::Object pBottom(bottom); sfp::Object pBalken(balken);
 	
-	//shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
-	shape.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
-	shape.AddPoint(50, 70,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
-//	shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128)); //Für convex/concav
-	shape.AddPoint(-50, 70, sf::Color(255, 170, 170), sf::Color(0, 128, 128));
 	shape.AddPoint(-50, 0,  sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
+	shape.AddPoint(-50, 70, sf::Color(255, 170, 170), sf::Color(0, 128, 128));
+//	shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128)); //Für convex/concav
+	shape.AddPoint(50, 70,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
+	shape.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
+	//shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
 	
-	bottom.AddPoint(0, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
-	bottom.AddPoint(0, 30,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
-	bottom.AddPoint(800, 30,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
-	bottom.AddPoint(800, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
+	bottom->AddPoint(0, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
+	bottom->AddPoint(0, 100,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
+	bottom->AddPoint(800, 100,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
+	bottom->AddPoint(800, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	
-	bottom.SetPosition(100,500);
-	shape.SetPosition(300,200);
+	bottom->SetPosition(400,500);
+	shape.SetPosition(400,200);
 	kreise.SetPosition(152.5,50);
 	circle2.SetPosition(50,250);
 	circle3.SetPosition(255,250);
@@ -63,7 +63,7 @@ int main()
 	
 	
 	sfp::Object object(shape,50);
-	sfp::Object foo(bottom,50);
+	sfp::Object* foo = new sfp::Object(*bottom,50);
 	
 	sfp::Object pCircle(kreise, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	pCircle.AddConvexShape(sfp::Shape::Circle(sf::Vector2f(3,1),1));
@@ -73,7 +73,7 @@ int main()
 	sfp::Object pCircle2(circle2, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle3(circle3, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
-	foo.SetShapeType(sfp::Shape::Type::Polygon);
+	foo->SetShapeType(sfp::Shape::Type::Polygon);
 	
 	sfp::Object* plane = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
 	sfp::Object* plane2 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(-1,0)));
@@ -82,7 +82,7 @@ int main()
 	plane2->SetPosition(sf::Vector2f(6.1,0));
 	plane3->SetPosition(sf::Vector2f(0,0));
 	
-	sfp::Collision collision;
+	sfp::Collision* collision = new sfp::Collision();
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
 	
@@ -99,15 +99,15 @@ int main()
 	world.AddObject(*plane2);
 	world.AddObject(*plane3);
 	
-//	collision.AddObject(object);
-//	collision.AddObject(foo);
-	collision.AddObject(pCircle4);
-	collision.AddObject(pCircle3);
-	collision.AddObject(pCircle);
-	collision.AddObject(pCircle2);
-	collision.AddObject(*plane);
-	collision.AddObject(*plane2);
-	collision.AddObject(*plane3);
+	collision->AddObject(object);
+	collision->AddObject(*foo);
+	collision->AddObject(pCircle4);
+	collision->AddObject(pCircle3);
+	collision->AddObject(pCircle);
+	collision->AddObject(pCircle2);
+	collision->AddObject(*plane);
+	collision->AddObject(*plane2);
+	collision->AddObject(*plane3);
 	
 	pCircle2.SetDensity(1);
 	pCircle.SetDensity(1);
@@ -135,7 +135,7 @@ int main()
 	{
 		world.UpdateFrameTime(window.GetFrameTime());
 		
-		while(window.GetEvent(event))
+		while(window.PollEvent(event))
 		{
 			if (event.Type == sf::Event::Closed) window.Close();
 			
@@ -169,7 +169,7 @@ int main()
 		// Play God
 		world.RenderGravity();
 		
-		while(collision.PollCollision(collisionevent))
+		while(collision->PollCollision(collisionevent))
 		{
 			
 			switch(collisionevent.CollisionType)
@@ -180,7 +180,7 @@ int main()
 //					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
 //						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
 					
-					collision.Bounce(collisionevent);
+					collision->Bounce(collisionevent);
 					break;
 				
 				default:
@@ -196,17 +196,20 @@ int main()
 		
 		//Draw
 		window.Draw(shape);
-		window.Draw(bottom);
+		window.Draw(*bottom);
 		window.Draw(kreise);
 		window.Draw(circle2);
 		window.Draw(circle3);
 		window.Draw(circle4);
 		
+		window.Draw(sf::Shape::Circle(sf::Vector2f(9*50,9*50.f),5,sf::Color::Red));
+		window.Draw(sf::Shape::Circle(sf::Vector2f(7*50,9*50.f),5,sf::Color::Red));
+		
 		window.Display();
 		window.Clear(sf::Color(0, 0, 150));
 		
 		shape.SetColor(sf::Color::White);
-		bottom.SetColor(sf::Color::White);
+		bottom->SetColor(sf::Color::White);
 		kreise.SetColor(sf::Color::White);
 		circle2.SetColor(sf::Color::White);
 		circle3.SetColor(sf::Color::White);
@@ -214,6 +217,14 @@ int main()
 	} // Window Loop //
 	
 	delete image;
+	
+	delete collision;
+	
+	delete plane;
+	delete plane2;
+	delete plane3;
+	delete foo;
+	delete bottom;
 	
 	#define HAU return
 	#define WOLFRAM 0

@@ -33,6 +33,7 @@ namespace sfp
 	template <typename T>
 	class Line
 	{
+		public:
 			Line();
 			Line(const sfp::Vector2<T>&, const sfp::Vector2<T>&);
 			

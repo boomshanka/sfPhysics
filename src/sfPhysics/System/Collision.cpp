@@ -25,7 +25,7 @@
 #include <cmath>
 
 
-
+#include<iostream>
 sfp::Collision::Collision()
 :myNoCollisionEventEnabled(false) //FIXME myCollisionEventEnabled(true)
 {
@@ -334,14 +334,18 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 
 
 
-bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b) //FIXME Rewrite + kollisionspunkte rausfinden!! event beschreiben
+bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b)
 {
 	first.GetConvexShape(a).GetSeparatingAxis().UpdateRotation(first.GetRotation());
 	second.GetConvexShape(b).GetSeparatingAxis().UpdateRotation(second.GetRotation());
 	
 	if(first.GetConvexShape(a).GetPointCount() > 1 && second.GetConvexShape(b).GetPointCount() > 1)
 	{
-		return ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b);
+		if(ComputePolygonPolygon(first, second, a, b) && ComputePolygonPolygon(second, first, a, b))
+		{
+			ComputePolygonPolygonCollision(first, second, a, b);
+			return true;
+		}
 	}
 	
 	return false;
@@ -380,21 +384,60 @@ bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& seco
 		
 	}
 	
-	ComputePolygonPolygonCollision(first, second, a, b);
-	
 	return true;
 }
 
 
 void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b)
 {
-	sfp::Vector2f r1; sfp::Vector2f r2;
+	sfp::Vector2f p1; sfp::Vector2f p2;
+	bool firstpoint = true;
 	
+	for(size_t i = 0; i < first.GetConvexShape(a).GetPointCount(); ++i)
+	{
+		sfp::FloatLine line1;
+		if(i == first.GetConvexShape(a).GetPointCount()-1)
+		{
+			line1 = sfp::FloatLine(first.ToGlobal(first.GetConvexShape(a).GetPoint(i)),
+					first.ToGlobal(first.GetConvexShape(a).GetPoint(0))-first.ToGlobal(first.GetConvexShape(a).GetPoint(i)));
+		}
+		else
+		{
+			line1 = sfp::FloatLine(first.ToGlobal(first.GetConvexShape(a).GetPoint(i)),
+					first.ToGlobal(first.GetConvexShape(a).GetPoint(i+1))-first.ToGlobal(first.GetConvexShape(a).GetPoint(i)));
+		}
+		
+		for(size_t j = 0; j < second.GetConvexShape(b).GetPointCount(); ++j)
+		{
+			sfp::FloatLine line2;
+			if(j == second.GetConvexShape(b).GetPointCount()-1)
+			{
+				line2 = sfp::FloatLine(second.ToGlobal(second.GetConvexShape(b).GetPoint(j)),
+						second.ToGlobal(second.GetConvexShape(b).GetPoint(0))-second.ToGlobal(second.GetConvexShape(b).GetPoint(j)));
+			}
+			else
+			{
+				line2 = sfp::FloatLine(second.ToGlobal(second.GetConvexShape(b).GetPoint(j)),
+						second.ToGlobal(second.GetConvexShape(b).GetPoint(i+1))-second.ToGlobal(second.GetConvexShape(b).GetPoint(j)));
+			}
+			
+			float r1 = 0; float r2 = 0;
+			line1.Intersects(line2, r1);
+			line2.Intersects(line1, r2);
+			
+			if((r1 > 0.f && r1 < 1.f) && (r2 > 0.f && r2 < 1.f)) //FIXME <= / >= ?
+			{
+				if(firstpoint) p1 = line1.Point + r1 * line1.Direction;
+				else p2 = line1.Point + r1 * line1.Direction;
+				
+				firstpoint = false;
+			}
+		}
+	}std::cout<<p1.x<<" "<<p1.y<<" | "<<p2.x<<" "<<p2.y<<"\n";
 	
-	
-	myCollisionEvents.top().collisionpoint.push((r1+r2)/2.f); 
-	myCollisionEvents.top().collisionnormal.push(sf::Vector2f());//DotProduct(r2-r1, r2-r1)); //FIXME second-first vllt umdrehen? stimmt das überhaupt?
-	myCollisionEvents.top().intersection.push(sf::Vector2f()); //FIXME
+	myCollisionEvents.top().collisionpoint.push((p1+p2)/2.f);
+	myCollisionEvents.top().collisionnormal.push(sf::Vector2f(0, 1));//DotProduct(r2-r1, r2-r1)); //FIXME second-first vllt umdrehen? stimmt das überhaupt?
+	myCollisionEvents.top().intersection.push(sf::Vector2f(0,0)); //FIXME
 }
 
 
