@@ -51,8 +51,8 @@ namespace sfp
 			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
 			bool PolygonPolygon(sfp::Object&, sfp::Object&, size_t, size_t);
-			bool PolygonPlane(sfp::Object&, sfp::Object&, size_t, size_t);
 			bool PolygonCircle(sfp::Object&, sfp::Object&, size_t, size_t);
+			bool PlanePolygon(sfp::Object&, sfp::Object&, size_t, size_t);
 			bool PlaneCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			bool CircleCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			
@@ -65,8 +65,9 @@ namespace sfp
 			
 			void UpdateCollisionEvents();
 			
-			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f&);
-			void ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
+			bool ComputeSAT(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f&);
+			void ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
+			void ComputePlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
 			
 	};
 }

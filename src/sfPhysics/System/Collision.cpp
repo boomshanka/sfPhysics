@@ -25,7 +25,7 @@
 #include <cmath>
 
 
-
+#include<iostream>
 sfp::Collision::Collision()
 :myNoCollisionEventEnabled(false) //FIXME myCollisionEventEnabled(true)
 {
@@ -202,7 +202,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						case Shape::Type::Polygon:
 						case Shape::Type::Rectangle:
 							//if(BoundingBoxes)
-								if(PolygonPolygon(first,second, i, j))
+								if(PolygonPolygon(first, second, i, j))
 								{
 									isCollided=true;
 									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
@@ -210,16 +210,17 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						break;
 						
 						case Shape::Type::Plane:
-							if(PolygonPlane(first,second, i, j))
+							if(PlanePolygon(second, first, j, i))
 							{
 								isCollided=true;
 								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								myCollisionEvents.top().collisionnormal.top()*=-1.f;
 							}
 						break;
 						
 						case Shape::Type::Circle:
 							//if(BoundingBoxes)
-								if(PolygonCircle(first,second, i, j))
+								if(PolygonCircle(first, second, i, j))
 								{
 									isCollided=true;
 									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
@@ -243,16 +244,15 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 					{
 						case Shape::Type::Polygon:
 						case Shape::Type::Rectangle:
-							if(PolygonPlane(second,first, j, i))
+							if(PlanePolygon(first, second, i, j))
 							{
 								isCollided=true;
 								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
-								myCollisionEvents.top().collisionnormal.top()*=-1.f;
 							}
 						break;
 						
 						case Shape::Type::Circle:
-							if(PlaneCircle(first,second, i, j))
+							if(PlaneCircle(first, second, i, j))
 							{
 								isCollided=true;
 								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
@@ -278,7 +278,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						case Shape::Type::Polygon:
 						case Shape::Type::Rectangle:
 							//if(BoundingBoxes)
-								if(PolygonCircle(second,first, j, i))
+								if(PolygonCircle(second, first, j, i))
 								{
 									isCollided=true;
 									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
@@ -287,7 +287,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						break;
 						
 						case Shape::Type::Plane:
-							if(PlaneCircle(second,first, j, i))
+							if(PlaneCircle(second, first, j, i))
 							{
 								isCollided=true;
 								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
@@ -297,7 +297,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 						
 						case Shape::Type::Circle:
 							//if(BoundingBoxes)
-								if(CircleCircle(first,second, i, j))
+								if(CircleCircle(first, second, i, j))
 								{
 									isCollided=true;
 									myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
@@ -334,6 +334,25 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 
 
 
+bool sfp::Collision::PlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b)
+{
+	second.GetConvexShape(b).GetSeparatingAxis().UpdateRotation(second.GetRotation());
+	
+	if(second.GetConvexShape(b).GetPointCount() > 1)
+	{
+		sfp::Vector2f vec;
+		if(ComputeSAT(first, second, a, b, vec))
+		{
+			ComputePlanePolygon(first, second, a, b);
+			myCollisionEvents.top().intersection.push(vec);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+
 bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b)
 {
 	first.GetConvexShape(a).GetSeparatingAxis().UpdateRotation(first.GetRotation());
@@ -342,9 +361,9 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, siz
 	if(first.GetConvexShape(a).GetPointCount() > 1 && second.GetConvexShape(b).GetPointCount() > 1)
 	{
 		sfp::Vector2f vec1, vec2;
-		if(ComputePolygonPolygon(first, second, a, b, vec1) && ComputePolygonPolygon(second, first, a, b, vec2))
+		if(ComputeSAT(first, second, a, b, vec1) && ComputeSAT(second, first, b, a, vec2))
 		{
-			ComputePolygonPolygonCollision(first, second, a, b);
+			ComputePolygonPolygon(first, second, a, b);
 			myCollisionEvents.top().intersection.push(vec1.GetForce() < vec2.GetForce() ? vec1 : vec2);
 			return true;
 		}
@@ -354,11 +373,11 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, siz
 }
 
 
-bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f& vec)
+bool sfp::Collision::ComputeSAT(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f& vec)
 {
 	bool first_iteration = true;
 	
-	for(size_t i = 0; i < first.GetConvexShape(a).GetSeparatingAxis().GetAxisCount(); ++i) //FIXME size_t
+	for(size_t i = 0; i < first.GetConvexShape(a).GetSeparatingAxis().GetAxisCount(); ++i)
 	{
 		float firstmin = DotProduct(first.GetConvexShape(a).GetSeparatingAxis().GetAx(i), first.ToGlobal(first.GetConvexShape(a).GetPoint(0)));
 		float firstmax = firstmin;
@@ -411,7 +430,7 @@ bool sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& seco
 }
 
 
-void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, size_t a, size_t b)
+void sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b)
 {
 	sfp::Vector2f p1; sfp::Vector2f p2;
 	char points = 0;
@@ -441,7 +460,7 @@ void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Obj
 			else
 			{
 				line2 = sfp::FloatLine(second.ToGlobal(second.GetConvexShape(b).GetPoint(j)),
-						second.ToGlobal(second.GetConvexShape(b).GetPoint(i+1))-second.ToGlobal(second.GetConvexShape(b).GetPoint(j)));
+						second.ToGlobal(second.GetConvexShape(b).GetPoint(j+1))-second.ToGlobal(second.GetConvexShape(b).GetPoint(j)));
 			}
 			
 			float r1 = 0; float r2 = 0;
@@ -467,21 +486,14 @@ void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Obj
 	if(points == 2)
 	{
 		myCollisionEvents.top().collisionpoint.push((p1+p2)/2.f);
-	
-		if(first.GetConvexShape(a).GetShapeType() == Shape::Type::Plane)
-		{
-			myCollisionEvents.top().collisionnormal.push(sf::Vector2f()); //FIXME normale von der ebene, soll auch zu SeparatingAxis kommen
-		}
-		else
-		{
-			myCollisionEvents.top().collisionnormal.push(p2-p1);
-			myCollisionEvents.top().collisionnormal.top().Normalize();
-			myCollisionEvents.top().collisionnormal.top().Rotate(90);
-			if(DotProduct(myCollisionEvents.top().collisionnormal.top(),
-			second.ToGlobal(second.GetConvexShape(b).GetShapeCenter()) - first.ToGlobal(first.GetConvexShape(a).GetShapeCenter())) < 0)
-				myCollisionEvents.top().collisionnormal.top()*=-1.f;
-			
-		}
+		
+		myCollisionEvents.top().collisionnormal.push(p2-p1);
+		myCollisionEvents.top().collisionnormal.top().Normalize();
+		myCollisionEvents.top().collisionnormal.top().Rotate(90);
+		if(DotProduct(myCollisionEvents.top().collisionnormal.top(),
+		second.ToGlobal(second.GetConvexShape(b).GetShapeCenter()) - first.ToGlobal(first.GetConvexShape(a).GetShapeCenter())) < 0)
+			myCollisionEvents.top().collisionnormal.top()*=-1.f;
+		
 	}
 	else
 	{
@@ -492,10 +504,58 @@ void sfp::Collision::ComputePolygonPolygonCollision(sfp::Object& first, sfp::Obj
 
 
 
-bool sfp::Collision::PolygonPlane(sfp::Object& first, sfp::Object& second, size_t i, size_t j)
+void sfp::Collision::ComputePlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b)
 {
-if(i!=j) {;}
-return false;
+	sfp::Vector2f p1; sfp::Vector2f p2;
+	
+	char points = 0;
+	
+	sfp::Vector2f direction(first.GetConvexShape(a).GetPlaneNormal()); direction.Rotate(90);
+	sfp::FloatLine planeline(first.ToGlobal(first.GetConvexShape(a).GetShapeCenter()), direction);
+	
+	for(size_t i = 0; i < second.GetConvexShape(b).GetPointCount(); ++i)
+	{
+		sfp::FloatLine line;
+		if(i == second.GetConvexShape(b).GetPointCount()-1)
+		{
+			line = sfp::FloatLine(second.ToGlobal(second.GetConvexShape(b).GetPoint(i)),
+					second.ToGlobal(second.GetConvexShape(b).GetPoint(0))-second.ToGlobal(second.GetConvexShape(b).GetPoint(i)));
+		}
+		else
+		{
+			line = sfp::FloatLine(second.ToGlobal(second.GetConvexShape(b).GetPoint(i)),
+					second.ToGlobal(second.GetConvexShape(b).GetPoint(i+1))-second.ToGlobal(second.GetConvexShape(b).GetPoint(i)));
+		}
+		
+		float r = 0;
+	//	planeline.Intersects(line, r1);
+		line.Intersects(planeline, r);
+		
+		if(r > 0.f && r < 1.f)
+		{
+			if(points == 0)
+			{
+				p1 = line.Point + r * line.Direction;
+				points = 1;
+			}
+			else
+			{
+				p2 = line.Point + r * line.Direction;
+				points = 2;
+			}
+		}
+	}
+	
+	if(points == 2)
+	{
+		myCollisionEvents.top().collisionpoint.push((p1+p2)/2.f);
+		myCollisionEvents.top().collisionnormal.push(first.GetConvexShape(a).GetPlaneNormal());
+	}
+	else
+	{
+		myCollisionEvents.top().collisionpoint.push(sf::Vector2f());
+		myCollisionEvents.top().collisionnormal.push(sf::Vector2f());
+	}
 }
 
 
@@ -517,7 +577,7 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, size_t
 		return false;
 	
 	myCollisionEvents.top().collisionpoint.push(second.ToGlobal(second.GetConvexShape(j).GetShapeCenter())-first.GetConvexShape(i).GetPlaneNormal()*distance);
-	myCollisionEvents.top().collisionnormal.push(first.GetPlaneNormal());
+	myCollisionEvents.top().collisionnormal.push(first.GetConvexShape(i).GetPlaneNormal());
 	myCollisionEvents.top().intersection.push(first.GetConvexShape(i).GetPlaneNormal()*(second.GetConvexShape(j).GetCircleRadius()-distance));
 	
 	return true;

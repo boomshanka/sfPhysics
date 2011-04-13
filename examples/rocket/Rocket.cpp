@@ -100,13 +100,13 @@ int main()
 	world.AddObject(*plane3);
 	
 	collision->AddObject(object);
-	collision->AddObject(*foo);
+//	collision->AddObject(*foo);
 	collision->AddObject(pCircle4);
 	collision->AddObject(pCircle3);
 	collision->AddObject(pCircle);
 	collision->AddObject(pCircle2);
 	collision->AddObject(*plane);
-	collision->AddObject(*plane2);
+//	collision->AddObject(*plane2);
 	collision->AddObject(*plane3);
 	
 	pCircle2.SetDensity(1);
@@ -210,7 +210,7 @@ int main()
 		window.Draw(circle2);
 		window.Draw(circle3);
 		window.Draw(circle4);
-		window.Draw(*bottom);
+//		window.Draw(*bottom);
 		
 		window.Display();
 		window.Clear(sf::Color(0, 0, 150));

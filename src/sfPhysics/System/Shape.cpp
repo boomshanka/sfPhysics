@@ -22,8 +22,7 @@
 
 
 sfp::Shape::Shape()
-:mySeparatingAxis(NULL),
-myCircleRadius(0)
+:myCircleRadius(0)
 {
 	type.myShapeType = Shape::Type::Nothing;
 }
@@ -31,11 +30,12 @@ myCircleRadius(0)
 
 
 sfp::Shape::Shape(const Shape& shape)
-:myPoints(shape.myPoints), mySeparatingAxis(NULL),
+:myPoints(shape.myPoints),
 myCircleRadius(shape.myCircleRadius), myPlaneNormal(shape.myPlaneNormal),
 myCenter(shape.myCenter), myArea(shape.myArea), myInertiaMoment(shape.myInertiaMoment)
 {
 	type.myShapeType = shape.type.myShapeType;
+	Update();
 }
 
 
@@ -46,19 +46,22 @@ void sfp::Shape::Update()
 	myArea=0;
 	myInertiaMoment=0;
 	
-	delete mySeparatingAxis;
-	mySeparatingAxis=NULL;
+	mySeparatingAxis.Clear();
 	
 	switch(type.myShapeType)
 	{
 		case Shape::Type::Polygon:
 		case Shape::Type::Rectangle: //FIXME
 			ComputePolygonArea();
-			mySeparatingAxis = new SeparatingAxis(myPoints);
+			mySeparatingAxis.ComputeSeparatingAxis(myPoints);
 			break;
 		
 		case Shape::Type::Circle:
 			ComputeCircleArea();
+			break;
+		
+		case Shape::Type::Plane:
+			mySeparatingAxis.AddAx(myPlaneNormal);
 			break;
 		
 		default:
@@ -153,8 +156,12 @@ sfp::Shape sfp::Shape::Plane(const sf::Vector2f& center, sfp::Vector2f normal)
 	shape.myCenter=center;
 	shape.myPlaneNormal=normal;
 	
+	shape.myPoints.push_back(center);
+	
 	shape.myArea=1;
 	shape.myInertiaMoment=1;
+	
+	shape.Update();
 	
 	return shape;
 }

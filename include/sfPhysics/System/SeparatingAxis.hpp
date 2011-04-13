@@ -39,7 +39,12 @@ namespace sfp
 			SeparatingAxis();
 			SeparatingAxis(const std::vector<sf::Vector2f>&);
 			
+			~SeparatingAxis() {}
+			
+			void Clear() {myAxis.clear();}
+			
 			void ComputeSeparatingAxis(const std::vector<sf::Vector2f>&);
+			void AddAx(const sfp::Vector2f& ax) {myAxis.push_back(ax);}
 			
 			void UpdateRotation(float) const;
 			float GetRotation() const {return myRotation;}

@@ -25,7 +25,7 @@
 sfp::ShapeManager::ShapeManager()
 :myIsUpdated(true)
 {
-	myConvexShapes.push_back(Shape());//FIXME
+
 }
 
 
@@ -54,7 +54,7 @@ void sfp::ShapeManager::SetShape(const Shape& shape)
 	*thisshape = shape;
 	
 	myConvexShapes.clear();
-	myConvexShapes.push_back(Shape(*this));
+	myConvexShapes.push_back(shape);
 	
 	Update();
 }
