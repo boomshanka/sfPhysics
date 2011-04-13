@@ -34,24 +34,24 @@ void sfp::ShapeManager::AddPoint(const sf::Vector2f& vec)
 {
 	Shape::AddPoint(vec);
 	
-	myIsUpdated=false;
+	myIsUpdated = false;
 }
 
 
 
-void sfp::ShapeManager::SetPoint(unsigned int index, const sf::Vector2f& vec)
+void sfp::ShapeManager::SetPoint(size_t index, const sf::Vector2f& vec)
 {
 	Shape::SetPoint(index, vec);
 	
-	myIsUpdated=false;
+	myIsUpdated = false;
 }
 
 
 
 void sfp::ShapeManager::SetShape(const Shape& shape)
 {
-	Shape* thisshape=this;
-	*thisshape=shape;
+	Shape* thisshape = this;
+	*thisshape = shape;
 	
 	myConvexShapes.clear();
 	myConvexShapes.push_back(Shape(*this));
@@ -68,7 +68,7 @@ void sfp::ShapeManager::Update()
 	ComputeArea();
 	ComputeBox();
 	
-	myIsUpdated=true;
+	myIsUpdated = true;
 }
 
 
@@ -78,7 +78,7 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME Shape::Update bei jedem Sh
 	Shape::type.myShapeType = Shape::Type::Nothing;
 	Shape::myPoints.clear();
 	
-	for(unsigned int i=0; i<myConvexShapes.size(); ++i)
+	for(size_t i = 0; i < myConvexShapes.size(); ++i)
 	{
 		switch(myConvexShapes[i].GetShapeType())
 		{
@@ -135,7 +135,7 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME Shape::Update bei jedem Sh
 		myConvexShapes[myConvexShapes.size()-1].AddPoint(Shape::GetPoint(0));
 		
 		
-		for(unsigned int i=1;i<Shape::GetPointCount();++i)
+		for(size_t i=1;i<Shape::GetPointCount();++i)
 		{
 			if(myConvexShapes[myConvexShapes.size()-1].GetPointCount()>2)
 			{
@@ -180,7 +180,7 @@ void sfp::ShapeManager::ComputeArea()
 	Shape::myArea=0;
 	Shape::myInertiaMoment=0;
 	
-	for(unsigned int i=0; i<myConvexShapes.size(); ++i)
+	for(size_t i = 0; i < myConvexShapes.size(); ++i)
 	{
 		if(myConvexShapes[i].GetShapeType()!=Shape::Type::Plane)
 		{
@@ -209,7 +209,7 @@ void sfp::ShapeManager::ComputeBox()
 		myBox.Left=myBox.Width=Shape::myPoints[0].x;
 		myBox.Top=myBox.Height=Shape::myPoints[0].y;
 		
-		for(unsigned int i=1; i<Shape::myPoints.size(); ++i)
+		for(size_t i=1; i<Shape::myPoints.size(); ++i)
 		{
 			if(myBox.Left>Shape::myPoints[i].x)
 				myBox.Left=Shape::myPoints[i].x;
@@ -235,7 +235,8 @@ void sfp::ShapeManager::ComputeBox()
 	}
 	switch(Shape::type.myShapeType)
 	{
-	
+		default:
+		break;
 	}
 }
 

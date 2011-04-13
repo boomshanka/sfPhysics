@@ -47,16 +47,16 @@ int main()
 //	shape.AddPoint(0, 30,  sf::Color(255, 255, 255), sf::Color(0, 128, 128)); //Für convex/concav
 	shape.AddPoint(50, 70,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
 	shape.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
-	//shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
+	shape.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
 	
 	bottom->AddPoint(0, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	bottom->AddPoint(0, 100,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	bottom->AddPoint(800, 100,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	bottom->AddPoint(800, 0,  sf::Color(0, 200, 0),   sf::Color(0, 0, 200));
 	
-	bottom->SetPosition(400,500);
+	bottom->SetPosition(400,550);
 	shape.SetPosition(400,200);
-	kreise.SetPosition(152.5,50);
+	kreise.SetPosition(0.5,50);
 	circle2.SetPosition(50,250);
 	circle3.SetPosition(255,250);
 	circle4.SetPosition(152.5,500);
@@ -88,7 +88,7 @@ int main()
 	
 	world.SetLengthFactor(50);
 	world.SetGravity(sf::Vector2f(0,10));
-	//world.SetTimeFactor(1);
+	world.SetTimeFactor(0);
 	
 	world.AddObject(object);
 	world.AddObject(pCircle);
@@ -149,6 +149,8 @@ int main()
 			
 			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::A) world.SetGravity(world.GetGravity()+sf::Vector2f(0,2));
 			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,2));
+			
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::S) world.SetTimeFactor(1);
 		}
 		
 		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-126*window.GetFrameTime()));
@@ -204,14 +206,11 @@ int main()
 		
 		//Draw
 		window.Draw(shape);
-		window.Draw(*bottom);
 		window.Draw(kreise);
 		window.Draw(circle2);
 		window.Draw(circle3);
 		window.Draw(circle4);
-		
-		window.Draw(sf::Shape::Circle(sf::Vector2f(9*50,9*50.f),5,sf::Color::Red));
-		window.Draw(sf::Shape::Circle(sf::Vector2f(7*50,9*50.f),5,sf::Color::Red));
+		window.Draw(*bottom);
 		
 		window.Display();
 		window.Clear(sf::Color(0, 0, 150));

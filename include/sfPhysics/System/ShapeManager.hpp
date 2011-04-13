@@ -48,11 +48,11 @@ namespace sfp
 			inline void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
 			void AddPoint(const sf::Vector2f&);
 			
-			inline void SetPoint(unsigned int index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
-			void SetPoint(unsigned int, const sf::Vector2f&);
+			inline void SetPoint(size_t index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
+			void SetPoint(size_t, const sf::Vector2f&);
 			
-			inline int GetPointCount() const {return Shape::GetPointCount();}
-			inline const sf::Vector2f& GetPoint(unsigned int index) const {return Shape::GetPoint(index);}
+			inline size_t GetPointCount() const {return Shape::GetPointCount();}
+			inline const sf::Vector2f& GetPoint(size_t index) const {return Shape::GetPoint(index);}
 			
 			inline float GetCircleRadius() const {return Shape::GetCircleRadius();}
 			inline void SetCircleRadius(float radius) {Shape::SetCircleRadius(radius);}
@@ -70,14 +70,14 @@ namespace sfp
 			
 			// Funktionen von ShapeManager
 			
-			unsigned int GetConvexShapeCount() const {return myConvexShapes.size();}
-			const Shape& GetConvexShape(unsigned int index) const {return myConvexShapes[index];}
+			size_t GetConvexShapeCount() const {return myConvexShapes.size();}
+			const Shape& GetConvexShape(size_t index) const {return myConvexShapes[index];}
 			
 			void AddConvexShape(const Shape& pol) {myConvexShapes.push_back(pol); Update();}
-			void SetConvexShape(unsigned int index, const Shape& Shape) {myConvexShapes[index]=Shape; Update();}
-			void RemoveConvexShape(unsigned int index) {myConvexShapes.erase(myConvexShapes.begin()+index); Update();}
+			void SetConvexShape(size_t index, const Shape& Shape) {myConvexShapes[index]=Shape; Update();}
+			void RemoveConvexShape(size_t index) {myConvexShapes.erase(myConvexShapes.begin()+index); Update();}
 			
-			const sf::Vector2f& GetPoint(unsigned int shape, unsigned int index) const {return myConvexShapes[shape].GetPoint(index);}
+			const sf::Vector2f& GetPoint(size_t shape, size_t index) const {return myConvexShapes[shape].GetPoint(index);}
 			
 			void SetShape(const Shape&);
 			

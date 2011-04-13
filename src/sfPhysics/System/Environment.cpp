@@ -44,7 +44,7 @@ void sfp::Environment::RenderGravity()
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
 		if(!(*it)->IsFixed())
-			(*it)->AddVelocity(myGravity*myFrameTime);
+			(*it)->AddVelocity(myGravity*myFrameTime*myTimefactor);
 	}
 }
 

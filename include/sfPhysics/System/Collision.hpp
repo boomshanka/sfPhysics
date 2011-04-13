@@ -50,11 +50,11 @@ namespace sfp
 			
 			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
-			bool PolygonPolygon(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
-			bool PolygonPlane(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
-			bool PolygonCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
-			bool PlaneCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
-			bool CircleCircle(sfp::Object&, sfp::Object&, unsigned int, unsigned int);
+			bool PolygonPolygon(sfp::Object&, sfp::Object&, size_t, size_t);
+			bool PolygonPlane(sfp::Object&, sfp::Object&, size_t, size_t);
+			bool PolygonCircle(sfp::Object&, sfp::Object&, size_t, size_t);
+			bool PlaneCircle(sfp::Object&, sfp::Object&, size_t, size_t);
+			bool CircleCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			
 			void Bounce(sfp::CollisionEvent&);
 			
@@ -65,10 +65,9 @@ namespace sfp
 			
 			void UpdateCollisionEvents();
 			
-			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b, sfp::Vector2f&);
-			void ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, unsigned int a, unsigned int b);
+			bool ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f&);
+			void ComputePolygonPolygonCollision(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
 			
-			sfp::Vector2f ComputeMTD(sfp::Object&, sfp::Object&, unsigned int, unsigned int, const sfp::Vector2f&, const sfp::Vector2f&);
 	};
 }
 

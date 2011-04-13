@@ -62,11 +62,11 @@ namespace sfp
 			
 			void AddObject(sfp::Object& newobject) {myObjects.push_back(&newobject);}
 			
-			unsigned int GetObjectCount() const {return myObjects.size();}
+			size_t GetObjectCount() const {return myObjects.size();}
 			
-			sfp::Object& GetObject(unsigned int index); //FIXME
+			sfp::Object& GetObject(size_t index); //FIXME
 			
-			void RemoveObject(unsigned int index); // {myObjects.erase(index);}
+			void RemoveObject(size_t index); // {myObjects.erase(index);}
 			void RemoveObject(sfp::Object& object) {myObjects.remove(&object);}
 			
 			void RenderGravity();

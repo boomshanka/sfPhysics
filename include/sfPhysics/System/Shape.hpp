@@ -73,11 +73,11 @@ namespace sfp
 			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
 			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec); Update();} //FIXME Update aufrufen?
 			
-			virtual void SetPoint(unsigned int index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
-			virtual void SetPoint(unsigned int index, const sf::Vector2f& vec) {myPoints[index]=vec; Update();} //FIXME s.o.
+			virtual void SetPoint(size_t index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
+			virtual void SetPoint(size_t index, const sf::Vector2f& vec) {myPoints[index]=vec; Update();} //FIXME s.o.
 			
-			virtual int GetPointCount() const {return myPoints.size();}
-			virtual const sf::Vector2f& GetPoint(unsigned int index) const {return myPoints[index];}
+			virtual size_t GetPointCount() const {return myPoints.size();}
+			virtual const sf::Vector2f& GetPoint(size_t index) const {return myPoints[index];}
 			
 			virtual float GetCircleRadius() const {return myCircleRadius;}
 			virtual void SetCircleRadius(float radius) {myCircleRadius=radius;}
