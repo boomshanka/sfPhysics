@@ -188,7 +188,7 @@ sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position, const sfp::Vector
 	position-=myCenter;
 	position.Rotate(myRotation);
 	
-	sfp::Vector2f movement(normal * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f)); //FIXME ist das noch nötig?
+	sfp::Vector2f movement(normal * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f));
 	
 	movement*=CrossProduct(position, normal);
 	movement+=Physicable::myVelocity;

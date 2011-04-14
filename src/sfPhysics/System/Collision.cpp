@@ -364,7 +364,14 @@ bool sfp::Collision::PolygonPolygon(sfp::Object& first, sfp::Object& second, siz
 		if(ComputeSAT(first, second, a, b, vec1) && ComputeSAT(second, first, b, a, vec2))
 		{
 			ComputePolygonPolygon(first, second, a, b);
-			myCollisionEvents.top().intersection.push(vec1.GetForce() < vec2.GetForce() ? vec1 : vec2);
+			sfp::Vector2f& vec = vec1.GetForce() < vec2.GetForce() ? vec1 : vec2;
+			if(DotProduct(vec, second.ToGlobal(second.GetConvexShape(b).GetShapeCenter()) - first.ToGlobal(first.GetConvexShape(a).GetShapeCenter())) >= 0)
+			//FIXME >= oder >
+			{
+				vec *= -1.f;
+			}
+			myCollisionEvents.top().intersection.push(vec);
+			
 			return true;
 		}
 	}
@@ -464,10 +471,8 @@ void sfp::Collision::ComputePolygonPolygon(sfp::Object& first, sfp::Object& seco
 			}
 			
 			float r1 = 0; float r2 = 0;
-			line1.Intersects(line2, r1);
-			line2.Intersects(line1, r2);
 			
-			if((r1 > 0.f && r1 < 1.f) && (r2 > 0.f && r2 < 1.f))
+			if(((line1.Intersects(line2, r1)) && (line2.Intersects(line1, r2))) && ((r1 >= 0.f && r1 <= 1.f) && (r2 >= 0.f && r2 <= 1.f)))
 			{
 				if(points == 0)
 				{
