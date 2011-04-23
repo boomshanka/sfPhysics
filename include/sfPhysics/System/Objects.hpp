@@ -76,10 +76,10 @@ namespace sfp
 			sfp::FloatBox GetBoundingBox();
 			
 			
-			void Impulse(const sfp::Vector2f& position, sfp::Vector2f impulse) {Impulse(position, impulse, impulse.GetForce());}
-			void Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse);
+			void Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse = 1);
 			//Ist getimpulse möglich?
 			
+			sfp::Vector2f GetMovement(sfp::Vector2f position) const;
 			sfp::Vector2f GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const;
 			
 			bool IsFixed() {return myIsFixed;}

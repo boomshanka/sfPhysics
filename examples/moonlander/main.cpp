@@ -46,7 +46,7 @@ int main()
 	plane3->SetPosition(sf::Vector2f(16,12));
 	plane4->SetPosition(sf::Vector2f(16,12));
 	
-	sfp::Collision collision;
+	sfp::Collision* collision = new sfp::Collision();
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment* world = new sfp::Environment();
 	
@@ -58,15 +58,15 @@ int main()
 	world->AddObject(*pCircle3);
 	world->AddObject(*pCircle4);
 	
-	collision.AddObject(*pCircle1);
-	collision.AddObject(*pCircle2);
-	collision.AddObject(*pCircle3);
-	collision.AddObject(*pCircle4);
+	collision->AddObject(*pCircle1);
+	collision->AddObject(*pCircle2);
+	collision->AddObject(*pCircle3);
+	collision->AddObject(*pCircle4);
 	
-	collision.AddObject(*plane1);
-	collision.AddObject(*plane2);
-	collision.AddObject(*plane3);
-	collision.AddObject(*plane4);
+	collision->AddObject(*plane1);
+	collision->AddObject(*plane2);
+	collision->AddObject(*plane3);
+	collision->AddObject(*plane4);
 	
 	pCircle1->SetVelocity(sf::Vector2f(5,2));
 	pCircle2->SetVelocity(sf::Vector2f(5,-2));
@@ -106,7 +106,7 @@ int main()
 	//	if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63*window.GetFrameTime(),0));
 	//	if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
 		
-		while(collision.PollCollision(collisionevent))
+		while(collision->PollCollision(collisionevent))
 		{
 			
 			switch(collisionevent.CollisionType)
@@ -115,7 +115,7 @@ int main()
 				//	collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
 				//	collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
 					
-					collision.Bounce(collisionevent);
+					collision->CollisionResponse(collisionevent);
 					break;
 				
 				default:
@@ -162,6 +162,7 @@ int main()
 	delete pCircle4;
 	
 	delete world;
+	delete collision;
 		
 	return 0;
 }

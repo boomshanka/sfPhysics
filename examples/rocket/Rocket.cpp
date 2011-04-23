@@ -122,6 +122,16 @@ int main()
 	foo->SetRestitution(0.5);
 	object.SetRestitution(0.4);
 	
+	pCircle.SetDynamicFriction(0.5);
+	pCircle2.SetDynamicFriction(0.5);
+	pCircle3.SetDynamicFriction(0.5);
+	pCircle4.SetDynamicFriction(0.5);
+	plane->SetDynamicFriction(0.5);
+	plane2->SetDynamicFriction(0.5);
+	plane3->SetDynamicFriction(0.5);
+	foo->SetDynamicFriction(0.5);
+	object.SetDynamicFriction(0.5);
+	
 	sf::Clock frametime;
 	unsigned int frames=0;
 	
@@ -134,7 +144,7 @@ int main()
 	object.SetRotation(45);
 	
 	pCircle.SetRotation(90);
-//	pCircle.SetRotationVelocity(5000);
+	pCircle.SetRotationVelocity(500);
 
 	
 	while (window.IsOpened()) // Window Loop //
@@ -142,6 +152,30 @@ int main()
 //		std::cout<<"-\n";
 		
 		world.UpdateFrameTime(window.GetFrameTime());
+		
+		
+		world.RenderGravity();
+		
+		while(collision->PollCollision(collisionevent))
+		{
+			
+			switch(collisionevent.CollisionType)
+			{
+				case sfp::PreciseCollision:
+//					if(collisionevent.GetFirstObject().GetDrawable()!=NULL)
+//						collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
+//					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
+//						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
+					
+					collision->CollisionResponse(collisionevent);
+					break;
+				
+				default:
+					//collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::White);
+					//collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::White);
+					break;
+			}
+		}
 		
 		while(window.PollEvent(event))
 		{
@@ -177,28 +211,6 @@ int main()
 		}
 		
 		// Play God
-		world.RenderGravity();
-		
-		while(collision->PollCollision(collisionevent))
-		{
-			
-			switch(collisionevent.CollisionType)
-			{
-				case sfp::PreciseCollision:
-//					if(collisionevent.GetFirstObject().GetDrawable()!=NULL)
-//						collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
-//					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
-//						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
-					
-					collision->Bounce(collisionevent);
-					break;
-				
-				default:
-					//collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::White);
-					//collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::White);
-					break;
-			}
-		}
 		
 		
 		world.MoveObjects();

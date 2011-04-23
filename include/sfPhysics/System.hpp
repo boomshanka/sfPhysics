@@ -21,7 +21,7 @@
 #define SYSTEM_PACK
 
 
-#include <sfPhysics/SFML.hpp>
+#include <sfPhysics/SFML_Graphics.hpp>
 
 
 #include <sfPhysics/System/Vector2.hpp>

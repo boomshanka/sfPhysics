@@ -40,12 +40,13 @@ namespace sfp
 	class CollisionEvent
 	{
 		friend class Collision;
+		friend class ContactManager;
 		
 		private:
 			sfp::Object* first;
 			sfp::Object* second;
 			
-			std::stack<sf::Vector2f> collisionpoint;
+			std::stack<sfp::Vector2f> collisionpoint;
 			std::stack<sfp::Vector2f> collisionnormal;
 			std::stack<sfp::Vector2f> intersection;
 			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;

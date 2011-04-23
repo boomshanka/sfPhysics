@@ -173,14 +173,22 @@ sfp::FloatBox sfp::Object::GetBoundingBox()
 
 void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse)
 {
-//	normal.Normalize();
 	position-=myCenter;
 	position.Rotate(myRotation);
 	
 	AddVelocity((impulse/Physicable::myMass) * normal);
-	AddRotationVelocity(impulse/Physicable::myInertiaMoment * CrossProduct(position, normal));
+	AddRotationVelocity(impulse/Physicable::myInertiaMoment * CrossProduct(position, normal) * 180.f/static_cast<float>(M_PI));
 }
 
+
+
+sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position) const
+{
+	position-=myCenter;
+	position.Rotate(myRotation);
+	
+	return sfp::Vector2f(position * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f) + Physicable::myVelocity);
+}
 
 
 sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const

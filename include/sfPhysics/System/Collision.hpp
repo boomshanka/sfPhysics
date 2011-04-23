@@ -23,6 +23,7 @@
 
 #include <sfPhysics/System/Objects.hpp>
 #include <sfPhysics/System/CollisionEvent.hpp>
+#include <sfPhysics/System/Contact.hpp>
 
 #include <list>
 #include <stack>
@@ -38,7 +39,10 @@ namespace sfp
 			std::list<sfp::Object*> myObjects;
 			std::stack<CollisionEvent> myCollisionEvents;
 			
+			sfp::ContactManager myContactManager;
+			
 			bool myNoCollisionEventEnabled; //FIXME Rename/Remove
+			
 		public:
 			Collision();
 			~Collision();
@@ -56,10 +60,14 @@ namespace sfp
 			bool PlaneCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			bool CircleCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			
-			void Bounce(sfp::CollisionEvent&);
 			
+			void CollisionResponse(sfp::CollisionEvent&);
 			
 		private:
+			void ComputeContact(sfp::CollisionEvent&);
+			sfp::Vector2f Friction(sfp::Object*, sfp::Object*);
+			void Bounce(sfp::Object*, sfp::Object*);
+			
 			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
 			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e);
 			
@@ -69,6 +77,15 @@ namespace sfp
 			void ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
 			void ComputePlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
 			
+			
+			sfp::Vector2f Movement;
+			sfp::Vector2f Movement2;
+			sfp::Vector2f* Collisionpoint;
+			sfp::Vector2f* Normal;
+			sfp::Vector2f* Intersection;
+			float Restitution;
+			size_t A;
+			size_t B;
 	};
 }
 

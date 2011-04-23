@@ -9,9 +9,14 @@
 #include <sfPhysics/System.hpp>
 
 
+#include <unistd.h>
+
+
 
 int main()
 {
+//	fork();
+	
 //	0°		→	1,0
 //	90°		↓	0,1
 //	180°	←	-1,0
@@ -44,12 +49,12 @@ int main()
 	sf::Shape* shape4 = new sf::Shape(*shape1);
 	sf::Shape* shape5 = new sf::Shape(*shape1);
 	
-	shape1->SetPosition(600,575);
-	shape2->SetPosition(600,475);
-	shape3->SetPosition(600,375);
-	shape4->SetPosition(600,275);
-	shape5->SetPosition(600,175);
-	shape->SetPosition(25,575);
+	shape1->SetPosition(600,550);
+	shape2->SetPosition(600,440);
+	shape3->SetPosition(600,330);
+	shape4->SetPosition(600,220);
+	shape5->SetPosition(600,110);
+	shape->SetPosition(25,550);
 	
 	sfp::Object* pShape1 = new sfp::Object(*shape1, 50);
 	sfp::Object* pShape2 = new sfp::Object(*shape2, 50);
@@ -109,6 +114,24 @@ int main()
 	{
 		world.UpdateFrameTime(window.GetFrameTime());
 		
+		// Play God
+		world.RenderGravity();
+		
+		while(collision->PollCollision(collisionevent))
+		{
+			
+			switch(collisionevent.CollisionType)
+			{
+				case sfp::PreciseCollision:
+					collision->CollisionResponse(collisionevent);
+					break;
+				
+				default:
+					break;
+			}
+		}
+		
+		
 		while(window.PollEvent(event))
 		{
 			if (event.Type == sf::Event::Closed) window.Close();
@@ -137,24 +160,6 @@ int main()
 			frametime.Reset();
 			frames=0;
 		}
-		
-		// Play God
-		world.RenderGravity();
-		
-		while(collision->PollCollision(collisionevent))
-		{
-			
-			switch(collisionevent.CollisionType)
-			{
-				case sfp::PreciseCollision:
-					collision->Bounce(collisionevent);
-					break;
-				
-				default:
-					break;
-			}
-		}
-		
 		
 		world.MoveObjects();
 		

@@ -25,7 +25,7 @@
 #include <cmath>
 
 
-#include<iostream>
+
 sfp::Collision::Collision()
 :myNoCollisionEventEnabled(false) //FIXME myCollisionEventEnabled(true)
 {
@@ -44,49 +44,106 @@ sfp::Collision::~Collision()
 
 
 
-void sfp::Collision::Bounce(sfp::CollisionEvent& event)
+void sfp::Collision::CollisionResponse(sfp::CollisionEvent& event)
 {
+	ComputeContact(event);
+	
 	while(!event.collisionpoint.empty())
 	{
+		Collisionpoint = &event.collisionpoint.top();
+		Normal = &event.collisionnormal.top();
+		Intersection = &event.intersection.top();
+		Restitution = event.first->GetRestitution() * event.second->GetRestitution();
+		A = event.convexobjects.top().first;
+		B = event.convexobjects.top().second;
+		
 		if(event.first->IsFixed())
 		{
-			sfp::Vector2f movement=-event.second->GetMovement(event.second->ToLocal(event.collisionpoint.top()), -event.collisionnormal.top());
-			
-			float restitution = (event.first->GetRestitution()+event.second->GetRestitution()) / 2.f;
-			BounceFixed(*event.second, event.collisionpoint.top(), -event.collisionnormal.top(), movement, restitution);
-			
-			event.second->AddIntersection(-event.intersection.top(), sf::Vector2f()); //FIXME
+			Movement = -event.second->GetMovement(event.second->ToLocal(*Collisionpoint), -*Normal);//FIXME
+			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint));
 		}
 		else if(event.second->IsFixed())
 		{
-			sfp::Vector2f movement=-event.first->GetMovement(event.first->ToLocal(event.collisionpoint.top()), event.collisionnormal.top());
-			
-			float restitution = (event.first->GetRestitution()+event.second->GetRestitution()) / 2.f;
-			BounceFixed(*event.first, event.collisionpoint.top(), event.collisionnormal.top(), movement, restitution);
-			
-			event.first->AddIntersection(event.intersection.top(), sf::Vector2f()); //FIXME
+			Movement = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint), *Normal);
+			Movement2 = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
 		}
 		else
 		{
-			sfp::Vector2f movement=event.second->GetMovement(event.second->ToLocal(event.collisionpoint.top()), -event.collisionnormal.top())-
-								event.first->GetMovement(event.first->ToLocal(event.collisionpoint.top()), event.collisionnormal.top());
-			
-			sfp::Vector2f r(event.collisionpoint.top()-event.second->ToGlobal(event.second->GetConvexShape(event.convexobjects.top().second).GetShapeCenter()));
-			float direction=r.GetDirection()-movement.GetDirection();
-			
-			if(direction<90 || direction>270) //FIXME if stimmt nicht
-				Bounce(*event.first, *event.second, event.collisionpoint.top(), event.collisionnormal.top(), movement);
-			
-			float factor = event.first->GetMass() / (event.first->GetMass() + event.second->GetMass()); //FIXME Testen!
-			
-			event.first->AddIntersection(event.intersection.top() * factor, sf::Vector2f()); //FIXME
-			event.second->AddIntersection(-event.intersection.top() * (1-factor), sf::Vector2f()); //FIXME
+			Movement = event.second->GetMovement(event.second->ToLocal(*Collisionpoint), -*Normal) -
+							event.first->GetMovement(event.first->ToLocal(*Collisionpoint), *Normal);
+			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint)) -
+							event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
 		}
+		
+		sfp::Vector2f friction = Friction(event.first, event.second);
+		Bounce(event.first, event.second);
+		
+		if(!event.first->IsFixed()) event.first->Impulse(event.first->ToLocal(*Collisionpoint), -friction);
+		if(!event.second->IsFixed()) event.second->Impulse(event.second->ToLocal(*Collisionpoint), friction);
 		
 		event.collisionpoint.pop();
 		event.collisionnormal.pop();
 		event.intersection.pop();
 		event.convexobjects.pop();
+	}
+}
+
+
+sfp::Vector2f sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
+{
+	sfp::Vector2f friction(-Normal->y, Normal->x);
+	friction *= CrossProduct(Movement2, *Normal);
+	
+	if(first->IsFixed())
+	{
+//		friction *= std::abs(DotProduct(second->GetImpulse(), *Normal));
+	}
+	else if(second->IsFixed())
+	{
+//		friction *= std::abs(DotProduct(first->GetImpulse(), *Normal));
+	}
+	else
+	{
+//		friction *= std::abs(DotProduct(Movement2 * (first->GetMass() + second->GetMass()), *Normal));
+	}
+	
+	if(myContactManager.GetContact(first, second) != NULL && myContactManager.GetContact(first, second)->type == Contact::StaticContact)
+	{
+		friction *= first->GetStaticFriction() * second->GetStaticFriction();
+	}
+	else
+	{
+		friction *= first->GetDynamicFriction() * second->GetDynamicFriction();
+	}
+	
+	return friction;
+}
+
+
+void sfp::Collision::Bounce(sfp::Object* first, sfp::Object* second)
+{
+	if(first->IsFixed())
+	{
+		BounceFixed(*second, *Collisionpoint, -*Normal, Movement, Restitution);
+		
+		second->AddIntersection(-*Intersection, sf::Vector2f()); //FIXME
+	}
+	else if(second->IsFixed())
+	{
+		BounceFixed(*first, *Collisionpoint, *Normal, Movement, Restitution);
+		
+		first->AddIntersection(*Intersection, sf::Vector2f()); //FIXME
+	}
+	else
+	{
+		sfp::Vector2f r(*Collisionpoint - second->ToGlobal(second->GetConvexShape(B).GetShapeCenter()));
+		
+		Bounce(*first, *second, *Collisionpoint, *Normal, Movement);
+		
+		float factor = first->GetMass() / (first->GetMass() + second->GetMass());
+		
+		first->AddIntersection(*Intersection * factor, sf::Vector2f()); //FIXME
+		second->AddIntersection(-*Intersection * (1-factor), sf::Vector2f()); //FIXME
 	}
 }
 
@@ -97,7 +154,7 @@ void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::
 	sfp::Vector2f r1(P-first.GetPosition());
 	sfp::Vector2f r2(P-second.GetPosition());
 			
-	float j=-(1+(first.GetRestitution()+second.GetRestitution())/2.f) * DotProduct(vr, n);
+	float j=-(1 + first.GetRestitution()*second.GetRestitution()) * DotProduct(vr, n);
 	j /= 1.f/first.GetMass() + 1.f/second.GetMass() +
 	std::abs(DotProduct((1.f/first.GetInertiaMoment() * CrossProduct(r1, n) * r1 + 1.f/second.GetInertiaMoment() * CrossProduct(r2, n) * r2), n));
 	
@@ -138,6 +195,7 @@ bool sfp::Collision::PollCollision(sfp::CollisionEvent& event)
 	if(myCollisionEvents.empty())
 	{
 		UpdateCollisionEvents();
+		myContactManager.UpdateContacts();
 	}
 	else
 	{
@@ -177,6 +235,15 @@ void sfp::Collision::UpdateCollisionEvents()
 		}
 	}
 } //FIXME Rename UpdateCollision, wahlweise Events deaktivieren, Funktion zum Ableiten implementieren. Quadtree?
+
+
+
+
+void sfp::Collision::ComputeContact(sfp::CollisionEvent& event)
+{
+	myContactManager.ComputeContact(event);
+}
+
 
 
 

@@ -46,6 +46,8 @@ namespace sfp
 			
 			T GetForce() const;
 			T GetForce(float direction) const;
+			T GetSquaredLength() const; //FIXME
+			T GetSquaredLength(float direction) const; //FIXME
 			float GetDirection() const;
 			
 			void SetForce(T force);
@@ -58,6 +60,8 @@ namespace sfp
 			void Normalize();
 			
 			sfp::Vector2<T> GetNormal() const;
+			sfp::Vector2<T> GetUnitVector() const; //FIXME
+			sfp::Vector2<T> GetRotatedVector(float rotation) const; //FIXME
 	};
 	
 	//FIXME sf::Vector2<T> ?
