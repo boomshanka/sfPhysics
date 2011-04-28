@@ -62,19 +62,15 @@ void sfp::Collision::CollisionResponse(sfp::CollisionEvent& event)
 		if(event.first->IsFixed())
 		{
 			Movement = -event.second->GetMovement(event.second->ToLocal(*Collisionpoint));//, -*Normal);//FIXME
-//			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint));
 		}
 		else if(event.second->IsFixed())
 		{
 			Movement = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));//, *Normal);
-//			Movement2 = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
 		}
 		else
 		{
 			Movement = event.second->GetMovement(event.second->ToLocal(*Collisionpoint))-//, -*Normal) -
 							event.first->GetMovement(event.first->ToLocal(*Collisionpoint));//, *Normal);
-//			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint)) -
-	//						event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
 		}
 		
 		Bounce(event.first, event.second);
@@ -108,16 +104,17 @@ void sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
 	
 	if(friction.GetForce() > std::abs(MaxFriction))
 	{
-	//	myContactManager.SetStaticContact(first, second);
+		myContactManager.SetStaticContact(first, second);
 		friction.SetForce(MaxFriction);
 	}
 	
-	if(CrossProduct(Movement, *Normal) > 0)
+	float cross = CrossProduct(Movement, *Normal);
+	if(cross > 0)
 	{
 		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), -friction);
 		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), friction);
 	}
-	else
+	else if(cross < 0)
 	{
 		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), friction);
 		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), -friction);
