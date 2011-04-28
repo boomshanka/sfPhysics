@@ -185,7 +185,7 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position) const
 {
 	position-=myCenter;
-	position.Rotate(myRotation);
+	position.Rotate(myRotation + 90.f);
 	
 	return sfp::Vector2f(position * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f) + Physicable::myVelocity);
 }

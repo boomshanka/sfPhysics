@@ -65,11 +65,11 @@ namespace sfp
 			
 		private:
 			void ComputeContact(sfp::CollisionEvent&);
-			sfp::Vector2f Friction(sfp::Object*, sfp::Object*);
+			void Friction(sfp::Object*, sfp::Object*);
 			void Bounce(sfp::Object*, sfp::Object*);
 			
 			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
-			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e);
+			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
 			
 			void UpdateCollisionEvents();
 			
@@ -79,11 +79,13 @@ namespace sfp
 			
 			
 			sfp::Vector2f Movement;
-			sfp::Vector2f Movement2;
 			sfp::Vector2f* Collisionpoint;
 			sfp::Vector2f* Normal;
 			sfp::Vector2f* Intersection;
+			sfp::Vector2f R1;
+			sfp::Vector2f R2;
 			float Restitution;
+			float Impulse;
 			size_t A;
 			size_t B;
 	};

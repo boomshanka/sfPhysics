@@ -33,12 +33,13 @@ int main()
 	sf::Shape shape; sf::Shape* bottom = new sf::Shape();// circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
 	sf::Shape circle2=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
 	circle3=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
-	circle4=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
+	circle4=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
+	circle5=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
 	
 //	circle.SetPointColor(0,sf::Color::Yellow);
-	circle2.SetPointColor(0,sf::Color::Yellow);
+	circle5.SetPointColor(0,sf::Color::Yellow);
 //	circle.SetPointColor(1,sf::Color::Yellow);
-	circle2.SetPointColor(1,sf::Color::Yellow);
+	circle5.SetPointColor(1,sf::Color::Yellow);
 	
 	//sfp::Object pShape(shape); sfp::Object pBottom(bottom); sfp::Object pBalken(balken);
 	
@@ -60,6 +61,7 @@ int main()
 	circle2.SetPosition(50,250);
 	circle3.SetPosition(255,250);
 	circle4.SetPosition(152.5,500);
+	circle5.SetPosition(400, 50);
 	
 	
 	sfp::Object object(shape,50);
@@ -73,6 +75,7 @@ int main()
 	sfp::Object pCircle2(circle2, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle3(circle3, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
+	sfp::Object pCircle5(circle5, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	foo->SetShapeType(sfp::Shape::Type::Polygon);
 	
 	sfp::Object* plane = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
@@ -95,12 +98,14 @@ int main()
 	world.AddObject(pCircle2);
 	world.AddObject(pCircle3);
 	world.AddObject(pCircle4);
+	world.AddObject(pCircle5);
 	world.AddObject(*plane);
 	world.AddObject(*plane2);
 	world.AddObject(*plane3);
 	
 	collision->AddObject(object);
 //	collision->AddObject(*foo);
+	collision->AddObject(pCircle5);
 	collision->AddObject(pCircle4);
 	collision->AddObject(pCircle3);
 	collision->AddObject(pCircle);
@@ -116,6 +121,7 @@ int main()
 	pCircle2.SetRestitution(0.6);
 	pCircle3.SetRestitution(0.6);
 	pCircle4.SetRestitution(0.4);
+	pCircle5.SetRestitution(0.4);
 	plane->SetRestitution(0.3);
 	plane2->SetRestitution(0.6);
 	plane3->SetRestitution(0.6);
@@ -126,6 +132,7 @@ int main()
 	pCircle2.SetDynamicFriction(0.5);
 	pCircle3.SetDynamicFriction(0.5);
 	pCircle4.SetDynamicFriction(0.5);
+	pCircle5.SetDynamicFriction(0.8);
 	plane->SetDynamicFriction(0.5);
 	plane2->SetDynamicFriction(0.5);
 	plane3->SetDynamicFriction(0.5);
@@ -145,7 +152,8 @@ int main()
 	
 	pCircle.SetRotation(90);
 	pCircle.SetRotationVelocity(500);
-
+	
+	pCircle5.SetRotationVelocity(100);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -222,6 +230,7 @@ int main()
 		window.Draw(circle2);
 		window.Draw(circle3);
 		window.Draw(circle4);
+		window.Draw(circle5);
 //		window.Draw(*bottom);
 		
 		window.Display();

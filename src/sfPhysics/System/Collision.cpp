@@ -56,30 +56,29 @@ void sfp::Collision::CollisionResponse(sfp::CollisionEvent& event)
 		Restitution = event.first->GetRestitution() * event.second->GetRestitution();
 		A = event.convexobjects.top().first;
 		B = event.convexobjects.top().second;
+		R1 = *Collisionpoint - event.first->GetPosition();
+		R2 = *Collisionpoint - event.second->GetPosition();
 		
 		if(event.first->IsFixed())
 		{
-			Movement = -event.second->GetMovement(event.second->ToLocal(*Collisionpoint), -*Normal);//FIXME
-			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint));
+			Movement = -event.second->GetMovement(event.second->ToLocal(*Collisionpoint));//, -*Normal);//FIXME
+//			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint));
 		}
 		else if(event.second->IsFixed())
 		{
-			Movement = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint), *Normal);
-			Movement2 = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
+			Movement = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));//, *Normal);
+//			Movement2 = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
 		}
 		else
 		{
-			Movement = event.second->GetMovement(event.second->ToLocal(*Collisionpoint), -*Normal) -
-							event.first->GetMovement(event.first->ToLocal(*Collisionpoint), *Normal);
-			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint)) -
-							event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
+			Movement = event.second->GetMovement(event.second->ToLocal(*Collisionpoint))-//, -*Normal) -
+							event.first->GetMovement(event.first->ToLocal(*Collisionpoint));//, *Normal);
+//			Movement2 = event.second->GetMovement(event.second->ToLocal(*Collisionpoint)) -
+	//						event.first->GetMovement(event.first->ToLocal(*Collisionpoint));
 		}
 		
-		sfp::Vector2f friction = Friction(event.first, event.second);
 		Bounce(event.first, event.second);
-		
-		if(!event.first->IsFixed()) event.first->Impulse(event.first->ToLocal(*Collisionpoint), -friction);
-		if(!event.second->IsFixed()) event.second->Impulse(event.second->ToLocal(*Collisionpoint), friction);
+		Friction(event.first, event.second);
 		
 		event.collisionpoint.pop();
 		event.collisionnormal.pop();
@@ -89,23 +88,10 @@ void sfp::Collision::CollisionResponse(sfp::CollisionEvent& event)
 }
 
 
-sfp::Vector2f sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
+void sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
 {
 	sfp::Vector2f friction(-Normal->y, Normal->x);
-	friction *= CrossProduct(Movement2, *Normal);
-	
-	if(first->IsFixed())
-	{
-//		friction *= std::abs(DotProduct(second->GetImpulse(), *Normal));
-	}
-	else if(second->IsFixed())
-	{
-//		friction *= std::abs(DotProduct(first->GetImpulse(), *Normal));
-	}
-	else
-	{
-//		friction *= std::abs(DotProduct(Movement2 * (first->GetMass() + second->GetMass()), *Normal));
-	}
+	friction *= std::abs(Impulse);
 	
 	if(myContactManager.GetContact(first, second) != NULL && myContactManager.GetContact(first, second)->type == Contact::StaticContact)
 	{
@@ -116,7 +102,26 @@ sfp::Vector2f sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
 		friction *= first->GetDynamicFriction() * second->GetDynamicFriction();
 	}
 	
-	return friction;
+	float MaxFriction = CrossProduct(Movement, *Normal);
+	if(!first->IsFixed()) MaxFriction /= 2.f/first->GetMass() + 1.f/first->GetInertiaMoment() * CrossProduct(R1, *Normal);
+	if(!second->IsFixed()) MaxFriction /= 2.f/second->GetMass() + 1.f/second->GetInertiaMoment() * CrossProduct(R2, *Normal);
+	
+	if(friction.GetForce() > std::abs(MaxFriction))
+	{
+	//	myContactManager.SetStaticContact(first, second);
+		friction.SetForce(MaxFriction);
+	}
+	
+	if(CrossProduct(Movement, *Normal) > 0)
+	{
+		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), -friction);
+		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), friction);
+	}
+	else
+	{
+		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), friction);
+		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), -friction);
+	}
 }
 
 
@@ -124,13 +129,13 @@ void sfp::Collision::Bounce(sfp::Object* first, sfp::Object* second)
 {
 	if(first->IsFixed())
 	{
-		BounceFixed(*second, *Collisionpoint, -*Normal, Movement, Restitution);
+		BounceFixed(*second, *Collisionpoint, -*Normal, Movement);
 		
 		second->AddIntersection(-*Intersection, sf::Vector2f()); //FIXME
 	}
 	else if(second->IsFixed())
 	{
-		BounceFixed(*first, *Collisionpoint, *Normal, Movement, Restitution);
+		BounceFixed(*first, *Collisionpoint, *Normal, Movement);
 		
 		first->AddIntersection(*Intersection, sf::Vector2f()); //FIXME
 	}
@@ -154,16 +159,16 @@ void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::
 	sfp::Vector2f r1(P-first.GetPosition());
 	sfp::Vector2f r2(P-second.GetPosition());
 			
-	float j=-(1 + first.GetRestitution()*second.GetRestitution()) * DotProduct(vr, n);
-	j /= 1.f/first.GetMass() + 1.f/second.GetMass() +
+	Impulse = -(1 + Restitution) * DotProduct(vr, n);
+	Impulse /= 1.f/first.GetMass() + 1.f/second.GetMass() +
 	std::abs(DotProduct((1.f/first.GetInertiaMoment() * CrossProduct(r1, n) * r1 + 1.f/second.GetInertiaMoment() * CrossProduct(r2, n) * r2), n));
 	
 	
-	first.SetVelocity(first.GetVelocity() - (j/first.GetMass()) * n);
-	second.SetVelocity(second.GetVelocity() + (j/second.GetMass()) * n);
+	first.SetVelocity(first.GetVelocity() - (Impulse/first.GetMass()) * n);
+	second.SetVelocity(second.GetVelocity() + (Impulse/second.GetMass()) * n);
 	
-	first.SetRotationVelocity(first.GetRotationVelocity() - j/first.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
-	second.SetRotationVelocity(second.GetRotationVelocity() + j/second.GetInertiaMoment() * CrossProduct(r2, n) * 180.f/static_cast<float>(M_PI));
+	first.SetRotationVelocity(first.GetRotationVelocity() - Impulse/first.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
+	second.SetRotationVelocity(second.GetRotationVelocity() + Impulse/second.GetInertiaMoment() * CrossProduct(r2, n) * 180.f/static_cast<float>(M_PI));
 	
 	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
 	
@@ -172,15 +177,15 @@ void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::
 
 
 
-void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr, float e)
+void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr)
 {
 	sfp::Vector2f r1(P-object.GetPosition());
 			
-	float j = - ++e * DotProduct(vr, n);
-	j /= 1.f/object.GetMass() + std::abs(DotProduct((1.f/object.GetInertiaMoment() * CrossProduct(r1, n) * r1), n));
+	Impulse = -(1 + Restitution) * DotProduct(vr, n);
+	Impulse /= 1.f/object.GetMass() + std::abs(DotProduct((1.f/object.GetInertiaMoment() * CrossProduct(r1, n) * r1), n));
 	
-	object.SetVelocity(object.GetVelocity() - (j/object.GetMass()) * n);
-	object.SetRotationVelocity(object.GetRotationVelocity() - j/object.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
+	object.SetVelocity(object.GetVelocity() - (Impulse/object.GetMass()) * n);
+	object.SetRotationVelocity(object.GetRotationVelocity() - Impulse/object.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
 	
 	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
 	
