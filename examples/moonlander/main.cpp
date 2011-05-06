@@ -53,20 +53,20 @@ int main()
 	world->SetLengthFactor(50);
 	world->SetGravity(sf::Vector2f(0,0));
 	
-	world->AddObject(*pCircle1);
-	world->AddObject(*pCircle2);
-	world->AddObject(*pCircle3);
-	world->AddObject(*pCircle4);
+	world->AddObject(pCircle1);
+	world->AddObject(pCircle2);
+	world->AddObject(pCircle3);
+	world->AddObject(pCircle4);
 	
-	collision->AddObject(*pCircle1);
-	collision->AddObject(*pCircle2);
-	collision->AddObject(*pCircle3);
-	collision->AddObject(*pCircle4);
+	collision->AddObject(pCircle1);
+	collision->AddObject(pCircle2);
+	collision->AddObject(pCircle3);
+	collision->AddObject(pCircle4);
 	
-	collision->AddObject(*plane1);
-	collision->AddObject(*plane2);
-	collision->AddObject(*plane3);
-	collision->AddObject(*plane4);
+	collision->AddObject(plane1);
+	collision->AddObject(plane2);
+	collision->AddObject(plane3);
+	collision->AddObject(plane4);
 	
 	pCircle1->SetVelocity(sf::Vector2f(5,2));
 	pCircle2->SetVelocity(sf::Vector2f(5,-2));

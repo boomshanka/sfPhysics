@@ -67,6 +67,7 @@ int main()
 	sfp::Object* plane1 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
 	sfp::Object* plane2 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(-1,0)));
 	sfp::Object* plane3 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(1,0)));
+	sfp::Object* plane4 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,1)));
 	plane1->SetPosition(sf::Vector2f(16,12));
 	plane2->SetPosition(sf::Vector2f(16,0));
 	plane3->SetPosition(sf::Vector2f(0,0));
@@ -79,22 +80,23 @@ int main()
 	world.SetGravity(sf::Vector2f(0,10));
 	world.SetTimeFactor(0);
 	
-	world.AddObject(*object);
-	world.AddObject(*pShape1);
-	world.AddObject(*pShape2);
-	world.AddObject(*pShape3);
-	world.AddObject(*pShape4);
-	world.AddObject(*pShape5);
+	world.AddObject(object);
+	world.AddObject(pShape1);
+	world.AddObject(pShape2);
+	world.AddObject(pShape3);
+	world.AddObject(pShape4);
+	world.AddObject(pShape5);
 	
-	collision->AddObject(*pShape1);
-	collision->AddObject(*pShape2);
-	collision->AddObject(*pShape3);
-	collision->AddObject(*pShape4);
-	collision->AddObject(*pShape5);
-	collision->AddObject(*object);
-	collision->AddObject(*plane1);
-	collision->AddObject(*plane2);
-	collision->AddObject(*plane3);
+	collision->AddObject(pShape1);
+	collision->AddObject(pShape2);
+	collision->AddObject(pShape3);
+	collision->AddObject(pShape4);
+	collision->AddObject(pShape5);
+	collision->AddObject(object);
+	collision->AddObject(plane1);
+	collision->AddObject(plane2);
+	collision->AddObject(plane3);
+	collision->AddObject(plane4);
 	
 	pShape1->SetRestitution(0.1);
 	pShape2->SetRestitution(0.1);
@@ -104,6 +106,7 @@ int main()
 	plane1->SetRestitution(0.1);
 	plane2->SetRestitution(0.1);
 	plane3->SetRestitution(0.1);
+	plane4->SetRestitution(0.1);
 	object->SetRestitution(0.1);
 	
 	sf::Clock frametime;
@@ -182,6 +185,7 @@ int main()
 	delete plane1;
 	delete plane2;
 	delete plane3;
+	delete plane4;
 	delete pShape1;
 	delete pShape2;
 	delete pShape3;

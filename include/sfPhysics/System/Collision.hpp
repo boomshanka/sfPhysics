@@ -24,6 +24,7 @@
 #include <sfPhysics/System/Objects.hpp>
 #include <sfPhysics/System/CollisionEvent.hpp>
 #include <sfPhysics/System/Contact.hpp>
+#include <sfPhysics/System/ObjectList.hpp>
 
 #include <list>
 #include <stack>
@@ -33,21 +34,18 @@
 namespace sfp
 {
 	
-	class Collision
+	class Collision : virtual public ObjectList
 	{
 		private:
-			std::list<sfp::Object*> myObjects;
 			std::stack<CollisionEvent> myCollisionEvents;
 			
 			sfp::ContactManager myContactManager;
 			
-			bool myNoCollisionEventEnabled; //FIXME Rename/Remove
+			bool myCollisionEventEnabled; //FIXME Remove?
 			
 		public:
 			Collision();
-			~Collision();
-			
-			void AddObject(sfp::Object& object) {myObjects.push_back(&object);}
+			virtual ~Collision();
 			
 			bool PollCollision(sfp::CollisionEvent&);
 			

@@ -23,18 +23,15 @@
 
 #include <sfPhysics/SFML_Graphics.hpp>
 #include <sfPhysics/System/Objects.hpp>
-
-#include <list>
+#include <sfPhysics/System/ObjectList.hpp>
 
 
 
 namespace sfp
 {
-	class Environment
+	class Environment : virtual public ObjectList
 	{
 		private:
-			std::list<sfp::Object*> myObjects; //list oder vector
-			
 			sf::Vector2f myGravity;
 			float myTimefactor;
 			float myLengthfactor;
@@ -44,7 +41,7 @@ namespace sfp
 			bool myMoveDrawableEnabled;
 		public:
 			Environment();
-			~Environment();
+			virtual ~Environment();
 			
 			void UpdateFrameTime(float time) {myFrameTime=time;}
 			float GetFrameTime() const {return myFrameTime;}
@@ -60,14 +57,14 @@ namespace sfp
 			
 			void EnableMoveDrawable(bool enabled) {myMoveDrawableEnabled=enabled;}
 			
-			void AddObject(sfp::Object& newobject) {myObjects.push_back(&newobject);}
+	//		void AddObject(sfp::Object& newobject) {myObjects.push_back(&newobject);}
 			
-			size_t GetObjectCount() const {return myObjects.size();}
+	//		size_t GetObjectCount() const {return myObjects.size();}
 			
-			sfp::Object& GetObject(size_t index); //FIXME
+	//		sfp::Object& GetObject(size_t index); //FIXME
 			
-			void RemoveObject(size_t index); // {myObjects.erase(index);}
-			void RemoveObject(sfp::Object& object) {myObjects.remove(&object);}
+	//		void RemoveObject(size_t index); // {myObjects.erase(index);}
+	//		void RemoveObject(sfp::Object& object) {myObjects.remove(&object);}
 			
 			void RenderGravity();
 			

@@ -20,6 +20,9 @@
 #include <sfPhysics/System/Environment.hpp>
 
 
+#define myObjects ObjectList::myObjectList
+
+
 
 sfp::Environment::Environment()
 : myGravity(sf::Vector2f(0,10)), myTimefactor(1), myLengthfactor(1), myFrameTime(0), myMoveDrawableEnabled(true)

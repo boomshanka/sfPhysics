@@ -25,9 +25,12 @@
 #include <cmath>
 
 
+#define myObjects ObjectList::myObjectList
+
+
 
 sfp::Collision::Collision()
-:myNoCollisionEventEnabled(false) //FIXME myCollisionEventEnabled(true)
+:myCollisionEventEnabled(true)
 {
 }
 
@@ -109,7 +112,10 @@ void sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
 	}
 	
 	float cross = CrossProduct(Movement, *Normal);
-	if(cross > 0)
+	if(cross == 0) //FIXME
+	{
+	}
+	else if(cross > 0)
 	{
 		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), -friction);
 		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), friction);
@@ -144,8 +150,10 @@ void sfp::Collision::Bounce(sfp::Object* first, sfp::Object* second)
 		
 		float factor = first->GetMass() / (first->GetMass() + second->GetMass());
 		
-		first->AddIntersection(*Intersection * factor, sf::Vector2f()); //FIXME
-		second->AddIntersection(-*Intersection * (1-factor), sf::Vector2f()); //FIXME
+		if(DotProduct(*Intersection, sf::Vector2f(0,-1))>0)
+			first->AddIntersection(*Intersection * factor, sf::Vector2f()); //FIXME
+		else
+			second->AddIntersection(-*Intersection * (1-factor), sf::Vector2f()); //FIXME
 	}
 }
 
@@ -231,7 +239,7 @@ void sfp::Collision::UpdateCollisionEvents()
 			}
 			else
 			{
-				if(!myNoCollisionEventEnabled && myCollisionEvents.top().CollisionType==NoCollision)
+				if(myCollisionEventEnabled && myCollisionEvents.top().CollisionType==NoCollision)
 					myCollisionEvents.pop(); //FIXME wie wärs wenn einfach kein objekt erstellt wird? Tolle Idee :D
 			}
 		}

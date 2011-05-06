@@ -93,26 +93,26 @@ int main()
 	world.SetGravity(sf::Vector2f(0,10));
 	world.SetTimeFactor(0);
 	
-	world.AddObject(object);
-	world.AddObject(pCircle);
-	world.AddObject(pCircle2);
-	world.AddObject(pCircle3);
-	world.AddObject(pCircle4);
-	world.AddObject(pCircle5);
-	world.AddObject(*plane);
-	world.AddObject(*plane2);
-	world.AddObject(*plane3);
+	world.AddObject(&object);
+	world.AddObject(&pCircle);
+	world.AddObject(&pCircle2);
+	world.AddObject(&pCircle3);
+	world.AddObject(&pCircle4);
+	world.AddObject(&pCircle5);
+	world.AddObject(plane);
+	world.AddObject(plane2);
+	world.AddObject(plane3);
 	
-	collision->AddObject(object);
-//	collision->AddObject(*foo);
-	collision->AddObject(pCircle5);
-	collision->AddObject(pCircle4);
-	collision->AddObject(pCircle3);
-	collision->AddObject(pCircle);
-	collision->AddObject(pCircle2);
-	collision->AddObject(*plane);
-//	collision->AddObject(*plane2);
-	collision->AddObject(*plane3);
+	collision->AddObject(&object);
+//	collision->AddObject(foo);
+	collision->AddObject(&pCircle5);
+	collision->AddObject(&pCircle4);
+	collision->AddObject(&pCircle3);
+	collision->AddObject(&pCircle);
+	collision->AddObject(&pCircle2);
+	collision->AddObject(plane);
+//	collision->AddObject(plane2);
+	collision->AddObject(plane3);
 	
 	pCircle2.SetDensity(1);
 	pCircle.SetDensity(1);
