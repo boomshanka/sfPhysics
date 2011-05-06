@@ -23,36 +23,14 @@
 
 
 sfp::ShapeManager::ShapeManager()
-:myIsUpdated(true)
 {
 
-}
-
-
-
-void sfp::ShapeManager::AddPoint(const sf::Vector2f& vec)
-{
-	Shape::AddPoint(vec);
-	
-	myIsUpdated = false;
-}
-
-
-
-void sfp::ShapeManager::SetPoint(size_t index, const sf::Vector2f& vec)
-{
-	Shape::SetPoint(index, vec);
-	
-	myIsUpdated = false;
 }
 
 
 
 void sfp::ShapeManager::SetShape(const Shape& shape)
 {
-	Shape* thisshape = this;
-	*thisshape = shape;
-	
 	myConvexShapes.clear();
 	myConvexShapes.push_back(shape);
 	
@@ -67,54 +45,51 @@ void sfp::ShapeManager::Update()
 	ComputeConvexShapes();
 	ComputeArea();
 	ComputeBox();
-	
-	myIsUpdated = true;
 }
 
 
 
 void sfp::ShapeManager::ComputeConvexShapes() //FIXME Shape::Update bei jedem Shapetype aufrufen. Polygone testen, ob sie konvex/konkav sind und zerlegen.
 {
-	Shape::type.myShapeType = Shape::Type::Nothing;
-	Shape::myPoints.clear();
+	myType = Shape::Type::Nothing;
 	
 	for(size_t i = 0; i < myConvexShapes.size(); ++i)
 	{
 		switch(myConvexShapes[i].GetShapeType())
 		{
 			case Shape::Type::Polygon:
-				if(Shape::type.myShapeType==Shape::Type::Nothing || Shape::type.myShapeType==Shape::Type::Rectangle)
-					Shape::type.myShapeType = Shape::Type::Polygon;
-				else if(Shape::type.myShapeType!=Shape::Type::Polygon)
-					Shape::type.myShapeType = Shape::Type::Unknown;
+				if(myType==Shape::Type::Nothing || myType==Shape::Type::Rectangle)
+					myType = Shape::Type::Polygon;
+				else if(myType!=Shape::Type::Polygon)
+					myType = Shape::Type::Unknown;
 				
 				//FIXME in konvexe trennen und alle shapes updaten!
 				myConvexShapes[i].Update();
 				break;
 			
 			case Shape::Type::Rectangle:
-				if(Shape::type.myShapeType==Shape::Type::Nothing)
-					Shape::type.myShapeType = Shape::Type::Rectangle;
-				else if(Shape::type.myShapeType!=Shape::Type::Rectangle && Shape::type.myShapeType!=Shape::Type::Polygon)
-					Shape::type.myShapeType = Shape::Type::Unknown;
+				if(myType==Shape::Type::Nothing)
+					myType = Shape::Type::Rectangle;
+				else if(myType!=Shape::Type::Rectangle && myType!=Shape::Type::Polygon)
+					myType = Shape::Type::Unknown;
 				
 				myConvexShapes[i].Update();
 				break;
 			
 			case Shape::Type::Circle:
-				if(Shape::type.myShapeType==Shape::Type::Nothing)
-					Shape::type.myShapeType = Shape::Type::Circle;
-				else if(Shape::type.myShapeType!=Shape::Type::Circle)
-					Shape::type.myShapeType = Shape::Type::Unknown;
+				if(myType==Shape::Type::Nothing)
+					myType = Shape::Type::Circle;
+				else if(myType!=Shape::Type::Circle)
+					myType = Shape::Type::Unknown;
 				
 				myConvexShapes[i].Update();
 				break;
 			
 			case Shape::Type::Plane:
-				if(Shape::type.myShapeType==Shape::Type::Nothing)
-					Shape::type.myShapeType = Shape::Type::Plane;
-				else if(Shape::type.myShapeType!=Shape::Type::Plane)
-					Shape::type.myShapeType = Shape::Type::Unknown;
+				if(myType==Shape::Type::Nothing)
+					myType = Shape::Type::Plane;
+				else if(myType!=Shape::Type::Plane)
+					myType = Shape::Type::Unknown;
 				
 				myConvexShapes[i].Update();
 				break;
@@ -176,9 +151,9 @@ void sfp::ShapeManager::ComputeConvexShapes() //FIXME Shape::Update bei jedem Sh
 
 void sfp::ShapeManager::ComputeArea()
 {
-	Shape::myCenter=sf::Vector2f(0,0);
-	Shape::myArea=0;
-	Shape::myInertiaMoment=0;
+	myCenter=sf::Vector2f(0,0);
+	myArea=0;
+	myInertiaMoment=0;
 	
 	for(size_t i = 0; i < myConvexShapes.size(); ++i)
 	{
@@ -203,8 +178,8 @@ void sfp::ShapeManager::ComputeArea()
 
 
 void sfp::ShapeManager::ComputeBox()
-{
-	if(Shape::type.myShapeType==sfp::Shape::Type::Polygon && Shape::myPoints.size()!=0) //FIXME switch
+{/*
+	if(Shape::myType==sfp::Shape::Type::Polygon && Shape::myPoints.size()!=0) //FIXME switch
 	{
 		myBox.Left=myBox.Width=Shape::myPoints[0].x;
 		myBox.Top=myBox.Height=Shape::myPoints[0].y;
@@ -223,21 +198,21 @@ void sfp::ShapeManager::ComputeBox()
 			
 		}
 	}
-	else if(Shape::type.myShapeType==sfp::Shape::Type::Circle)
+	else if(Shape::myType==sfp::Shape::Type::Circle)
 	{
 		myBox.Left = Shape::myCenter.x - Shape::myCircleRadius;
 		myBox.Top = Shape::myCenter.y - Shape::myCircleRadius;
 		myBox.Width = myBox.Height = Shape::myCircleRadius * 2.f;
 	}
-	else if(Shape::type.myShapeType==sfp::Shape::Type::Rectangle)
+	else if(Shape::myType==sfp::Shape::Type::Rectangle)
 	{
 	
 	}
-	switch(Shape::type.myShapeType)
+	switch(Shape::myType)
 	{
 		default:
 		break;
-	}
+	}*/
 }
 
 

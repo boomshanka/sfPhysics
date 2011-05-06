@@ -8,24 +8,29 @@
 
 
 
-class ObjectList
+namespace sfp
 {
-	protected:
-		std::list<sfp::Object*> myObjectList;
+
+	class ObjectList
+	{
+		protected:
+			std::list<sfp::Object*> myObjectList;
 		
-	public:
-		ObjectList() {}
-		~ObjectList() {}
+		public:
+			ObjectList() {}
+			~ObjectList() {}
 		
-		void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
+			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
 		
-		void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-		void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
+			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
+			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
 		
-		size_t GetObjectCount() const {return myObjectList.size();}
+			size_t GetObjectCount() const {return myObjectList.size();}
 		
-	//	std::list<sfp::Object*>::const_iterator
-};
+		//	std::list<sfp::Object*>::const_iterator
+	};
+
+} // namespace
 
 
 #endif  // SFPHYSICS_OBJECTLIST_HPP

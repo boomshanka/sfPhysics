@@ -56,7 +56,7 @@ sfp::Object::~Object()
 void sfp::Object::SetShape(const Shape& shape)
 {
 	ShapeManager::SetShape(shape);
-	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
+	if(ShapeManager::myType==sfp::Shape::Type::Plane)
 	{
 		myIsFixed=true;
 	}
@@ -75,9 +75,6 @@ void sfp::Object::SetShape(const Shape& shape)
 
 void sfp::Object::SetCenter(const sf::Vector2f& center)
 {//FIXME InertiaMoment neu berechnen
-	if(!ShapeManager::IsUpdated())
-		Update();
-	
 	myCenter=Physicable::myCenter=center;
 	
 	#ifdef SFML_ENABLED
@@ -113,9 +110,7 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 
 const sfp::FloatBox& sfp::Object::GetLocalBox()
 {
-	if(!ShapeManager::IsUpdated())
-		Update();
-	
+	//FIXME
 	return myLocalBox;
 }
 
@@ -262,7 +257,7 @@ myLengthfactor(lengthfactor)
 	myDrawable=&drawable;
 	
 	SetShape(shape);
-	if(ShapeManager::type.myShapeType==sfp::Shape::Type::Plane)
+	if(ShapeManager::myType==sfp::Shape::Type::Plane)
 	{
 		myIsFixed=true;
 		

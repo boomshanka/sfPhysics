@@ -76,7 +76,7 @@ int main()
 	sfp::Object pCircle3(circle3, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle4(circle4, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
 	sfp::Object pCircle5(circle5, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
-	foo->SetShapeType(sfp::Shape::Type::Polygon);
+	foo->GetConvexShape(0).SetShapeType(sfp::Shape::Type::Polygon);
 	
 	sfp::Object* plane = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(0,-1)));
 	sfp::Object* plane2 = new sfp::Object(sfp::Shape::Plane(sf::Vector2f(0,0),sf::Vector2f(-1,0)));

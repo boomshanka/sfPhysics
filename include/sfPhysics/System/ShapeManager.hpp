@@ -31,47 +31,33 @@
 namespace sfp
 {
 
-	class ShapeManager : public Shape
-	{	
+	class ShapeManager
+	{
+		friend class Object;
+		
 		private:
 			std::vector<Shape> myConvexShapes;
 			sfp::FloatBox myBox; //GetBox //Auch in Shape //?
 			
-			bool myIsUpdated;
+			Shape::Type::ShapeType myType;
 			
+			sf::Vector2f myCenter;
+			float myArea;			
+			float myInertiaMoment;
 		public:
 			ShapeManager();
-			//copyconstructor
 			
 			// Funktionen von Shape
+			inline Shape::Type::ShapeType GetShapeType() const {return myType;}
 			
-			inline void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
-			void AddPoint(const sf::Vector2f&);
+			inline const sf::Vector2f& GetShapeCenter() const {return myCenter;}
+			inline float GetShapeArea() const {return myArea;}
+			inline float GetShapeInertiaMoment() const {return myInertiaMoment;}
 			
-			inline void SetPoint(size_t index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
-			void SetPoint(size_t, const sf::Vector2f&);
-			
-			inline size_t GetPointCount() const {return Shape::GetPointCount();}
-			inline const sf::Vector2f& GetPoint(size_t index) const {return Shape::GetPoint(index);}
-			
-			inline float GetCircleRadius() const {return Shape::GetCircleRadius();}
-			inline void SetCircleRadius(float radius) {Shape::SetCircleRadius(radius);}
-			
-			const sfp::Vector2f& GetPlaneNormal() const {return Shape::GetPlaneNormal();}
-			void SetPlaneNormal(const sfp::Vector2f& normal) {Shape::SetPlaneNormal(normal);}
-			
-			inline Type::ShapeType GetShapeType() const {return Shape::GetShapeType();}
-			inline void SetShapeType(Type::ShapeType newtype) {Shape::SetShapeType(newtype);}
-			
-			
-			inline const sf::Vector2f& GetShapeCenter() const {return Shape::GetShapeCenter();} //FIXME Update?
-			inline float GetShapeArea() const {return Shape::GetShapeArea();}
-			inline float GetShapeInertiaMoment() const {return Shape::GetShapeInertiaMoment();}
 			
 			// Funktionen von ShapeManager
-			
 			size_t GetConvexShapeCount() const {return myConvexShapes.size();}
-			const Shape& GetConvexShape(size_t index) const {return myConvexShapes[index];}
+			Shape& GetConvexShape(size_t index) {return myConvexShapes[index];}
 			
 			void AddConvexShape(const Shape& pol) {myConvexShapes.push_back(pol); Update();}
 			void SetConvexShape(size_t index, const Shape& Shape) {myConvexShapes[index]=Shape; Update();}
@@ -83,10 +69,9 @@ namespace sfp
 			
 			const sfp::FloatBox& GetShapeBox() {return myBox;}
 			
-			bool IsUpdated() {return myIsUpdated;}
+		protected:
 			void Update();
 			
-		protected:
 			void ComputeConvexShapes();
 			void ComputeArea();
 			void ComputeBox();

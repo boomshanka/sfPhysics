@@ -82,10 +82,10 @@ void sfp::Environment::MoveObjects()
 
 
 
-#ifdef SFML_ENABLED
-
 void sfp::Environment::MoveDrawable()
 {
+	#ifdef SFML_ENABLED
+	
 	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
 	{
 		if((*it)->GetDrawable()!=NULL)
@@ -94,8 +94,9 @@ void sfp::Environment::MoveDrawable()
 			(*it)->GetDrawable()->SetRotation((*it)->GetRotation());
 		}
 	}
+	
+	#endif
 }
 
-#endif
 
 

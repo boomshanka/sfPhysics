@@ -57,24 +57,11 @@ namespace sfp
 			
 			void EnableMoveDrawable(bool enabled) {myMoveDrawableEnabled=enabled;}
 			
-	//		void AddObject(sfp::Object& newobject) {myObjects.push_back(&newobject);}
-			
-	//		size_t GetObjectCount() const {return myObjects.size();}
-			
-	//		sfp::Object& GetObject(size_t index); //FIXME
-			
-	//		void RemoveObject(size_t index); // {myObjects.erase(index);}
-	//		void RemoveObject(sfp::Object& object) {myObjects.remove(&object);}
-			
 			void RenderGravity();
 			
 			void MoveObjects();
 			
-			#ifdef SFML_ENABLED
-			void MoveDrawable();
-			#else
-			virtual void MoveDrawable() {}
-			#endif
+			virtual void MoveDrawable();
 			
 	};
 	
