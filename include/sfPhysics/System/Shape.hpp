@@ -49,11 +49,11 @@ namespace sfp
 				Circle = 5,
 				NegCircle = 6,
 				Unknown = 9
-			} myShapeType;
+			};
 			};
 			
 		private:
-			Type type;
+			Type::ShapeType myShapeType;
 		
 			std::vector<sf::Vector2f> myPoints;
 			
@@ -85,8 +85,8 @@ namespace sfp
 			virtual const sfp::Vector2f& GetPlaneNormal() const {return myPlaneNormal;}
 			virtual void SetPlaneNormal(const sfp::Vector2f& normal) {myPlaneNormal=normal; myPlaneNormal.Normalize();}
 			
-			virtual Type::ShapeType GetShapeType() const {return type.myShapeType;}
-			virtual void SetShapeType(Type::ShapeType newtype) {type.myShapeType=newtype;}
+			virtual Type::ShapeType GetShapeType() const {return myShapeType;}
+			virtual void SetShapeType(Type::ShapeType newtype) {myShapeType=newtype;}
 			
 			
 			virtual const sf::Vector2f& GetShapeCenter() const {return myCenter;}

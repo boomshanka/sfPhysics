@@ -52,6 +52,7 @@ namespace sfp
 			
 		public:
 			Physicable();
+			virtual ~Physicable() {}
 			
 			void SetVelocity(const sfp::Vector2f& velocity) {myVelocity=velocity;}
 			void AddVelocity(const sfp::Vector2f& velocity) {myVelocity+=velocity;}

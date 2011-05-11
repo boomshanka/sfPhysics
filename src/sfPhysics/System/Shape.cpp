@@ -22,19 +22,19 @@
 
 
 sfp::Shape::Shape()
-:myCircleRadius(0)
+:myShapeType(Shape::Type::Nothing), myCircleRadius(0)
 {
-	type.myShapeType = Shape::Type::Nothing;
+	
 }
 
 
 
 sfp::Shape::Shape(const Shape& shape)
-:myPoints(shape.myPoints),
+:myShapeType(shape.myShapeType),
+myPoints(shape.myPoints),
 myCircleRadius(shape.myCircleRadius), myPlaneNormal(shape.myPlaneNormal),
-myCenter(shape.myCenter), myArea(shape.myArea), myInertiaMoment(shape.myInertiaMoment)
+myCenter(shape.myCenter)
 {
-	type.myShapeType = shape.type.myShapeType;
 	Update();
 }
 
@@ -43,12 +43,12 @@ myCenter(shape.myCenter), myArea(shape.myArea), myInertiaMoment(shape.myInertiaM
 
 void sfp::Shape::Update()
 {
-	myArea=0;
-	myInertiaMoment=0;
+	myArea=1;
+	myInertiaMoment=1;
 	
 	mySeparatingAxis.Clear();
 	
-	switch(type.myShapeType)
+	switch(myShapeType)
 	{
 		case Shape::Type::Polygon:
 		case Shape::Type::Rectangle: //FIXME
@@ -152,7 +152,7 @@ sfp::Shape sfp::Shape::Plane(const sf::Vector2f& center, sfp::Vector2f normal)
 {
 	Shape shape;
 	
-	shape.type.myShapeType=sfp::Shape::Type::Plane;
+	shape.myShapeType=sfp::Shape::Type::Plane;
 	shape.myCenter=center;
 	shape.myPlaneNormal=normal;
 	
@@ -171,7 +171,7 @@ sfp::Shape sfp::Shape::Circle(const sf::Vector2f& center, float radius)
 {
 	Shape shape;
 	
-	shape.type.myShapeType=sfp::Shape::Type::Circle;
+	shape.myShapeType=sfp::Shape::Type::Circle;
 	shape.myCenter=center;
 	shape.myCircleRadius=radius;
 	

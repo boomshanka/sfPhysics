@@ -46,6 +46,7 @@ namespace sfp
 			float myInertiaMoment;
 		public:
 			ShapeManager();
+			virtual ~ShapeManager() {}
 			
 			// Funktionen von Shape
 			inline Shape::Type::ShapeType GetShapeType() const {return myType;}

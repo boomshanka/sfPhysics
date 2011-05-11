@@ -104,8 +104,10 @@ void sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
 	float MaxFriction = CrossProduct(Movement, *Normal);
 	if(!first->IsFixed()) MaxFriction /= 2.f/first->GetMass() + 1.f/first->GetInertiaMoment() * CrossProduct(R1, *Normal);
 	if(!second->IsFixed()) MaxFriction /= 2.f/second->GetMass() + 1.f/second->GetInertiaMoment() * CrossProduct(R2, *Normal);
+	MaxFriction = std::abs(MaxFriction);
 	
-	if(friction.GetForce() > std::abs(MaxFriction))
+	
+	if(friction.GetForce() > MaxFriction)
 	{
 		myContactManager.SetStaticContact(first, second);
 		friction.SetForce(MaxFriction);
