@@ -14,7 +14,7 @@ export VERSION    = 1.0
 export CP         = cp
 export LN         = ln
 export LNFLAGS    = -s -f
-export LIBS       = system
+export LIBS       = system debugdraw
 
 
 all: sfphysics
@@ -47,11 +47,11 @@ install:
 	$(CP) -r ../include/sfPhysics/ $(DESTINCDIR)/
 	find $(DESTINCDIR)/sfPhysics -name .svn -type d -print0 | xargs -0 /bin/rm -rf
 	$(MAKE) $@ -f Makefile.system
-	$(MAKE) $@ -f Makefile.collision
+	$(MAKE) $@ -f Makefile.debugdraw
 
 clean mrproper:
 	$(MAKE) $@ -f Makefile.system
-	$(MAKE) $@ -f Makefile.collision
+	$(MAKE) $@ -f Makefile.debugdraw
 	cd ../examples/build && $(MAKE) $@
 
 .PHONY: clean mrproper
