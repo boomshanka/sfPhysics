@@ -17,43 +17,38 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
+#ifndef SFPHYSICS_DEBUGRENDERER_HPP
+#define SFPHYSICS_DEBUGRENDERER_HPP
+
+#ifdef SFML_ENABLED
 
 
-#include <sfPhysics/System/Objects.hpp>
-
-#include <list>
-
-#include <cstddef>
+#include <SFML/Graphics/Drawable.hpp>
 
 
 
 namespace sfp
 {
-
-	class ObjectList
+	class DebugRenderer : public sf::Drawable
 	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
+		private:
+			
+			
 		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator
+			DebugRenderer();
+			virtual ~DebugRenderer();
+			
+			virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const = 0;
 	};
+	
+	
+} // namespace sfp
 
-} // namespace
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+#endif // SFML_ENABLED
+
+
+#endif // SFPHYSICS_DEBUGRENDERER_HPP
 
 

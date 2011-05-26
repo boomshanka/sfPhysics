@@ -87,6 +87,7 @@ int main()
 	world.AddObject(pShape4);
 	world.AddObject(pShape5);
 	
+	collision->AddObject(plane4);
 	collision->AddObject(pShape1);
 	collision->AddObject(pShape2);
 	collision->AddObject(pShape3);
@@ -96,7 +97,6 @@ int main()
 	collision->AddObject(plane1);
 	collision->AddObject(plane2);
 	collision->AddObject(plane3);
-	collision->AddObject(plane4);
 	
 	pShape1->SetRestitution(0.1);
 	pShape2->SetRestitution(0.1);
@@ -145,10 +145,10 @@ int main()
 			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::S) world.SetTimeFactor(1);
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) object->AddImpulse(sf::Vector2f(0,-100*window.GetFrameTime()));
-		if(Input.IsKeyDown(sf::Key::Down)) object->AddImpulse(sf::Vector2f(0,75*window.GetFrameTime()));
-		if(Input.IsKeyDown(sf::Key::Right)) object->AddImpulse(sf::Vector2f(75*window.GetFrameTime(),0));
-		if(Input.IsKeyDown(sf::Key::Left)) object->AddImpulse(sf::Vector2f(-75*window.GetFrameTime(),0));
+		if(Input.IsKeyDown(sf::Key::Up)) object->AddImpulse(sf::Vector2f(0,-100.f * window.GetFrameTime()/1000.f));
+		if(Input.IsKeyDown(sf::Key::Down)) object->AddImpulse(sf::Vector2f(0,75.f * window.GetFrameTime()/1000.f));
+		if(Input.IsKeyDown(sf::Key::Right)) object->AddImpulse(sf::Vector2f(75.f * window.GetFrameTime()/1000.f,0));
+		if(Input.IsKeyDown(sf::Key::Left)) object->AddImpulse(sf::Vector2f(-75.f * window.GetFrameTime()/1000.f,0));
 		
 		mouse_x=Input.GetMouseX();
 		mouse_y=Input.GetMouseY();

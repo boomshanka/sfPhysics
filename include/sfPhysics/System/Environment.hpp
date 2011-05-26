@@ -21,7 +21,9 @@
 #define SFPHYSICS_ENVIRONMENT_HPP
 
 
+#include <sfPhysics/Settings.hpp>
 #include <sfPhysics/SFML_Graphics.hpp>
+
 #include <sfPhysics/System/Objects.hpp>
 #include <sfPhysics/System/ObjectList.hpp>
 
@@ -36,15 +38,15 @@ namespace sfp
 			float myTimefactor;
 			float myLengthfactor;
 			
-			float myFrameTime;
+			Uint32 myFrameTime;
 			
 			bool myMoveDrawableEnabled;
 		public:
 			Environment();
 			virtual ~Environment();
 			
-			void UpdateFrameTime(float time) {myFrameTime=time;}
-			float GetFrameTime() const {return myFrameTime;}
+			void UpdateFrameTime(Uint32 time) {myFrameTime=time;}
+			Uint32 GetFrameTime() const {return myFrameTime;}
 			
 			void SetTimeFactor(float timefactor) {myTimefactor=timefactor;}
 			float GetTimeFactor() const {return myTimefactor;}

@@ -17,13 +17,20 @@
  ******************************************************************************/
 
 
-#ifndef DEBUGDRAWPACK
-#define DEBUGDRAWPACK
+#ifndef SFPHYSICS_DEBUGDRAW_PACK
+#define SFPHYSICS_DEBUGDRAW_PACK
 
 
-//
+#ifdef SFML_ENABLED
 
 
-#endif // DEBUGDRAWPACK
+#include <sfPhysics/Debugdraw/ObjectRenderer.hpp>
+#include <sfPhysics/Debugdraw/EventRenderer.hpp>
+
+
+#endif // SFML_ENABLED
+
+
+#endif // SFPHYSICS_DEBUGDRAW_PACK
 
 

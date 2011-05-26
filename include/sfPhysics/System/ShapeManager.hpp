@@ -26,6 +26,8 @@
 
 #include <vector>
 
+#include <cstddef>
+
 
 
 namespace sfp
@@ -60,9 +62,9 @@ namespace sfp
 			size_t GetConvexShapeCount() const {return myConvexShapes.size();}
 			Shape& GetConvexShape(size_t index) {return myConvexShapes[index];}
 			
-			void AddConvexShape(const Shape& pol) {myConvexShapes.push_back(pol); Update();}
-			void SetConvexShape(size_t index, const Shape& Shape) {myConvexShapes[index]=Shape; Update();}
-			void RemoveConvexShape(size_t index) {myConvexShapes.erase(myConvexShapes.begin()+index); Update();}
+			void AddConvexShape(const Shape& pol) {myConvexShapes.push_back(pol);}
+			void SetConvexShape(size_t index, const Shape& Shape) {myConvexShapes[index]=Shape;}
+			void RemoveConvexShape(size_t index) {myConvexShapes.erase(myConvexShapes.begin()+index);}
 			
 			const sf::Vector2f& GetPoint(size_t shape, size_t index) const {return myConvexShapes[shape].GetPoint(index);}
 			

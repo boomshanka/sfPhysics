@@ -63,15 +63,15 @@ namespace sfp
 			void SetRotationVelocity(float velocity) {myRotationVelocity=velocity;}
 			void AddRotationVelocity(float velocity) {myRotationVelocity+=velocity;}
 			
-			void SetRotationImpulse(float impulse) {myRotationVelocity=impulse/myInertiaMoment;}
-			void AddRotationImpulse(float impulse) {myRotationVelocity+=impulse/myInertiaMoment;}
+			void SetRotationImpulse(float impulse) {myRotationVelocity= (impulse/myInertiaMoment) * 180.f/static_cast<float>(M_PI);}
+			void AddRotationImpulse(float impulse) {myRotationVelocity+= (impulse/myInertiaMoment) * 180.f/static_cast<float>(M_PI);}
 			
 			
 			const sfp::Vector2f& GetVelocity() const {return myVelocity;}
 			sfp::Vector2f GetImpulse() const {return myVelocity*myMass;}
 			
 			float GetRotationVelocity() const {return myRotationVelocity;}
-			float GetRotationImpulse() const {return myRotationVelocity*myInertiaMoment;}
+			float GetRotationImpulse() const {return myRotationVelocity * static_cast<float>(M_PI)/180.f * myInertiaMoment;}
 			
 			void RemoveForces() {myVelocity=sfp::Vector2f(0,0); myRotationVelocity=0;}
 			

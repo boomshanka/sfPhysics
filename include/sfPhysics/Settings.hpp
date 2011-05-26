@@ -17,43 +17,48 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
+#ifndef SFPHYSICS_SETTINGS_HPP
+#define SFPHYSICS_SETTINGS_HPP
 
 
-#include <sfPhysics/System/Objects.hpp>
+#define SFPHYSICS_VERSION_MAJOR 2
+#define SFPHYSICS_VERSION_MINOR 0
 
-#include <list>
 
-#include <cstddef>
-
+#if !defined(NDEBUG)
+	
+	#define SFPYSICS_DEBUG
+	
+#endif
 
 
 namespace sfp
 {
+    // 8 bits integer types
+    typedef signed   char Int8;
+    typedef unsigned char Uint8;
 
-	class ObjectList
-	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
-		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator
-	};
+    // 16 bits integer types
+    typedef signed   short Int16;
+    typedef unsigned short Uint16;
 
-} // namespace
+    // 32 bits integer types
+    typedef signed   int Int32;
+    typedef unsigned int Uint32;
+
+    // 64 bits integer types
+    #if defined(_MSC_VER)
+        typedef signed   __int64 Int64;
+        typedef unsigned __int64 Uint64;
+    #else
+        typedef signed   long long Int64;
+        typedef unsigned long long Uint64;
+    #endif
+
+} // namespace sfp
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+
+#endif // SFPHYSICS_SETTINGS_HPP
 
 

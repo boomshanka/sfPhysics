@@ -28,7 +28,7 @@
 #define myObjects ObjectList::myObjectList
 
 
-
+#include<iostream>
 sfp::Collision::Collision()
 :myCollisionEventEnabled(true)
 {
@@ -57,7 +57,7 @@ void sfp::Collision::CollisionResponse(sfp::CollisionEvent& event)
 		Normal = &event.collisionnormal.top();
 		Intersection = &event.intersection.top();
 		Restitution = event.first->GetRestitution() * event.second->GetRestitution();
-		A = event.convexobjects.top().first;
+		A = event.convexobjects.top().first;//FIXME
 		B = event.convexobjects.top().second;
 		R1 = *Collisionpoint - event.first->GetPosition();
 		R2 = *Collisionpoint - event.second->GetPosition();
@@ -113,20 +113,21 @@ void sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
 		friction.SetForce(MaxFriction);
 	}
 	
-	float cross = CrossProduct(Movement, *Normal);
+	float cross = CrossProduct(*Normal, Movement);
 	if(cross == 0) //FIXME
 	{
 	}
-	else if(cross > 0)
+	else if(cross < 0)
 	{
 		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), -friction);
 		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), friction);
 	}
-	else if(cross < 0)
+	else if(cross > 0)
 	{
 		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), friction);
 		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), -friction);
 	}
+	std::cout<<cross<<"\n";
 }
 
 
@@ -294,6 +295,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 								isCollided=true;
 								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
 								myCollisionEvents.top().collisionnormal.top()*=-1.f;
+								myCollisionEvents.top().intersection.top()*=-1.f;
 							}
 						break;
 						
@@ -327,6 +329,7 @@ bool sfp::Collision::CheckCollision(sfp::Object& first, sfp::Object& second)
 							{
 								isCollided=true;
 								myCollisionEvents.top().convexobjects.push(std::make_pair(i,j));
+								myCollisionEvents.top().collisionnormal.top()*= 1.f;
 							}
 						break;
 						
@@ -423,7 +426,7 @@ bool sfp::Collision::PlanePolygon(sfp::Object& first, sfp::Object& second, size_
 		if(ComputeSAT(first, second, a, b, vec))
 		{
 			ComputePlanePolygon(first, second, a, b);
-			myCollisionEvents.top().intersection.push(vec);
+			myCollisionEvents.top().intersection.push(-vec);
 			return true;
 		}
 	}

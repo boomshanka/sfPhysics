@@ -263,8 +263,8 @@ myLengthfactor(lengthfactor)
 		
 	}//FIXME was ist mit Lengthfactor?
 	
-	myPosition=drawable.GetPosition()/myLengthfactor;
-	myRotation=drawable.GetRotation();
+	myPosition = drawable.GetPosition()/myLengthfactor;
+	myRotation = drawable.GetRotation();
 }
 
 

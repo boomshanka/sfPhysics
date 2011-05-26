@@ -172,6 +172,7 @@ void sfp::ShapeManager::ComputeArea()
 		
 			//Fläche addieren
 			myArea+=myConvexShapes[i].GetShapeArea();
+			
 		}
 	}
 }

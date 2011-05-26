@@ -24,6 +24,8 @@
 
 #include <sfPhysics/System/Vector2.hpp>
 
+#include <cstddef>
+
 
 
 namespace sfp

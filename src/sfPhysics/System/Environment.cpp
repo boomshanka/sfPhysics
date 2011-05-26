@@ -44,10 +44,10 @@ sfp::Environment::~Environment()
 
 void sfp::Environment::RenderGravity()
 {
-	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
+	for(std::list<sfp::Object*>::iterator it = myObjects.begin(); it != myObjects.end(); ++it)
 	{
 		if(!(*it)->IsFixed())
-			(*it)->AddVelocity(myGravity*myFrameTime*myTimefactor);
+			(*it)->AddVelocity(myGravity * myTimefactor * (static_cast<float>(myFrameTime) / 1000.f));
 	}
 }
 
@@ -55,7 +55,7 @@ void sfp::Environment::RenderGravity()
 
 void sfp::Environment::MoveObjects()
 {
-	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
+	for(std::list<sfp::Object*>::iterator it = myObjects.begin(); it != myObjects.end(); ++it)
 	{
 		if((*it)->IsFixed())
 		{
@@ -64,14 +64,14 @@ void sfp::Environment::MoveObjects()
 		else
 		{
 			//Move Intersection
-			while((*it)->GetIntersection().size()>0)
+			while((*it)->GetIntersection().size() > 0)
 			{
 				(*it)->Move((*it)->GetIntersection().top().first);
 				(*it)->GetIntersection().pop();
 			}
 			
-			(*it)->Rotate((*it)->GetRotationVelocity()*myFrameTime*myTimefactor);
-			(*it)->Move((*it)->GetVelocity()*myFrameTime*myTimefactor);
+			(*it)->Rotate((*it)->GetRotationVelocity() * myTimefactor * (static_cast<float>(myFrameTime) / 1000.f));
+			(*it)->Move((*it)->GetVelocity() * myTimefactor * (static_cast<float>(myFrameTime) / 1000.f));
 		}
 	}
 	
@@ -86,11 +86,11 @@ void sfp::Environment::MoveDrawable()
 {
 	#ifdef SFML_ENABLED
 	
-	for(std::list<sfp::Object*>::iterator it=myObjects.begin(); it!=myObjects.end(); ++it)
+	for(std::list<sfp::Object*>::iterator it = myObjects.begin(); it != myObjects.end(); ++it)
 	{
 		if((*it)->GetDrawable()!=NULL)
 		{
-			(*it)->GetDrawable()->SetPosition((*it)->GetPosition()*myLengthfactor);
+			(*it)->GetDrawable()->SetPosition((*it)->GetPosition() * myLengthfactor);
 			(*it)->GetDrawable()->SetRotation((*it)->GetRotation());
 		}
 	}

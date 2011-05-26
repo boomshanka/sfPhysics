@@ -195,10 +195,10 @@ int main()
 			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::S) world.SetTimeFactor(1);
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-126*window.GetFrameTime()));
-		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,63*window.GetFrameTime()));
-		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63*window.GetFrameTime(),0));
-		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63*window.GetFrameTime(),0));
+		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-126.f * window.GetFrameTime()/1000.f));
+		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,63.f * window.GetFrameTime()/1000.f));
+		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63.f * window.GetFrameTime()/1000.f,0));
+		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63.f * window.GetFrameTime()/1000.f,0));
 		
 		//FIXME Test
 		//pCircle.AddRotationVelocity(-pCircle.GetRotationVelocity()*0.1*window.GetFrameTime());

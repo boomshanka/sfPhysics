@@ -17,8 +17,11 @@
  ******************************************************************************/
 
 
-#ifndef SYSTEM_PACK
-#define SYSTEM_PACK
+#ifndef SFPHYSICS_SYSTEM_PACK
+#define SFPHYSICS_SYSTEM_PACK
+
+
+#include <sfPhysics/Settings.hpp>
 
 
 #include <sfPhysics/SFML_Graphics.hpp>
@@ -36,6 +39,6 @@
 #include <sfPhysics/System/Collision.hpp>
 
 
-#endif // SYSTEM_PACK
+#endif // SFPHYSICS_SYSTEM_PACK
 
 

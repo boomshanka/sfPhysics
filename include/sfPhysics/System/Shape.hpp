@@ -26,6 +26,8 @@
 
 #include <vector>
 
+#include <cstddef>
+
 
 
 namespace sfp
@@ -71,10 +73,10 @@ namespace sfp
 			virtual ~Shape() {}
 			
 			virtual void AddPoint(float x, float y) {AddPoint(sf::Vector2f(x,y));}
-			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec); Update();} //FIXME Update aufrufen?
+			virtual void AddPoint(const sf::Vector2f& vec) {myPoints.push_back(vec);} //FIXME Update aufrufen?
 			
 			virtual void SetPoint(size_t index, float x, float y) {SetPoint(index,sf::Vector2f(x,y));}
-			virtual void SetPoint(size_t index, const sf::Vector2f& vec) {myPoints[index]=vec; Update();} //FIXME s.o.
+			virtual void SetPoint(size_t index, const sf::Vector2f& vec) {myPoints[index]=vec;} //FIXME s.o.
 			
 			virtual size_t GetPointCount() const {return myPoints.size();}
 			virtual const sf::Vector2f& GetPoint(size_t index) const {return myPoints[index];}
