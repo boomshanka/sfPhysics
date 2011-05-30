@@ -35,36 +35,42 @@ inline sfp::Vector2<T>::Vector2()
 template <typename T>
 inline sfp::Vector2<T>::Vector2(T X, T Y) 
 {
-	sf::Vector2<T>::x=X;
-	sf::Vector2<T>::y=Y;
+	sf::Vector2<T>::x = X;
+	sf::Vector2<T>::y = Y;
 }
 
 
 template <typename T>
 inline sfp::Vector2<T>::Vector2(const sf::Vector2<T>& vec)
 {
-	sf::Vector2<T>::x=vec.x;
-	sf::Vector2<T>::y=vec.y;
+	sf::Vector2<T>::x = vec.x;
+	sf::Vector2<T>::y = vec.y;
 }
+
 
 
 template <typename T>
 inline T sfp::Vector2<T>::GetForce() const
 {
-	return std::sqrt(sf::Vector2<T>::x*sf::Vector2<T>::x + sf::Vector2<T>::y*sf::Vector2<T>::y);
+	return std::sqrt(GetSquaredLength());
 }
-
 
 
 template <typename T>
 inline T sfp::Vector2<T>::GetForce(float direction) const
 {
-	float force=std::cos(direction*M_PI/180.f)*sf::Vector2<T>::x;
-	force+=std::sin(direction*M_PI/180.f)*sf::Vector2<T>::y;
+	Vector2<T> vec(1,0);
+	vec.Rotate(direction);
 	
-	return force;
+	return DotProduct(*this, vec);
 }
 
+
+template <typename T>
+inline T sfp::Vector2<T>::GetSquaredLength() const
+{
+	return sf::Vector2<T>::x * sf::Vector2<T>::x  +  sf::Vector2<T>::y * sf::Vector2<T>::y;
+}
 
 
 template <typename T>
@@ -81,20 +87,23 @@ inline float sfp::Vector2<T>::GetDirection() const // Liefert Werte zw 0° und �
 template <typename T>
 inline void sfp::Vector2<T>::SetForce(T force)
 {
-	float direction=GetDirection();
-	
-	sf::Vector2<T>::x=std::cos(direction*M_PI/180.f)*force;
-	sf::Vector2<T>::y=std::sin(direction*M_PI/180.f)*force;
+	if(*this != Vector2<T>(0, 0))
+	{
+		*this *= force / GetForce();
+	}
+	else
+	{
+		sf::Vector2<T>::x = force;
+	}
 }
 
 
 template <typename T>
 inline void sfp::Vector2<T>::SetForce(T force, float direction) //FIXME: Ist die funktion richtig? andere mögliche bugs suchen.
 {
-	sf::Vector2<T>::x=std::cos(direction*M_PI/180.f)*force;
-	sf::Vector2<T>::y=std::sin(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::x = std::cos(direction*M_PI/180.f) * force;
+	sf::Vector2<T>::y = std::sin(direction*M_PI/180.f) * force;
 }
-
 
 
 template <typename T>
@@ -104,11 +113,10 @@ inline void sfp::Vector2<T>::SetDirection(float direction)
 }
 
 
-
 template <typename T>
 inline void sfp::Vector2<T>::Rotate(float rotation)
 {
-	SetForce(GetForce(), rotation+GetDirection());
+	SetForce(GetForce(), rotation + GetDirection());
 }
 
 
@@ -116,26 +124,29 @@ inline void sfp::Vector2<T>::Rotate(float rotation)
 template <typename T>
 inline void sfp::Vector2<T>::AddForce(T force)
 {
-	float direction=GetDirection();
+	Vector2<T> vec(1,0);
+	T newForce = DotProduct(GetUnitVector(), vec) * force;
 	
-	sf::Vector2<T>::x+=std::cos(direction*M_PI/180.f)*force;
-	sf::Vector2<T>::y+=std::sin(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::x += newForce;
+	sf::Vector2<T>::y += force - newForce;
 }
 
 
 template <typename T>
 inline void sfp::Vector2<T>::AddForce(T force, float direction)
 {
-	sf::Vector2<T>::x+=std::cos(direction*M_PI/180.f)*force;
-	sf::Vector2<T>::y+=std::sin(direction*M_PI/180.f)*force;
+	sf::Vector2<T>::x += std::cos(direction*M_PI/180.f) * force;
+	sf::Vector2<T>::y += std::sin(direction*M_PI/180.f) * force;
 }
-
 
 
 template <typename T>
 inline void sfp::Vector2<T>::Normalize()
 {
-	*this/=GetForce();
+	if(*this == Vector2<T>(0, 0))
+		*this = Vector2<T>(0, 0);
+	else
+		*this /= GetForce();
 }
 
 
@@ -144,6 +155,24 @@ template <typename T>
 inline sfp::Vector2<T> sfp::Vector2<T>::GetNormal() const
 {
 	return sfp::Vector2<T>(-sf::Vector2<T>::y, sf::Vector2<T>::x);
+}
+
+
+template <typename T>
+inline sfp::Vector2<T> sfp::Vector2<T>::GetUnitVector() const
+{
+	if(*this == Vector2<T>(0, 0))
+		return Vector2<T>(0, 0);
+	
+	return Vector2<T>(*this) / GetForce();
+}
+
+
+template <typename T>
+inline sfp::Vector2<T> sfp::Vector2<T>::GetRotatedVector(float rotation) const
+{
+	Vector2<T> vec(*this); vec.Rotate(rotation);
+	return vec;
 }
 
 

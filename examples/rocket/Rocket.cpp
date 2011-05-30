@@ -153,7 +153,9 @@ int main()
 	pCircle.SetRotation(90);
 	pCircle.SetRotationVelocity(500);
 	
-	pCircle5.SetRotationVelocity(100);
+//	pCircle5.SetRotationVelocity(100);
+	
+	sfp::Spring* spring = new sfp::Spring(&pCircle5, NULL, sfp::Vector2f(0,-1), sfp::Vector2f(8,-2), 2.f);
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -199,6 +201,8 @@ int main()
 		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,63.f * window.GetFrameTime()/1000.f));
 		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63.f * window.GetFrameTime()/1000.f,0));
 		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63.f * window.GetFrameTime()/1000.f,0));
+		
+		spring->RenderForces(window.GetFrameTime() * world.GetTimeFactor());
 		
 		//FIXME Test
 		//pCircle.AddRotationVelocity(-pCircle.GetRotationVelocity()*0.1*window.GetFrameTime());
@@ -253,6 +257,8 @@ int main()
 	delete plane3;
 	delete foo;
 	delete bottom;
+	
+	delete spring;
 	
 	#define HAU return
 	#define WOLFRAM 0

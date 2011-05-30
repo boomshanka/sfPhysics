@@ -21,15 +21,42 @@
 #define SFPHYSICS_LINKABLE_HPP
 
 
+#include <sfPhysics/Settings.hpp>
+#include <sfPhysics/System/Objects.hpp>
+
+
 
 namespace sfp
 {
 	class Linkable
 	{
-		private:
+		protected:
+			sfp::Object* first;
+			sfp::Object* second;
 			
+			sfp::Vector2f firstlink;
+			sfp::Vector2f secondlink;
 			
 		public:
+			Linkable() : first(NULL), second(NULL) {}
+			Linkable(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& vone, const sfp::Vector2f& vtwo)
+			: first(one), second(two), firstlink(vone), secondlink(vtwo) {}
+			virtual ~Linkable() {}
+			
+			void LinkObjects(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& vone, const sfp::Vector2f& vtwo)
+			{
+				first = one; second = two; firstlink = vone; secondlink = vtwo;
+			}
+			void SetFirstObject(sfp::Object* object, const sfp::Vector2f& vec) {first = object; firstlink = vec;}
+			void SetSecondObject(sfp::Object* object, const sfp::Vector2f& vec) {second = object; secondlink = vec;}
+			
+			void RemoveFirstObject() {first = NULL;}
+			void RemoveSecondObject() {second = NULL;}
+			
+			sfp::Object* GetFirstObject() {return first;}
+			sfp::Object* GetSecondObject() {return second;}
+			
+			virtual float RenderForces(sfp::Uint32 time) = 0;
 			
 	};
 	

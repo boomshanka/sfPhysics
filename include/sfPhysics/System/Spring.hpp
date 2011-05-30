@@ -20,6 +20,7 @@
 #ifndef SFPHYSICS_SPRING_HPP
 #define SFPHYSICS_SPRING_HPP
 
+
 #include <sfPhysics/System/Linkable.hpp>
 
 
@@ -29,10 +30,22 @@ namespace sfp
 	class Spring : public Linkable
 	{
 		private:
-			
+			float myLength;
+			float mySpringConstant;
+			bool myIsQuadratic;
 			
 		public:
+			Spring();
+			Spring(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& vone, const sfp::Vector2f& vtwo,
+											float length, float springconstant = 10.f, bool quadratic = false);
 			
+			void SetSpringConstant(float constant) {mySpringConstant = constant;}
+			float GetSpringConstant() {return mySpringConstant;}
+			
+			bool IsQuadratic() {return myIsQuadratic;}
+			void SetQuadratic(bool quadratic) {myIsQuadratic = quadratic;}
+			
+			float RenderForces(sfp::Uint32 time);
 	};
 	
 	

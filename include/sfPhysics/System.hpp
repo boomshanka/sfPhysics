@@ -28,15 +28,19 @@
 
 
 #include <sfPhysics/System/Vector2.hpp>
+#include <sfPhysics/System/Line.hpp>
 
 #include <sfPhysics/System/Environment.hpp>
 #include <sfPhysics/System/Physicable.hpp>
 #include <sfPhysics/System/Shape.hpp>
 #include <sfPhysics/System/ShapeManager.hpp>
 #include <sfPhysics/System/Objects.hpp>
-#include <sfPhysics/System/SAT.hpp>
+
 #include <sfPhysics/System/CollisionEvent.hpp>
 #include <sfPhysics/System/Collision.hpp>
+
+#include <sfPhysics/System/Hinge.hpp>
+#include <sfPhysics/System/Spring.hpp>
 
 
 #endif // SFPHYSICS_SYSTEM_PACK
