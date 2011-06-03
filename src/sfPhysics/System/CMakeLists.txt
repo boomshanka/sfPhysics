@@ -2,22 +2,6 @@
 #add_library(sfml-main STATIC ${CMAKE_SOURCE_DIR}/src/SFML/Main/SFML_Main.cpp)
 
 
-# find the SFML include directory
-find_path(SFML_INCLUDE_DIR SFML/Config.hpp
-          PATH_SUFFIXES include
-          PATHS
-          ~/Library/Frameworks
-          /Library/Frameworks
-          /usr/local/
-          /usr/
-          /sw          # Fink
-          /opt/local/  # DarwinPorts
-          /opt/csw/    # Blastwave
-          /opt/
-          ${SFMLDIR}
-          $ENV{SFMLDIR})
-
-
 set(INCROOT ${CMAKE_SOURCE_DIR}/include/sfPhysics/System)
 set(SRCROOT ${CMAKE_SOURCE_DIR}/src/sfPhysics/System)
 

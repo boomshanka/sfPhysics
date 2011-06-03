@@ -34,6 +34,12 @@ set(BUILD_DOC FALSE CACHE BOOL "TRUE to generate the API documentation, FALSE to
 set(SFML_ENABLED TRUE CACHE BOOL "TRUE to build sfPhysics with functions for SFML and with the debugdraw pack")
 
 
+#
+if(NOT SFML_FOUND)
+    set(SFML_ENABLED FALSE)
+endif()
+
+
 # define SFPHYSICS_STATIC if the build type is not set to 'shared'
 if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DSFPHYSICS_STATIC)
