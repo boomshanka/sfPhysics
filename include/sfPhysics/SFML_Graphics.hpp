@@ -23,6 +23,8 @@
 
 #ifdef SFML_ENABLED
 
+#include <SFML/Graphics/Drawable.hpp>
+
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
