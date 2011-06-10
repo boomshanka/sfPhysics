@@ -88,18 +88,12 @@ template <typename T>
 inline void sfp::Vector2<T>::SetForce(T force)
 {
 	if(*this != Vector2<T>(0, 0))
-	{
 		*this *= force / GetForce();
-	}
-	else
-	{
-		sf::Vector2<T>::x = force;
-	}
 }
 
 
 template <typename T>
-inline void sfp::Vector2<T>::SetForce(T force, float direction) //FIXME: Ist die funktion richtig? andere mögliche bugs suchen.
+inline void sfp::Vector2<T>::SetForce(T force, float direction)
 {
 	sf::Vector2<T>::x = std::cos(direction*M_PI/180.f) * force;
 	sf::Vector2<T>::y = std::sin(direction*M_PI/180.f) * force;
@@ -143,9 +137,7 @@ inline void sfp::Vector2<T>::AddForce(T force, float direction)
 template <typename T>
 inline void sfp::Vector2<T>::Normalize()
 {
-	if(*this == Vector2<T>(0, 0))
-		*this = Vector2<T>(0, 0);
-	else
+	if(*this != Vector2<T>(0, 0))
 		*this /= GetForce();
 }
 
@@ -161,10 +153,8 @@ inline sfp::Vector2<T> sfp::Vector2<T>::GetNormal() const
 template <typename T>
 inline sfp::Vector2<T> sfp::Vector2<T>::GetUnitVector() const
 {
-	if(*this == Vector2<T>(0, 0))
-		return Vector2<T>(0, 0);
-	
-	return Vector2<T>(*this) / GetForce();
+	if(*this != Vector2<T>(0, 0))
+		return Vector2<T>(*this) / GetForce();
 }
 
 

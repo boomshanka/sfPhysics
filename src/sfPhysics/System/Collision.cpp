@@ -30,7 +30,7 @@
 
 #include<iostream>
 sfp::Collision::Collision()
-:myCollisionEventEnabled(true)
+:myCollisionEventEnabled(true), myFirstConvexShapes(0), mySecondConvexShapes(0)
 {
 }
 
@@ -693,5 +693,139 @@ bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, size_
 }
 
 
+//////////
+
+
+bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
+{
+	if((mySecondObject != event.second) || (myFirstObject != event.first))
+	{
+		myFirstConvexShapes = 0;
+		mySecondConvexShapes = 0;
+	}
+	
+	switch(event.first->GetConvexShape(myFirstConvexShapes).GetShapeType())
+	{
+		case Shape::Type::Polygon:
+		case Shape::Type::Rectangle:
+			switch(event.second->GetConvexShape(mySecondConvexShapes).GetShapeType())
+			{
+				case Shape::Type::Polygon:
+				case Shape::Type::Rectangle:
+					//if(BoundingBoxes)
+						PolygonPolygon(event);
+				break;
+				
+				case Shape::Type::Plane:
+					PlanePolygon(event);
+				break;
+				
+				case Shape::Type::Circle:
+					//if(BoundingBoxes)
+						PolygonCircle(event);
+				break;
+				
+				case Shape::Type::NegCircle:
+					//FIXME
+				break;
+				
+				default:
+				break;
+			}
+		break;
+				
+		case Shape::Type::Plane:
+			switch(event.second->GetConvexShape(mySecondConvexShapes).GetShapeType())
+			{
+				case Shape::Type::Polygon:
+				case Shape::Type::Rectangle:
+					PlanePolygon(event);
+				break;
+				
+				case Shape::Type::Circle:
+					PlaneCircle(event);
+				break;
+				
+				case Shape::Type::NegCircle:
+					//FIXME
+				break;
+				
+				case Shape::Type::Plane:
+				default:
+				break;
+			}
+		break;
+			
+		case Shape::Type::Circle:
+			switch(event.second->GetConvexShape(mySecondConvexShapes).GetShapeType())
+			{
+				case Shape::Type::Polygon:
+				case Shape::Type::Rectangle:
+					//if(BoundingBoxes)
+						PolygonCircle(event);
+				break;
+				
+				case Shape::Type::Plane:
+					PlaneCircle(event);
+				break;
+				
+				case Shape::Type::Circle:
+					//if(BoundingBoxes)
+						CircleCircle(event);
+				break;
+				
+				case Shape::Type::NegCircle:
+					//FIXME
+				break;
+				
+				default:
+				break;
+			}
+		break;
+		
+		case Shape::Type::NegCircle:
+			//switch(second.GetConvexShape(mySecondConvexShapes).GetShapeType())
+			{
+			
+			}
+		break;
+		
+		default:
+		break;
+	}
+	
+	return (++myFirstConvexShapes != event.first->GetConvexShapeCount()) && (++mySecondConvexShapes != event.second->GetConvexShapeCount());
+}
+
+
+
+void sfp::Collision::PolygonPolygon(sfp::CollisionEvent& event)
+{
+
+}
+
+
+void sfp::Collision::PolygonCircle(sfp::CollisionEvent& event)
+{
+
+}
+
+
+void sfp::Collision::PlanePolygon(sfp::CollisionEvent& event)
+{
+
+}
+
+
+void sfp::Collision::PlaneCircle(sfp::CollisionEvent& event)
+{
+
+}
+
+
+void sfp::Collision::CircleCircle(sfp::CollisionEvent& event)
+{
+
+}
 
 

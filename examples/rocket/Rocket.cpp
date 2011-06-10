@@ -1,5 +1,3 @@
-#define SFML_ENABLED
-
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -155,7 +153,7 @@ int main()
 	
 //	pCircle5.SetRotationVelocity(100);
 	
-	sfp::Spring* spring = new sfp::Spring(&pCircle5, NULL, sfp::Vector2f(0,-1), sfp::Vector2f(8,-2), 2.f);
+	sfp::Spring* spring = new sfp::Spring(&pCircle5, NULL, sfp::Vector2f(1,1), sfp::Vector2f(8,-2), 2.f);
 	
 	while (window.IsOpened()) // Window Loop //
 	{

@@ -10,6 +10,8 @@ set(SRCROOT ${CMAKE_SOURCE_DIR}/src/sfPhysics/System)
 set(SRC
     ${INCROOT}/../Settings.hpp
     ${INCROOT}/../SFML_Graphics.hpp
+    ${SRCROOT}/CollisionManager.cpp
+    ${INCROOT}/CollisionManager.hpp
     ${SRCROOT}/Collision.cpp
     ${INCROOT}/Collision.hpp
     ${SRCROOT}/Contact.cpp

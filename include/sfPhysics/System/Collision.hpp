@@ -45,6 +45,13 @@ namespace sfp
 			
 			bool myCollisionEventEnabled; //FIXME Remove?
 			
+			//
+			sfp::Object* myFirstObject;
+			sfp::Object* mySecondObject;
+			
+			std::size_t myFirstConvexShapes;
+			std::size_t mySecondConvexShapes;
+			
 		public:
 			Collision();
 			virtual ~Collision();
@@ -62,6 +69,16 @@ namespace sfp
 			
 			
 			void CollisionResponse(sfp::CollisionEvent&);
+			
+			
+			//////
+			bool GetCollisions(sfp::CollisionEvent& event);
+			
+			void PolygonPolygon(sfp::CollisionEvent& event);
+			void PolygonCircle(sfp::CollisionEvent& event);
+			void PlanePolygon(sfp::CollisionEvent& event);
+			void PlaneCircle(sfp::CollisionEvent& event);
+			void CircleCircle(sfp::CollisionEvent& event);
 			
 		private:
 			void ComputeContact(sfp::CollisionEvent&);

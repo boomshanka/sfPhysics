@@ -17,55 +17,48 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_COLLISIONEVENT_HPP
-#define SFPHYSICS_COLLISIONEVENT_HPP
+#ifndef SFPHYSICS_COLLISIONMANAGER_HPP
+#define SFPHYSICS_COLLISIONMANAGER_HPP
 
 
 #include <sfPhysics/System/Objects.hpp>
-
-#include <stack>
-#include <utility>
+#include <sfPhysics/System/Collision.hpp>
+#include <sfPhysics/System/CollisionEvent.hpp>
+#include <sfPhysics/System/Contact.hpp>
+#include <sfPhysics/System/ObjectList.hpp>
 
 
 
 namespace sfp
 {
-	enum CollisionEventType
+	
+	class CollisionManager : virtual public ObjectList
 	{
-		NoCollision = 0,
-		BoundingBoxCollision = 1,
-		PreciseCollision = 2
-	};
-
-	class CollisionEvent
-	{
-		friend class Collision;
-		friend class ContactManager;
-		
 		private:
-			sfp::Object* first;
-			sfp::Object* second;
+			sfp::Collision myCollision;
+			sfp::ContactManager myContactManager;
 			
-			std::stack<sfp::Vector2f> collisionpoint;
-			std::stack<sfp::Vector2f> collisionnormal;
-			std::stack<sfp::Vector2f> intersection;
-			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;
 		public:
-			CollisionEvent() : CollisionTime(0) {}
-			CollisionEvent(sfp::Object& one, sfp::Object& two) {first=&one; second=&two;}
-			CollisionEvent(sfp::Object* one, sfp::Object* two) {first = one; second = two;}
+			CollisionManager();
+			virtual ~CollisionManager();
 			
-			CollisionEventType CollisionType;
+			void UpdateCollisions();
 			
-			float CollisionTime; //FIXME
+			//bool CheckCollision(sfp::Object&, sfp::Object&);
 			
+			void CollisionResponse(sfp::CollisionEvent& event);
 			
-			sfp::Object& GetFirstObject() {return *first;}
-			sfp::Object& GetSecondObject() {return *second;}
+		protected:
+			virtual void OnPreciseCollision(sfp::CollisionEvent& event);
+			virtual void OnBoundingBoxCollision(sfp::CollisionEvent& event) = 0;
+			virtual void OnNoCollision(sfp::CollisionEvent& event) = 0;
+			
 	};
 
-}
+} // namespace
 
-#endif
+
+#endif // COLLISIONMANAGER_HPP
+
 
 
