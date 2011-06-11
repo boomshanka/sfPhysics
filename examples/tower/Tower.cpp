@@ -70,7 +70,7 @@ int main()
 	plane2->SetPosition(sf::Vector2f(16,0));
 	plane3->SetPosition(sf::Vector2f(0,0));
 	
-	sfp::Collision* collision = new sfp::Collision();
+	sfp::CollisionManager* collision = new sfp::CollisionManager();
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
 	
@@ -118,20 +118,7 @@ int main()
 		// Play God
 		world.RenderGravity();
 		
-		while(collision->PollCollision(collisionevent))
-		{
-			
-			switch(collisionevent.CollisionType)
-			{
-				case sfp::PreciseCollision:
-					collision->CollisionResponse(collisionevent);
-					break;
-				
-				default:
-					break;
-			}
-		}
-		
+		collision->UpdateCollisions();
 		
 		while(window.PollEvent(event))
 		{

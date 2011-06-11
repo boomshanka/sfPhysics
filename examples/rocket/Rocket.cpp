@@ -83,7 +83,7 @@ int main()
 	plane2->SetPosition(sf::Vector2f(6.1,0));
 	plane3->SetPosition(sf::Vector2f(0,0));
 	
-	sfp::Collision* collision = new sfp::Collision();
+	sfp::CollisionManager* collision = new sfp::CollisionManager();
 	sfp::CollisionEvent collisionevent;
 	sfp::Environment world;
 	
@@ -164,26 +164,7 @@ int main()
 		
 		world.RenderGravity();
 		
-		while(collision->PollCollision(collisionevent))
-		{
-			
-			switch(collisionevent.CollisionType)
-			{
-				case sfp::PreciseCollision:
-//					if(collisionevent.GetFirstObject().GetDrawable()!=NULL)
-//						collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::Red);
-//					if(collisionevent.GetSecondObject().GetDrawable()!=NULL)
-//						collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::Red);
-					
-					collision->CollisionResponse(collisionevent);
-					break;
-				
-				default:
-					//collisionevent.GetFirstObject().GetDrawable()->SetColor(sf::Color::White);
-					//collisionevent.GetSecondObject().GetDrawable()->SetColor(sf::Color::White);
-					break;
-			}
-		}
+		collision->UpdateCollisions();
 		
 		while(window.PollEvent(event))
 		{
@@ -213,7 +194,7 @@ int main()
 		
 		//Frames
 		++frames;
-		if(frametime.GetElapsedTime()>=1)
+		if(frametime.GetElapsedTime()>=1000)
 		{
 			std::cerr<<frames<<"\n";
 			frametime.Reset();

@@ -36,15 +36,10 @@
 namespace sfp
 {
 	
-	class Collision : virtual public ObjectList
+	class Collision
 	{
 		private:
-			std::stack<CollisionEvent> myCollisionEvents;
-			
-			sfp::ContactManager myContactManager;
-			
-			bool myCollisionEventEnabled; //FIXME Remove?
-			
+		//	sfp::ContactManager myContactManager;
 			//
 			sfp::Object* myFirstObject;
 			sfp::Object* mySecondObject;
@@ -54,9 +49,9 @@ namespace sfp
 			
 		public:
 			Collision();
-			virtual ~Collision();
+			~Collision();
 			
-			bool PollCollision(sfp::CollisionEvent&);
+	/*		bool PollCollision(sfp::CollisionEvent&);
 			
 			
 			bool CheckCollision(sfp::Object&, sfp::Object&);
@@ -68,11 +63,15 @@ namespace sfp
 			bool CircleCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			
 			
-			void CollisionResponse(sfp::CollisionEvent&);
+			void CollisionResponse(sfp::CollisionEvent&); */
 			
 			
 			//////
 			bool GetCollisions(sfp::CollisionEvent& event);
+			void SeparateObjects(sfp::CollisionEvent& event);
+			
+			bool CheckBoundingBoxCollision(sfp::CollisionEvent& event);
+			bool CheckCollision(sfp::CollisionEvent& event); //FIXME preciese collision
 			
 			void PolygonPolygon(sfp::CollisionEvent& event);
 			void PolygonCircle(sfp::CollisionEvent& event);
@@ -81,7 +80,10 @@ namespace sfp
 			void CircleCircle(sfp::CollisionEvent& event);
 			
 		private:
-			void ComputeContact(sfp::CollisionEvent&);
+			void SwapEventObjects(sfp::CollisionEvent& event);
+			
+			
+/*			void ComputeContact(sfp::CollisionEvent&);
 			void Friction(sfp::Object*, sfp::Object*);
 			void Bounce(sfp::Object*, sfp::Object*);
 			
@@ -92,19 +94,8 @@ namespace sfp
 			
 			bool ComputeSAT(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f&);
 			void ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
-			void ComputePlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
+			void ComputePlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);*/
 			
-			
-			sfp::Vector2f Movement;
-			sfp::Vector2f* Collisionpoint;
-			sfp::Vector2f* Normal;
-			sfp::Vector2f* Intersection;
-			sfp::Vector2f R1;
-			sfp::Vector2f R2;
-			float Restitution;
-			float Impulse;
-			size_t A;
-			size_t B;
 	};
 }
 

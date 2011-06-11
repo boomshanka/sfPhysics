@@ -59,7 +59,7 @@ int main()
 	
 	
 	sfp::Environment* world = new sfp::Environment();
-	sfp::Collision* collision = new sfp::Collision();
+	sfp::CollisionManager* collision = new sfp::CollisionManager();
 	sfp::CollisionEvent collisionevent;
 	
 	world->SetLengthFactor(50);
@@ -91,19 +91,7 @@ int main()
 		
 		world->RenderGravity();
 		
-		while(collision->PollCollision(collisionevent))
-		{
-			
-			switch(collisionevent.CollisionType)
-			{
-				case sfp::PreciseCollision:
-					collision->CollisionResponse(collisionevent);
-					break;
-				
-				default:
-					break;
-			}
-		}
+		collision->UpdateCollisions();
 		
 		world->MoveObjects();
 		

@@ -23,8 +23,7 @@
 
 #include <sfPhysics/System/Objects.hpp>
 
-#include <stack>
-#include <utility>
+#include <cstddef>
 
 
 
@@ -40,25 +39,31 @@ namespace sfp
 	class CollisionEvent
 	{
 		friend class Collision;
+		friend class CollisionManager;
 		friend class ContactManager;
 		
 		private:
 			sfp::Object* first;
 			sfp::Object* second;
 			
-			std::stack<sfp::Vector2f> collisionpoint;
-			std::stack<sfp::Vector2f> collisionnormal;
-			std::stack<sfp::Vector2f> intersection;
-			std::stack<std::pair<unsigned int, unsigned int> > convexobjects;
 		public:
-			CollisionEvent() : CollisionTime(0) {}
-			CollisionEvent(sfp::Object& one, sfp::Object& two) {first=&one; second=&two;}
-			CollisionEvent(sfp::Object* one, sfp::Object* two) {first = one; second = two;}
-			
 			CollisionEventType CollisionType;
 			
-			float CollisionTime; //FIXME
+			sfp::Vector2f Collisionpoint;
+			sfp::Vector2f Collisionnormal;
+			sfp::Vector2f Intersection;
+			std::size_t FirstConvexObject;
+			std::size_t SecondConvexObject;
 			
+			sfp::Vector2f R1;
+			sfp::Vector2f R2;
+			sfp::Vector2f Movement;
+			float Impulse;
+			
+		public:
+			CollisionEvent() : CollisionType(NoCollision) {}
+			CollisionEvent(sfp::Object& one, sfp::Object& two) : CollisionType(NoCollision) {first=&one; second=&two;}
+			CollisionEvent(sfp::Object* one, sfp::Object* two) : CollisionType(NoCollision) {first = one; second = two;}		
 			
 			sfp::Object& GetFirstObject() {return *first;}
 			sfp::Object& GetSecondObject() {return *second;}

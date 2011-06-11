@@ -50,8 +50,11 @@ namespace sfp
 			
 		protected:
 			virtual void OnPreciseCollision(sfp::CollisionEvent& event);
-			virtual void OnBoundingBoxCollision(sfp::CollisionEvent& event) = 0;
-			virtual void OnNoCollision(sfp::CollisionEvent& event) = 0;
+			virtual void OnBoundingBoxCollision(sfp::CollisionEvent& event);
+			virtual void OnNoCollision(sfp::CollisionEvent& event);
+			
+			void Bounce(sfp::CollisionEvent& event);
+			void Friction(sfp::CollisionEvent& event);
 			
 	};
 

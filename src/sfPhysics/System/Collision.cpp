@@ -28,9 +28,9 @@
 #define myObjects ObjectList::myObjectList
 
 
-#include<iostream>
+
 sfp::Collision::Collision()
-:myCollisionEventEnabled(true), myFirstConvexShapes(0), mySecondConvexShapes(0)
+:myFirstConvexShapes(0), mySecondConvexShapes(0)
 {
 }
 
@@ -43,211 +43,9 @@ sfp::Collision::~Collision()
 
 
 
-// ---------------------------------------------------- //
+/*
 
 
-
-void sfp::Collision::CollisionResponse(sfp::CollisionEvent& event)
-{
-	ComputeContact(event);
-	
-	while(!event.collisionpoint.empty())
-	{
-		Collisionpoint = &event.collisionpoint.top();
-		Normal = &event.collisionnormal.top();
-		Intersection = &event.intersection.top();
-		Restitution = event.first->GetRestitution() * event.second->GetRestitution();
-		A = event.convexobjects.top().first;//FIXME
-		B = event.convexobjects.top().second;
-		R1 = *Collisionpoint - event.first->GetPosition();
-		R2 = *Collisionpoint - event.second->GetPosition();
-		
-		if(event.first->IsFixed())
-		{
-			Movement = -event.second->GetMovement(event.second->ToLocal(*Collisionpoint));//, -*Normal);//FIXME
-		}
-		else if(event.second->IsFixed())
-		{
-			Movement = -event.first->GetMovement(event.first->ToLocal(*Collisionpoint));//, *Normal);
-		}
-		else
-		{
-			Movement = event.second->GetMovement(event.second->ToLocal(*Collisionpoint))-//, -*Normal) -
-							event.first->GetMovement(event.first->ToLocal(*Collisionpoint));//, *Normal);
-		}
-		
-		Bounce(event.first, event.second);
-		Friction(event.first, event.second);
-		
-		event.collisionpoint.pop();
-		event.collisionnormal.pop();
-		event.intersection.pop();
-		event.convexobjects.pop();
-	}
-}
-
-
-void sfp::Collision::Friction(sfp::Object* first, sfp::Object* second)
-{
-	sfp::Vector2f friction(-Normal->y, Normal->x);
-	friction *= std::abs(Impulse);
-	
-	if(myContactManager.GetContact(first, second) != NULL && myContactManager.GetContact(first, second)->type == Contact::StaticContact)
-	{
-		friction *= first->GetStaticFriction() * second->GetStaticFriction();
-	}
-	else
-	{
-		friction *= first->GetDynamicFriction() * second->GetDynamicFriction();
-	}
-	
-	float MaxFriction = CrossProduct(Movement, *Normal);
-	if(!first->IsFixed()) MaxFriction /= 2.f/first->GetMass() + 1.f/first->GetInertiaMoment() * CrossProduct(R1, *Normal);
-	if(!second->IsFixed()) MaxFriction /= 2.f/second->GetMass() + 1.f/second->GetInertiaMoment() * CrossProduct(R2, *Normal);
-	MaxFriction = std::abs(MaxFriction);
-	
-	
-	if(friction.GetForce() > MaxFriction)
-	{
-		myContactManager.SetStaticContact(first, second);
-		friction.SetForce(MaxFriction);
-	}
-	
-	float cross = CrossProduct(*Normal, Movement);
-	if(cross == 0) //FIXME
-	{
-	}
-	else if(cross < 0)
-	{
-		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), -friction);
-		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), friction);
-	}
-	else if(cross > 0)
-	{
-		if(!first->IsFixed()) first->Impulse(first->ToLocal(*Collisionpoint), friction);
-		if(!second->IsFixed()) second->Impulse(second->ToLocal(*Collisionpoint), -friction);
-	}
-	std::cout<<cross<<"\n";
-}
-
-
-void sfp::Collision::Bounce(sfp::Object* first, sfp::Object* second)
-{
-	if(first->IsFixed())
-	{
-		BounceFixed(*second, *Collisionpoint, -*Normal, Movement);
-		
-		second->AddIntersection(-*Intersection, sf::Vector2f()); //FIXME
-	}
-	else if(second->IsFixed())
-	{
-		BounceFixed(*first, *Collisionpoint, *Normal, Movement);
-		
-		first->AddIntersection(*Intersection, sf::Vector2f()); //FIXME
-	}
-	else
-	{
-		sfp::Vector2f r(*Collisionpoint - second->ToGlobal(second->GetConvexShape(B).GetShapeCenter()));
-		
-		Bounce(*first, *second, *Collisionpoint, *Normal, Movement);
-		
-		float factor = first->GetMass() / (first->GetMass() + second->GetMass());
-		
-		if(DotProduct(*Intersection, sf::Vector2f(0,-1))>0)
-			first->AddIntersection(*Intersection * factor, sf::Vector2f()); //FIXME
-		else
-			second->AddIntersection(-*Intersection * (1-factor), sf::Vector2f()); //FIXME
-	}
-}
-
-
-
-void sfp::Collision::Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr)
-{
-	sfp::Vector2f r1(P-first.GetPosition());
-	sfp::Vector2f r2(P-second.GetPosition());
-			
-	Impulse = -(1 + Restitution) * DotProduct(vr, n);
-	Impulse /= 1.f/first.GetMass() + 1.f/second.GetMass() +
-	std::abs(DotProduct((1.f/first.GetInertiaMoment() * CrossProduct(r1, n) * r1 + 1.f/second.GetInertiaMoment() * CrossProduct(r2, n) * r2), n));
-	
-	
-	first.SetVelocity(first.GetVelocity() - (Impulse/first.GetMass()) * n);
-	second.SetVelocity(second.GetVelocity() + (Impulse/second.GetMass()) * n);
-	
-	first.SetRotationVelocity(first.GetRotationVelocity() - Impulse/first.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
-	second.SetRotationVelocity(second.GetRotationVelocity() + Impulse/second.GetInertiaMoment() * CrossProduct(r2, n) * 180.f/static_cast<float>(M_PI));
-	
-	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
-	
-	
-}
-
-
-
-void sfp::Collision::BounceFixed(sfp::Object& object, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr)
-{
-	sfp::Vector2f r1(P-object.GetPosition());
-			
-	Impulse = -(1 + Restitution) * DotProduct(vr, n);
-	Impulse /= 1.f/object.GetMass() + std::abs(DotProduct((1.f/object.GetInertiaMoment() * CrossProduct(r1, n) * r1), n));
-	
-	object.SetVelocity(object.GetVelocity() - (Impulse/object.GetMass()) * n);
-	object.SetRotationVelocity(object.GetRotationVelocity() - Impulse/object.GetInertiaMoment() * CrossProduct(r1, n) * 180.f/static_cast<float>(M_PI));
-	
-	//Objekte auseinander schieben. FIXME es wird nur der kürzteste weg genutzt
-	
-	
-}
-
-
-
-
-bool sfp::Collision::PollCollision(sfp::CollisionEvent& event)
-{
-	if(myCollisionEvents.empty())
-	{
-		UpdateCollisionEvents();
-		myContactManager.UpdateContacts();
-	}
-	else
-	{
-		myCollisionEvents.pop();
-	}
-	
-	if(!myCollisionEvents.empty())
-	{
-		event=myCollisionEvents.top();
-		return true;
-	}
-	
-	return false;
-}
-
-
-
-
-void sfp::Collision::UpdateCollisionEvents()
-{
-	for(std::list<sfp::Object*>::iterator it = myObjects.begin(); it != myObjects.end(); ++it)
-	{
-		std::list<sfp::Object*>::iterator it2 = it;
-		for(++it2; it2 != myObjects.end(); ++it2)
-		{
-			myCollisionEvents.push(CollisionEvent(*(*it),*(*it2)));
-			
-			if(CheckCollision(*(*it),*(*it2)))
-			{
-				myCollisionEvents.top().CollisionType=sfp::PreciseCollision;
-			}
-			else
-			{
-				if(myCollisionEventEnabled && myCollisionEvents.top().CollisionType==NoCollision)
-					myCollisionEvents.pop(); //FIXME wie wärs wenn einfach kein objekt erstellt wird? Tolle Idee :D
-			}
-		}
-	}
-} //FIXME Rename UpdateCollision, wahlweise Events deaktivieren, Funktion zum Ableiten implementieren. Quadtree?
 
 
 
@@ -672,26 +470,8 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, size_t
 
 
 
-bool sfp::Collision::CircleCircle(sfp::Object& first, sfp::Object& second, size_t i, size_t j)
-{
-	sfp::Vector2f distance(second.ToGlobal(second.GetConvexShape(j).GetShapeCenter())-first.ToGlobal(first.GetConvexShape(i).GetShapeCenter()));
-	float dis=(first.GetConvexShape(i).GetCircleRadius()+second.GetConvexShape(j).GetCircleRadius()) - distance.GetForce();
-	if(dis <= 0)
-		return false;
-	
-	myCollisionEvents.top().collisionnormal.push(distance); myCollisionEvents.top().collisionnormal.top().Normalize();
-	myCollisionEvents.top().intersection.push(myCollisionEvents.top().collisionnormal.top());
-	myCollisionEvents.top().intersection.top()*= -dis; //FIXME warum -
-	
-	distance.SetForce(first.GetConvexShape(i).GetCircleRadius()-((first.GetConvexShape(i).GetCircleRadius()+
-			 second.GetConvexShape(j).GetCircleRadius())-distance.GetForce())/2.f);
-	distance+=first.ToGlobal(first.GetConvexShape(i).GetShapeCenter());
-	
-	myCollisionEvents.top().collisionpoint.push(distance);
-	
-	return true;
-}
 
+*/
 
 //////////
 
@@ -700,10 +480,37 @@ bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
 {
 	if((mySecondObject != event.second) || (myFirstObject != event.first))
 	{
+		if(event.first->GetConvexShapeCount() == 0 || !CheckBoundingBoxCollision(event)) //FIXME
+			return false;
+		
 		myFirstConvexShapes = 0;
 		mySecondConvexShapes = 0;
+		
+		myFirstObject = event.first;
+		mySecondObject = event.second;
 	}
 	
+	if(myFirstConvexShapes == event.first->GetConvexShapeCount())
+	{
+		if(++mySecondConvexShapes == event.second->GetConvexShapeCount())
+			return false;
+		
+		myFirstConvexShapes = 0;
+	}
+	
+	event.CollisionType = sfp::BoundingBoxCollision;
+	event.FirstConvexObject = myFirstConvexShapes;
+	event.SecondConvexObject = mySecondConvexShapes;
+	SeparateObjects(event);
+	
+	++myFirstConvexShapes;
+	
+	return true;
+}
+
+
+void sfp::Collision::SeparateObjects(sfp::CollisionEvent& event)
+{
 	switch(event.first->GetConvexShape(myFirstConvexShapes).GetShapeType())
 	{
 		case Shape::Type::Polygon:
@@ -766,6 +573,7 @@ bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
 				break;
 				
 				case Shape::Type::Plane:
+					SwapEventObjects(event);
 					PlaneCircle(event);
 				break;
 				
@@ -793,8 +601,20 @@ bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
 		default:
 		break;
 	}
-	
-	return (++myFirstConvexShapes != event.first->GetConvexShapeCount()) && (++mySecondConvexShapes != event.second->GetConvexShapeCount());
+}
+
+
+
+bool sfp::Collision::CheckBoundingBoxCollision(sfp::CollisionEvent& event)
+{
+	return true;
+}
+
+
+
+bool sfp::Collision::CheckCollision(sfp::CollisionEvent& event)
+{
+	return false;
 }
 
 
@@ -819,13 +639,58 @@ void sfp::Collision::PlanePolygon(sfp::CollisionEvent& event)
 
 void sfp::Collision::PlaneCircle(sfp::CollisionEvent& event)
 {
-
+	sfp::Vector2f hyp(event.first->ToGlobal(event.first->GetConvexShape(event.FirstConvexObject).GetShapeCenter()) -
+						event.second->ToGlobal(event.second->GetConvexShape(event.SecondConvexObject).GetShapeCenter()));
+	float distance = std::abs(std::cos((event.first->GetConvexShape(event.FirstConvexObject).GetPlaneNormal().GetDirection() -
+						hyp.GetDirection())*M_PI/180.f)) * hyp.GetForce();
+	
+	if(distance < event.second->GetConvexShape(event.SecondConvexObject).GetCircleRadius()) //FIXME <=?
+	{
+		event.Collisionpoint = event.second->ToGlobal(event.second->GetConvexShape(event.SecondConvexObject).GetShapeCenter()) -
+								event.first->GetConvexShape(event.FirstConvexObject).GetPlaneNormal() * distance;
+		event.Collisionnormal = event.first->GetConvexShape(event.FirstConvexObject).GetPlaneNormal();
+		event.Intersection = -event.first->GetConvexShape(event.FirstConvexObject).GetPlaneNormal() *
+								(event.second->GetConvexShape(event.SecondConvexObject).GetCircleRadius() - distance);
+		
+		event.CollisionType = sfp::PreciseCollision;
+	}
 }
 
 
 void sfp::Collision::CircleCircle(sfp::CollisionEvent& event)
 {
-
+	sfp::Vector2f distance(event.second->ToGlobal(event.second->GetConvexShape(event.SecondConvexObject).GetShapeCenter()) -
+								event.first->ToGlobal(event.first->GetConvexShape(event.FirstConvexObject).GetShapeCenter()));
+	float length = (event.first->GetConvexShape(event.FirstConvexObject).GetCircleRadius() +
+					event.second->GetConvexShape(event.SecondConvexObject).GetCircleRadius()) - distance.GetForce();
+	
+	if(length > 0)
+	{
+		event.Collisionnormal = distance.GetUnitVector();
+		event.Intersection = -event.Collisionnormal * length; // FIXME Warum -
+		distance.SetForce(event.first->GetConvexShape(event.FirstConvexObject).GetCircleRadius() -
+						((event.first->GetConvexShape(event.FirstConvexObject).GetCircleRadius() +
+				 			event.second->GetConvexShape(event.SecondConvexObject).GetCircleRadius()) - distance.GetForce())/2.f);
+		distance += event.first->ToGlobal(event.first->GetConvexShape(event.FirstConvexObject).GetShapeCenter());
+		event.Collisionpoint = distance;
+		
+		event.CollisionType = sfp::PreciseCollision;
+	}
 }
+
+
+
+
+void sfp::Collision::SwapEventObjects(sfp::CollisionEvent& event)
+{
+	sfp::Object* obj = event.first;
+	event.first = event.second;
+	event.second = obj;
+	
+	std::size_t convex = event.FirstConvexObject;
+	event.FirstConvexObject = event.SecondConvexObject;
+	event.SecondConvexObject = convex;
+}
+
 
 

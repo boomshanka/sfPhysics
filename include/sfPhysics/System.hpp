@@ -37,6 +37,7 @@
 #include <sfPhysics/System/Objects.hpp>
 
 #include <sfPhysics/System/CollisionEvent.hpp>
+#include <sfPhysics/System/CollisionManager.hpp>
 #include <sfPhysics/System/Collision.hpp>
 
 #include <sfPhysics/System/Hinge.hpp>
