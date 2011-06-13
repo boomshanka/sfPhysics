@@ -72,34 +72,34 @@ void sfp::Shape::Update()
 
 void sfp::Shape::ComputePolygonArea()
 {
-	myCenter=sf::Vector2f(0,0);
-	myInertiaMoment=0;
-	myArea=0;
+	myCenter = sf::Vector2f(0,0);
+	myInertiaMoment = 0;
+	myArea = 0;
 	
-	for(unsigned int i=2; i<myPoints.size(); ++i)
+	for(std::size_t i = 2; i < myPoints.size(); ++i)
 	{
-		sfp::Vector2f line=myPoints[0]-myPoints[i-1];
-		float a=line.GetForce();
-		line=myPoints[i-1]-myPoints[i];
-		float b=line.GetForce();
-		line=myPoints[i]-myPoints[0];
-		float c=line.GetForce();
+		sfp::Vector2f line = myPoints[0] - myPoints[i-1];
+		float a = line.GetForce();
+		line = myPoints[i-1] - myPoints[i];
+		float b = line.GetForce();
+		line = myPoints[i] - myPoints[0];
+		float c = line.GetForce();
 		
-		float area=0.25*std::sqrt((a+b+c)*(a+b-c)*(b+c-a)*(c+a-b));
-		sf::Vector2f center((myPoints[0]+myPoints[i-1]+myPoints[i])/3.f);
+		float area = 0.25 * std::sqrt((a+b+c) * (a+b-c) * (b+c-a) * (c+a-b));
+		sf::Vector2f center((myPoints[0] + myPoints[i-1] + myPoints[i]) / 3.f);
 		
 		//Schwerpunkte addieren
-		sfp::Vector2f diff(center-myCenter);
-		diff*=(area/(area+myArea));
-		myCenter+=diff;
+		sfp::Vector2f diff(center - myCenter);
+		diff *= (area / (area+myArea));
+		myCenter += diff;
 		
 		//Trägheitsmoment verschieben
 		myInertiaMoment += myArea * std::pow(diff.GetForce(),2);
 		//Trägheitsmoment von Dreieck verschieben & addieren
-		diff=(center-(myCenter-diff))-diff;
-		myInertiaMoment += ComputeTriangleMoment(myPoints[0], myPoints[i-1], myPoints[i], area) + area * std::pow(diff.GetForce(),2);
+		diff = (center - (myCenter-diff)) - diff;
+		myInertiaMoment += ComputeTriangleMoment(myPoints[0], myPoints[i-1], myPoints[i], area) + area * std::pow(diff.GetForce(), 2);
 		
-		myArea+=area;
+		myArea += area;
 	}
 }
 

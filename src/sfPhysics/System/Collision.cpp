@@ -493,7 +493,11 @@ bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
 	if(myFirstConvexShapes == event.first->GetConvexShapeCount())
 	{
 		if(++mySecondConvexShapes == event.second->GetConvexShapeCount())
+		{
+			myFirstObject = NULL;
+			mySecondObject = NULL;
 			return false;
+		}
 		
 		myFirstConvexShapes = 0;
 	}

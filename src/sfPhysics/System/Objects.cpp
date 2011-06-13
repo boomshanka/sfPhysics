@@ -25,8 +25,8 @@ sfp::Object::Object()
 :myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
-	myDrawable=NULL;
-	myLengthfactor=1;
+	myDrawable = NULL;
+	myLengthfactor = 1;
 	#endif
 }
 
@@ -36,8 +36,8 @@ sfp::Object::Object(const Shape& shape)
 :myIsFixed(false)
 {
 	#ifdef SFML_ENABLED
-	myDrawable=NULL;
-	myLengthfactor=1;
+	myDrawable = NULL;
+	myLengthfactor = 1;
 	#endif
 	
 	SetShape(shape);
@@ -56,16 +56,16 @@ sfp::Object::~Object()
 void sfp::Object::SetShape(const Shape& shape)
 {
 	ShapeManager::SetShape(shape);
-	if(ShapeManager::myType==sfp::Shape::Type::Plane)
+	if(ShapeManager::myType == sfp::Shape::Type::Plane)
 	{
-		myIsFixed=true;
+		myIsFixed = true;
 	}
 	
 	SetCenter(ShapeManager::myCenter);
 	Physicable::SetArea(ShapeManager::myArea);
-	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	Physicable::myInertiaMoment = ShapeManager::myInertiaMoment * Physicable::myDensity;
 	
-	myLocalBox=ShapeManager::GetShapeBox();
+	myLocalBox = ShapeManager::GetShapeBox();
 	myLocalBox.Left -= myCenter.x;
 	myLocalBox.Top -= myCenter.y;
 }
@@ -75,11 +75,11 @@ void sfp::Object::SetShape(const Shape& shape)
 
 void sfp::Object::SetCenter(const sf::Vector2f& center)
 {//FIXME InertiaMoment neu berechnen
-	myCenter=Physicable::myCenter=center;
+	myCenter = Physicable::myCenter = center;
 	
 	#ifdef SFML_ENABLED
-	if(myDrawable!=NULL)
-		myDrawable->SetOrigin(center*myLengthfactor);
+	if(myDrawable != NULL)
+		myDrawable->SetOrigin(center * myLengthfactor);
 	#endif
 }
 
@@ -87,10 +87,10 @@ void sfp::Object::SetCenter(const sf::Vector2f& center)
 
 sf::Vector2f sfp::Object::ToGlobal(const sf::Vector2f& local) const
 {
-	sfp::Vector2f global(local-myCenter);
+	sfp::Vector2f global(local - myCenter);
 	
 	global.Rotate(myRotation);
-	global+=myPosition;
+	global += myPosition;
 	
 	return global;
 }
@@ -100,7 +100,7 @@ sf::Vector2f sfp::Object::ToLocal(const sf::Vector2f& global) const
 {
 	sfp::Vector2f local(global);
 	
-	local-=myPosition;
+	local -= myPosition;
 	local.Rotate(-myRotation);
 	
 	return local+myCenter;
@@ -157,8 +157,8 @@ sfp::FloatBox sfp::Object::GetBoundingBox()
 		back.Height=vec.y;
 	
 	
-	back.Width-=back.Left;
-	back.Height-=back.Top;
+	back.Width -= back.Left;
+	back.Height -= back.Top;
 	
 	return back;
 }
@@ -168,7 +168,7 @@ sfp::FloatBox sfp::Object::GetBoundingBox()
 
 void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse)
 {
-	position-=myCenter;
+	position -= myCenter;
 	position.Rotate(myRotation);
 	
 	AddVelocity((impulse/Physicable::myMass) * normal);
@@ -179,7 +179,7 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 
 sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position) const
 {
-	position-=myCenter;
+	position -= myCenter;
 	position.Rotate(myRotation + 90.f);
 	
 	return sfp::Vector2f(position * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f) + Physicable::myVelocity);
@@ -188,13 +188,13 @@ sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position) const
 
 sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const
 {
-	position-=myCenter;
+	position -= myCenter;
 	position.Rotate(myRotation);
 	
 	sfp::Vector2f movement(normal * (Physicable::myRotationVelocity*static_cast<float>(M_PI)/180.f));
 	
-	movement*=CrossProduct(position, normal);
-	movement+=Physicable::myVelocity;
+	movement *= CrossProduct(position, normal);
+	movement += Physicable::myVelocity;
 	
 	return movement;
 }
@@ -207,7 +207,7 @@ void sfp::Object::Update()
 	
 	SetCenter(ShapeManager::myCenter);
 	Physicable::SetArea(ShapeManager::myArea);
-	Physicable::myInertiaMoment=ShapeManager::myInertiaMoment*Physicable::myDensity;
+	Physicable::myInertiaMoment = ShapeManager::myInertiaMoment*Physicable::myDensity;
 	
 	myLocalBox=ShapeManager::GetShapeBox();
 	myLocalBox.Left -= myCenter.x;
@@ -254,17 +254,12 @@ sfp::Object::Object(sf::Drawable& drawable, const Shape& shape, float lengthfact
 :myIsFixed(false),
 myLengthfactor(lengthfactor)
 {
-	myDrawable=&drawable;
+	myDrawable = &drawable;
 	
 	SetShape(shape);
-	if(ShapeManager::myType==sfp::Shape::Type::Plane)
-	{
-		myIsFixed=true;
-		
-	}//FIXME was ist mit Lengthfactor?
 	
-	myPosition = drawable.GetPosition()/myLengthfactor;
-	myRotation = drawable.GetRotation();
+	myPosition = drawable.GetPosition() / myLengthfactor;
+	myRotation = drawable.GetRotation(); //FIXME SetDrawable
 }
 
 
@@ -300,25 +295,25 @@ myLengthfactor(lengthfactor)
 
 void sfp::Object::SetShape(sf::Shape& sfShape)
 {
-	myDrawable=&sfShape;
+	myDrawable = &sfShape;
 	
 	sfp::Shape shape;
-	for(unsigned int i=0; i<sfShape.GetPointsCount();++i)
+	for(std::size_t i = 0; i < sfShape.GetPointsCount(); ++i)
 	{
-		shape.AddPoint(sfShape.GetPointPosition(i)/myLengthfactor);
+		shape.AddPoint(sfShape.GetPointPosition(i) / myLengthfactor);
 	}
 	shape.SetShapeType(Shape::Type::Polygon);
 	SetShape(shape);
 	
-	myPosition=sfShape.GetPosition()/myLengthfactor;
-	myRotation=sfShape.GetRotation();
+	myPosition = sfShape.GetPosition()/myLengthfactor; //FIXME SetDrawable
+	myRotation = sfShape.GetRotation();
 }
 
 
 
 void sfp::Object::SetSprite(sf::Sprite& sprite)
 {
-	myDrawable=&sprite;
+	myDrawable = &sprite;
 	//FIXME
 }
 
@@ -326,18 +321,18 @@ void sfp::Object::SetSprite(sf::Sprite& sprite)
 
 void sfp::Object::SetDrawable(sf::Drawable& drawable)
 {
-	myDrawable=&drawable;
+	myDrawable = &drawable;
 	
-	SetCenter(drawable.GetOrigin()/myLengthfactor);
+	SetCenter(drawable.GetOrigin() / myLengthfactor);
 	
-	myPosition=drawable.GetPosition()/myLengthfactor;
-	myRotation=drawable.GetRotation();
+	myPosition = drawable.GetPosition() / myLengthfactor;
+	myRotation = drawable.GetRotation();
 }
 
 
 
 
-void sfp::Object::SetLengthFactor(float factor)
+void sfp::Object::SetLengthFactor(float factor) //FIXME Remove! LengthFactor ist in sfp::Object nur im Konstruktor relevant
 {/*FIXME
 	factor=
 	myLengthfactor=factor;

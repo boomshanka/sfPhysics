@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 # set a default build type if none was provided
 # this has to be done before the project() instruction!
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 endif()
 
 # project name
