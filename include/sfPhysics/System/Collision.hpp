@@ -36,8 +36,6 @@ namespace sfp
 	class Collision
 	{
 		private:
-		//	sfp::ContactManager myContactManager;
-			//
 			sfp::Object* myFirstObject;
 			sfp::Object* mySecondObject;
 			
@@ -50,17 +48,11 @@ namespace sfp
 			
 	/*		bool PollCollision(sfp::CollisionEvent&);
 			
-			
 			bool CheckCollision(sfp::Object&, sfp::Object&);
 			
 			bool PolygonPolygon(sfp::Object&, sfp::Object&, size_t, size_t);
-			bool PolygonCircle(sfp::Object&, sfp::Object&, size_t, size_t);
 			bool PlanePolygon(sfp::Object&, sfp::Object&, size_t, size_t);
-			bool PlaneCircle(sfp::Object&, sfp::Object&, size_t, size_t);
-			bool CircleCircle(sfp::Object&, sfp::Object&, size_t, size_t);
-			
-			
-			void CollisionResponse(sfp::CollisionEvent&); */
+			*/
 			
 			
 			//////
@@ -79,20 +71,6 @@ namespace sfp
 			
 		private:
 			void SwapEventObjects(sfp::CollisionEvent& event);
-			
-			
-/*			void ComputeContact(sfp::CollisionEvent&);
-			void Friction(sfp::Object*, sfp::Object*);
-			void Bounce(sfp::Object*, sfp::Object*);
-			
-			void Bounce(sfp::Object& first, sfp::Object& second, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
-			void BounceFixed(sfp::Object& obj, const sfp::Vector2f& P, const sfp::Vector2f& n, const sfp::Vector2f& vr);
-			
-			void UpdateCollisionEvents();
-			
-			bool ComputeSAT(sfp::Object& first, sfp::Object& second, size_t a, size_t b, sfp::Vector2f&);
-			void ComputePolygonPolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);
-			void ComputePlanePolygon(sfp::Object& first, sfp::Object& second, size_t a, size_t b);*/
 			
 	};
 }

@@ -20,11 +20,7 @@
 #ifndef SFPHYSICS_COLLISIONEVENT_HPP
 #define SFPHYSICS_COLLISIONEVENT_HPP
 
-
 #include <sfPhysics/System/Objects.hpp>
-
-#include <cstddef>
-
 
 
 namespace sfp
@@ -72,5 +68,6 @@ namespace sfp
 }
 
 #endif
+
 
 

@@ -53,8 +53,6 @@ namespace sfp
 			virtual void OnBoundingBoxCollision(sfp::CollisionEvent& event);
 			virtual void OnNoCollision(sfp::CollisionEvent& event);
 			
-			void ComputeEventProperties(sfp::CollisionEvent& event);
-			
 			void Bounce(sfp::CollisionEvent& event);
 			void Friction(sfp::CollisionEvent& event);
 			
