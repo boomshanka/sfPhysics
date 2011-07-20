@@ -19,6 +19,8 @@
 
 #include <sfPhysics/System/CollisionManager.hpp>
 
+#include <stack>
+
 
 #define myObjects ObjectList::myObjectList
 
@@ -44,27 +46,56 @@ void sfp::CollisionManager::UpdateCollisions()
 		std::list<sfp::Object*>::iterator it2 = it;
 		for(++it2; it2 != myObjects.end(); ++it2)
 		{
-			sfp::CollisionEvent event(*it, *it2);
-			while(myCollision.GetCollisions(event))
+			std::stack<sfp::CollisionEvent> events;
+			events.push(sfp::CollisionEvent(*it, *it2));
+			
+			while(myCollision.PollCollisions(events.top()))
 			{
-				switch(event.CollisionType)
+				events.push(sfp::CollisionEvent(*it, *it2));
+			}
+			
+			while(!events.empty())
+			{
+				switch(events.top().CollisionType)
 				{
 					case sfp::NoCollision:
-						OnNoCollision(event);
+						OnNoCollision(events.top());
 					break;
 				
 					case sfp::BoundingBoxCollision:
-						OnBoundingBoxCollision(event);
+						OnBoundingBoxCollision(events.top());
 					break;
 				
 					case sfp::PreciseCollision:
-						OnPreciseCollision(event);
+						OnPreciseCollision(events.top());
 					break;
 				}
 				
-				event = sfp::CollisionEvent(*it, *it2);
+				events.pop();
 			}
 		}
+	}
+}
+
+
+
+void sfp::CollisionManager::ComputeEventProperties(sfp::CollisionEvent& event) //FIXME weg!
+{
+	event.R1 = event.Collisionpoint - event.first->GetPosition();
+	event.R2 = event.Collisionpoint - event.second->GetPosition();
+	
+	if(event.first->IsFixed())
+	{
+		event.Movement = event.second->GetMovement(event.second->ToLocal(event.Collisionpoint));//, -*Normal);//FIXME
+	}
+	else if(event.second->IsFixed())
+	{
+		event.Movement = -event.first->GetMovement(event.first->ToLocal(event.Collisionpoint));//, *Normal);
+	}
+	else
+	{
+		event.Movement = event.second->GetMovement(event.second->ToLocal(event.Collisionpoint))-//, -*Normal) -
+						event.first->GetMovement(event.first->ToLocal(event.Collisionpoint));//, *Normal);
 	}
 }
 

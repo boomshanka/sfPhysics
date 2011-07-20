@@ -170,7 +170,7 @@ macro(sfphysics_add_example target)
     # create the target
     if(THIS_GUI_APP AND WINDOWS)
         add_executable(${target} WIN32 ${THIS_SOURCES})
-        target_link_libraries(${target} sfphysics-main) ##FIXME
+##        target_link_libraries(${target} sfml-main) ##FIXME
     else()
         add_executable(${target} ${THIS_SOURCES})
     endif()

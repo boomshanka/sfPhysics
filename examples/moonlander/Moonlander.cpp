@@ -12,7 +12,6 @@ int main()
 	window.EnableVerticalSync(true);
 	
 	sf::Event event;
-	const sf::Input& Input = window.GetInput();
 	
 	sf::Shape* sGround = new sf::Shape(sf::Shape::Rectangle(0,0,800,100,sf::Color(142,43,43)));
 	sf::Shape * sRocket = new sf::Shape();
@@ -83,10 +82,10 @@ int main()
 		
 		sfp::Vector2f vec(0, -150);
 		vec.Rotate(pRocket->GetRotation());
-		if(Input.IsKeyDown(sf::Key::Right)) pRocket->AddRotationImpulse(10.f * window.GetFrameTime()/1000.f);
-		if(Input.IsKeyDown(sf::Key::Left)) pRocket->AddRotationImpulse(-10.f * window.GetFrameTime()/1000.f);
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Right)) pRocket->AddRotationImpulse(10.f * window.GetFrameTime()/1000.f);
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Left)) pRocket->AddRotationImpulse(-10.f * window.GetFrameTime()/1000.f);
 		
-		if(Input.IsKeyDown(sf::Key::Up)) pRocket->Impulse(sf::Vector2f(0,00), vec * static_cast<float>(window.GetFrameTime())/1000.f);
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Up)) pRocket->Impulse(sf::Vector2f(0,00), vec * static_cast<float>(window.GetFrameTime())/1000.f);
 		
 		
 		world->RenderGravity();

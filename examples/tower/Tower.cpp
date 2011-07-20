@@ -25,7 +25,6 @@ int main()
 	window.EnableVerticalSync(true);
 	
 	sf::Event event;
-	const sf::Input& Input = window.GetInput();
 	int mouse_x, mouse_y;
 	
 	
@@ -124,19 +123,16 @@ int main()
 		{
 			if (event.Type == sf::Event::Closed) window.Close();
 			
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::A) world.SetGravity(world.GetGravity()+sf::Vector2f(0,2));
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,2));
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Keyboard::A) world.SetGravity(world.GetGravity()+sf::Vector2f(0,2));
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Keyboard::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,2));
 			
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::S) world.SetTimeFactor(1);
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Keyboard::S) world.SetTimeFactor(1);
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) object->AddImpulse(sf::Vector2f(0,-100.f * window.GetFrameTime()/1000.f));
-		if(Input.IsKeyDown(sf::Key::Down)) object->AddImpulse(sf::Vector2f(0,75.f * window.GetFrameTime()/1000.f));
-		if(Input.IsKeyDown(sf::Key::Right)) object->AddImpulse(sf::Vector2f(75.f * window.GetFrameTime()/1000.f,0));
-		if(Input.IsKeyDown(sf::Key::Left)) object->AddImpulse(sf::Vector2f(-75.f * window.GetFrameTime()/1000.f,0));
-		
-		mouse_x=Input.GetMouseX();
-		mouse_y=Input.GetMouseY();
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Up)) object->AddImpulse(sf::Vector2f(0,-100.f * window.GetFrameTime()/1000.f));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Down)) object->AddImpulse(sf::Vector2f(0,75.f * window.GetFrameTime()/1000.f));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Right)) object->AddImpulse(sf::Vector2f(75.f * window.GetFrameTime()/1000.f,0));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Left)) object->AddImpulse(sf::Vector2f(-75.f * window.GetFrameTime()/1000.f,0));
 		
 		// End of Events and Inputs
 		

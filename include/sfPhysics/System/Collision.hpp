@@ -26,9 +26,6 @@
 #include <sfPhysics/System/Contact.hpp>
 #include <sfPhysics/System/ObjectList.hpp>
 
-#include <list>
-#include <stack>
-
 #include <cstddef>
 
 
@@ -67,8 +64,9 @@ namespace sfp
 			
 			
 			//////
-			bool GetCollisions(sfp::CollisionEvent& event);
+			bool PollCollisions(sfp::CollisionEvent& event);
 			void SeparateObjects(sfp::CollisionEvent& event);
+			void ComputeCollisionProperties(sfp::CollisionEvent& event);
 			
 			bool CheckBoundingBoxCollision(sfp::CollisionEvent& event);
 			bool CheckCollision(sfp::CollisionEvent& event); //FIXME preciese collision

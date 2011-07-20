@@ -24,7 +24,6 @@ int main()
 	sf::Sprite kreise(*image);
 	
 	sf::Event event;
-	const sf::Input& Input = window.GetInput();
 	int mouse_x, mouse_y;
 	
 	
@@ -170,25 +169,22 @@ int main()
 		{
 			if (event.Type == sf::Event::Closed) window.Close();
 			
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::A) world.SetGravity(world.GetGravity()+sf::Vector2f(0,2));
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,2));
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Keyboard::A) world.SetGravity(world.GetGravity()+sf::Vector2f(0,2));
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Keyboard::Q) world.SetGravity(world.GetGravity()-sf::Vector2f(0,2));
 			
-			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Key::S) world.SetTimeFactor(1);
+			if (event.Type == sf::Event::KeyPressed && event.Key.Code == sf::Keyboard::S) world.SetTimeFactor(1);
 		}
 		
-		if(Input.IsKeyDown(sf::Key::Up)) pCircle.AddImpulse(sf::Vector2f(0,-126.f * window.GetFrameTime()/1000.f));
-		if(Input.IsKeyDown(sf::Key::Down)) pCircle.AddImpulse(sf::Vector2f(0,63.f * window.GetFrameTime()/1000.f));
-		if(Input.IsKeyDown(sf::Key::Right)) pCircle.AddImpulse(sf::Vector2f(63.f * window.GetFrameTime()/1000.f,0));
-		if(Input.IsKeyDown(sf::Key::Left)) pCircle.AddImpulse(sf::Vector2f(-63.f * window.GetFrameTime()/1000.f,0));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Up)) pCircle.AddImpulse(sf::Vector2f(0,-126.f * window.GetFrameTime()/1000.f));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Down)) pCircle.AddImpulse(sf::Vector2f(0,63.f * window.GetFrameTime()/1000.f));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Right)) pCircle.AddImpulse(sf::Vector2f(63.f * window.GetFrameTime()/1000.f,0));
+		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Left)) pCircle.AddImpulse(sf::Vector2f(-63.f * window.GetFrameTime()/1000.f,0));
 		
 		spring->RenderForces(window.GetFrameTime() * world.GetTimeFactor());
 		
 		//FIXME Test
 		//pCircle.AddRotationVelocity(-pCircle.GetRotationVelocity()*0.1*window.GetFrameTime());
 //		pCircle.Impulse(sfp::Vector2f(0,1),sfp::Vector2f(0,-1),M_PI/3.f);
-		
-		mouse_x=Input.GetMouseX();
-		mouse_y=Input.GetMouseY();
 		
 		// End of Events and Inputs
 		

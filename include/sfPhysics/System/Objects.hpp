@@ -56,7 +56,7 @@ namespace sfp
 			
 			void SetShape(const Shape&);
 			
-			// //
+			
 			void SetPosition(const sf::Vector2f& position) {myPosition=position;}
 			void Move(const sf::Vector2f& move) {myPosition+=move;}
 			
@@ -77,12 +77,12 @@ namespace sfp
 			
 			
 			void Impulse(sfp::Vector2f position, sfp::Vector2f normal, float impulse = 1);
-			//Ist getimpulse möglich?
+			sfp::Vector2f GetImpulse(const sfp::Vector2f& position);
 			
 			sfp::Vector2f GetMovement(sfp::Vector2f position) const;
-			sfp::Vector2f GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const;
+			sfp::Vector2f GetMovement(sfp::Vector2f position, const sfp::Vector2f& normal) const; //FIXME
 			
-			bool IsFixed() {return myIsFixed;}
+			bool IsFixed() const {return myIsFixed;}
 			void Fix(bool fix) {myIsFixed=fix;}
 			
 			void AddIntersection(const sf::Vector2f& first, const sf::Vector2f& second) {myIntersection.push(std::make_pair(first, second));}
@@ -96,27 +96,20 @@ namespace sfp
 			float myLengthfactor;
 			
 		public:
-			Object(sf::Shape&, float lengthfactor=1);
-			Object(sf::Sprite&, float lengthfactor=1);
-			Object(sf::Drawable&, float lengthfactor=1);
-			Object(sf::Drawable&, const Shape& shape, float lengthfactor=1);
+			Object(sf::Shape&, float lengthfactor = 1);
+			Object(sf::Sprite&, float lengthfactor = 1);
+			Object(sf::Drawable&, float lengthfactor = 1);
+			Object(sf::Drawable&, const Shape& shape, float lengthfactor = 1);
 			
-			Object(sf::Shape&, const sf::Vector2f&, float lengthfactor=1);
-			Object(sf::Sprite&, const sf::Vector2f&, float lengthfactor=1);
-			Object(sf::Drawable&, const sf::Vector2f&, float lengthfactor=1);
 			
-			void SetShape(sf::Shape&); //FIXME!!
-			void SetSprite(sf::Sprite&);
+			void SetShape(sf::Shape&);
+			void SetSprite(sf::Sprite&); //FIXME!!
 			void SetDrawable(sf::Drawable&);
 			
-			void SetShape(sf::Shape&, const sf::Vector2f&){} //FIXME!!
-			void SetSprite(sf::Sprite&, const sf::Vector2f&){}
-			void SetDrawable(sf::Drawable&, const sf::Vector2f&){}
-			
 			sf::Drawable* GetDrawable() {return myDrawable;}
-			void RemoveDrawable() {myDrawable=NULL;}
+			void RemoveDrawable() {myDrawable = NULL;}
 			
-			void SetLengthFactor(float);
+			bool SetLengthFactor(float);
 			float GetLengthFactor() const {return myLengthfactor;}
 			#endif
 	};

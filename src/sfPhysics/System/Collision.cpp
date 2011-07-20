@@ -476,11 +476,11 @@ bool sfp::Collision::PlaneCircle(sfp::Object& first, sfp::Object& second, size_t
 //////////
 
 
-bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
+bool sfp::Collision::PollCollisions(sfp::CollisionEvent& event)
 {
 	if((mySecondObject != event.second) || (myFirstObject != event.first))
 	{
-		if(event.first->GetConvexShapeCount() == 0 || !CheckBoundingBoxCollision(event)) //FIXME
+		if(event.first->GetConvexShapeCount() == 0 || (event.first->IsFixed() && event.second->IsFixed()) || !CheckBoundingBoxCollision(event)) //FIXME
 			return false;
 		
 		myFirstConvexShapes = 0;
@@ -490,24 +490,30 @@ bool sfp::Collision::GetCollisions(sfp::CollisionEvent& event)
 		mySecondObject = event.second;
 	}
 	
-	if(myFirstConvexShapes == event.first->GetConvexShapeCount())
+	event.CollisionType = sfp::BoundingBoxCollision;
+	
+	while(event.CollisionType == sfp::BoundingBoxCollision)
 	{
-		if(++mySecondConvexShapes == event.second->GetConvexShapeCount())
+		if(myFirstConvexShapes == event.first->GetConvexShapeCount())
 		{
-			myFirstObject = NULL;
-			mySecondObject = NULL;
-			return false;
+			if(++mySecondConvexShapes == event.second->GetConvexShapeCount())
+			{
+				myFirstObject = NULL;
+				mySecondObject = NULL;
+				return false;
+			}
+		
+			myFirstConvexShapes = 0;
 		}
 		
-		myFirstConvexShapes = 0;
+		event.FirstConvexObject = myFirstConvexShapes;
+		event.SecondConvexObject = mySecondConvexShapes;
+		SeparateObjects(event);
+		
+		++myFirstConvexShapes;
 	}
 	
-	event.CollisionType = sfp::BoundingBoxCollision;
-	event.FirstConvexObject = myFirstConvexShapes;
-	event.SecondConvexObject = mySecondConvexShapes;
-	SeparateObjects(event);
-	
-	++myFirstConvexShapes;
+	ComputeCollisionProperties(event);
 	
 	return true;
 }
@@ -579,6 +585,7 @@ void sfp::Collision::SeparateObjects(sfp::CollisionEvent& event)
 				case Shape::Type::Plane:
 					SwapEventObjects(event);
 					PlaneCircle(event);
+					SwapEventObjects(event);
 				break;
 				
 				case Shape::Type::Circle:
@@ -694,7 +701,35 @@ void sfp::Collision::SwapEventObjects(sfp::CollisionEvent& event)
 	std::size_t convex = event.FirstConvexObject;
 	event.FirstConvexObject = event.SecondConvexObject;
 	event.SecondConvexObject = convex;
+	
+	event.Collisionnormal *= -1.f;
+	event.Intersection *= -1.f;
 }
 
+
+
+void sfp::Collision::ComputeCollisionProperties(sfp::CollisionEvent& event)
+{
+/*	event.R1 = event.Collisionpoint - event.first->GetPosition();
+	event.R2 = event.Collisionpoint - event.second->GetPosition();
+	
+	if(event.first->IsFixed())
+	{
+		event.Movement = event.second->GetMovement(event.second->ToLocal(event.Collisionpoint));
+	}
+	else if(event.second->IsFixed())
+	{
+		event.Movement = -event.first->GetMovement(event.first->ToLocal(event.Collisionpoint));
+	}
+	else
+	{
+		event.Movement = event.second->GetMovement(event.second->ToLocal(event.Collisionpoint)) -
+						event.first->GetMovement(event.first->ToLocal(event.Collisionpoint));
+	}
+	
+	Bounce(event);
+	*/
+	//FIXME friction?
+}
 
 

@@ -176,6 +176,12 @@ void sfp::Object::Impulse(sfp::Vector2f position, sfp::Vector2f normal, float im
 }
 
 
+sfp::Vector2f sfp::Object::GetImpulse(const sfp::Vector2f& position)
+{
+	
+}
+
+
 
 sfp::Vector2f sfp::Object::GetMovement(sfp::Vector2f position) const
 {
@@ -259,37 +265,8 @@ myLengthfactor(lengthfactor)
 	SetShape(shape);
 	
 	myPosition = drawable.GetPosition() / myLengthfactor;
-	myRotation = drawable.GetRotation(); //FIXME SetDrawable
+	myRotation = drawable.GetRotation();
 }
-
-
-
-sfp::Object::Object(sf::Shape& shape, const sf::Vector2f& center, float lengthfactor)
-:myIsFixed(false),
-myLengthfactor(lengthfactor)
-{
-	SetShape(shape, center);
-}
-
-
-
-sfp::Object::Object(sf::Sprite& sprite, const sf::Vector2f& center, float lengthfactor)
-:myIsFixed(false),
-myLengthfactor(lengthfactor)
-{
-	SetSprite(sprite, center);
-}
-
-
-
-sfp::Object::Object(sf::Drawable& drawable, const sf::Vector2f& center, float lengthfactor)
-:myIsFixed(false),
-myLengthfactor(lengthfactor)
-{
-	SetDrawable(drawable, center);
-}
-
-
 
 
 
@@ -305,7 +282,7 @@ void sfp::Object::SetShape(sf::Shape& sfShape)
 	shape.SetShapeType(Shape::Type::Polygon);
 	SetShape(shape);
 	
-	myPosition = sfShape.GetPosition()/myLengthfactor; //FIXME SetDrawable
+	myPosition = sfShape.GetPosition()/myLengthfactor;
 	myRotation = sfShape.GetRotation();
 }
 
@@ -332,18 +309,19 @@ void sfp::Object::SetDrawable(sf::Drawable& drawable)
 
 
 
-void sfp::Object::SetLengthFactor(float factor) //FIXME Remove! LengthFactor ist in sfp::Object nur im Konstruktor relevant
-{/*FIXME
-	factor=
-	myLengthfactor=factor;
+bool sfp::Object::SetLengthFactor(float factor)
+{
+	if(factor != 0)
+		return false;
 	
-	myPosition=myDrawable->GetPosition()/myLengthfactor;
-	Shape shape;
-	for(unsigned int i=0; i<ShapeManager::GetPointsCount();++i)
+	myLengthfactor = factor;
+	
+	if(myDrawable != NULL)
 	{
-		shape.AddPoint(ShapeManager::GetPointPosition(i)/myLengthfactor);
+		myDrawable->SetOrigin(myCenter * myLengthfactor);
+		myDrawable->SetPosition(myPosition * myLengthfactor);
 	}
-	ShapeManager::SetShape(shape);*/
+	return true;
 }
 
 
