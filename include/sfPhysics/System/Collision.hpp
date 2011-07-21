@@ -46,16 +46,6 @@ namespace sfp
 			Collision();
 			~Collision();
 			
-	/*		bool PollCollision(sfp::CollisionEvent&);
-			
-			bool CheckCollision(sfp::Object&, sfp::Object&);
-			
-			bool PolygonPolygon(sfp::Object&, sfp::Object&, size_t, size_t);
-			bool PlanePolygon(sfp::Object&, sfp::Object&, size_t, size_t);
-			*/
-			
-			
-			//////
 			bool PollCollisions(sfp::CollisionEvent& event);
 			void SeparateObjects(sfp::CollisionEvent& event);
 			void ComputeCollisionProperties(sfp::CollisionEvent& event);
@@ -72,6 +62,9 @@ namespace sfp
 		private:
 			void SwapEventObjects(sfp::CollisionEvent& event);
 			
+			bool ComputeSAT(sfp::CollisionEvent& event, sfp::Vector2f& vec);
+			void ComputePolygonPolygonContact(sfp::CollisionEvent& event);
+			void ComputePlanePolygonContact(sfp::CollisionEvent& event);
 	};
 }
 
