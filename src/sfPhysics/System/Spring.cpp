@@ -22,13 +22,14 @@
 
 
 sfp::Spring::Spring()
+:Linkable(), myLength(0), mySpringConstant(10), myDamping(0.1), myIsQuadratic(false)
 {
 
 }
 
 
-sfp::Spring::Spring(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& vone, const sfp::Vector2f& vtwo, float length, float springconst, bool quadratic)
-:Linkable(one, two, vone, vtwo), myLength(length), mySpringConstant(springconst), myIsQuadratic(quadratic)
+sfp::Spring::Spring(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& vone, const sfp::Vector2f& vtwo, float length, float springconst, float damping, bool quadratic)
+:Linkable(one, two, vone, vtwo), myLength(length), mySpringConstant(springconst), myDamping(damping), myIsQuadratic(quadratic)
 {
 
 }
@@ -38,9 +39,12 @@ sfp::Spring::Spring(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& von
 float sfp::Spring::RenderForces(sfp::Uint32 time)
 {
 	sfp::Vector2f distance;
+	sfp::Vector2f velocity;
+	
 	if(Linkable::second != NULL)
 	{
 		distance = Linkable::second->ToGlobal(Linkable::secondlink);
+		velocity = -Linkable::second->GetMovement(Linkable::secondlink);
 	}
 	else
 	{
@@ -50,24 +54,28 @@ float sfp::Spring::RenderForces(sfp::Uint32 time)
 	if(Linkable::first != NULL)
 	{
 		distance -= Linkable::first->ToGlobal(Linkable::firstlink);
+		velocity += Linkable::first->GetMovement(Linkable::firstlink);
 	}
 	else
 	{
 		distance -= Linkable::firstlink;
 	}
 	
-	distance -= distance.GetUnitVector() * myLength;
+	float length = distance.GetForce();
+	distance /= length;
 	
-	if(myIsQuadratic)
-		distance *= distance.GetForce();
+	length -= myLength;
 	
-	distance *= mySpringConstant;
-	distance *= static_cast<float>(time) / 1000.f;
+	float force = length * mySpringConstant * (static_cast<float>(time) / 1000.f);
+	if(myIsQuadratic) force *= length; //FIXME Brauch ich das / stimmt das?
 	
-	if(Linkable::first != NULL) Linkable::first->Impulse(Linkable::firstlink, distance);
-	if(Linkable::second != NULL) Linkable::second->Impulse(Linkable::secondlink, -distance);
+	// Dämpfung
+	force -= myDamping * DotProduct(velocity, distance) * (static_cast<float>(time) / 1000.f);
 	
-	return distance.GetForce();
+	if(Linkable::first != NULL) Linkable::first->Impulse(Linkable::firstlink, distance, force);
+	if(Linkable::second != NULL) Linkable::second->Impulse(Linkable::secondlink, -distance, force);
+	
+	return force;
 }
 
 

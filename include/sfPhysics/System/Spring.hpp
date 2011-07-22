@@ -32,15 +32,19 @@ namespace sfp
 		private:
 			float myLength;
 			float mySpringConstant;
+			float myDamping;
 			bool myIsQuadratic;
 			
 		public:
 			Spring();
 			Spring(sfp::Object* one, sfp::Object* two, const sfp::Vector2f& vone, const sfp::Vector2f& vtwo,
-											float length, float springconstant = 10.f, bool quadratic = false);
+											float length, float springconstant = 10.f, float damping = 0.1f, bool quadratic = false);
 			
 			void SetSpringConstant(float constant) {mySpringConstant = constant;}
 			float GetSpringConstant() {return mySpringConstant;}
+			
+			void SetDamping(float damping) {myDamping = damping;}
+			float GetDamping() {return myDamping;}
 			
 			bool IsQuadratic() {return myIsQuadratic;}
 			void SetQuadratic(bool quadratic) {myIsQuadratic = quadratic;}
