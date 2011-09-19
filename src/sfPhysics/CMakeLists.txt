@@ -38,7 +38,7 @@ add_definitions(-DSFPHYSICS_EXPORTS)
 # add the modules subdirectories
 ##add_subdirectory(System)
 add_subdirectory(Mechanic)
-##add_subdirectory(Electronic)
+add_subdirectory(Electronic)
 if(SFML_ENABLED)
     add_subdirectory(Debugdraw)
 endif()
