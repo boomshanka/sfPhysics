@@ -11,7 +11,9 @@ project(sfPhysics)
 
 # include the configuration file
 include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
-include(${CMAKE_SOURCE_DIR}/cmake/Modules/FindSFML.cmake)
+##include(${CMAKE_SOURCE_DIR}/cmake/Modules/FindSFML.cmake)
+find_package(SFML 2.0 REQUIRED system graphics)
+
 
 # setup version numbers
 set(VERSION_MAJOR 1)

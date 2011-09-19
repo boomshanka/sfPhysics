@@ -6,4 +6,4 @@ set(SRC ${SRCROOT}/Moonlander.cpp)
 # define the moonlander target
 sfphysics_add_example(moonlander
                  SOURCES ${SRC}
-                 DEPENDS sfml-system sfml-window sfml-graphics sfphysics-system)
+                 DEPENDS sfml-system sfml-window sfml-graphics sfphysics-mechanic)

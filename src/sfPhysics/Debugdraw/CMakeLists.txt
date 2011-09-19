@@ -13,6 +13,6 @@ set(SRC
 # define the sfphysics-debugdraw target
 sfphysics_add_library(sfphysics-debugdraw
                  SOURCES ${SRC}
-                 ##DEPENDS sfphysics-system
+                 DEPENDS sfphysics-mechanic sfml-graphics
                  EXTERNAL_LIBS ${DEBUGDRAW_EXT_LIBS})
 

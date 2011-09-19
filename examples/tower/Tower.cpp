@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <sfPhysics/System.hpp>
+#include <sfPhysics/Mechanic.hpp>
 
 
 #include <unistd.h>
@@ -95,16 +96,27 @@ int main()
 	collision->AddObject(plane2);
 	collision->AddObject(plane3);
 	
-	pShape1->SetRestitution(0.1);
-	pShape2->SetRestitution(0.1);
-	pShape3->SetRestitution(0.1);
-	pShape4->SetRestitution(0.1);
-	pShape5->SetRestitution(0.1);
-	plane1->SetRestitution(0.1);
-	plane2->SetRestitution(0.1);
-	plane3->SetRestitution(0.1);
-	plane4->SetRestitution(0.1);
-	object->SetRestitution(0.1);
+	pShape1->SetDynamicFriction(0);
+	pShape2->SetDynamicFriction(0);
+	pShape3->SetDynamicFriction(0);
+	pShape4->SetDynamicFriction(0);
+	pShape5->SetDynamicFriction(0);
+	plane1->SetDynamicFriction(0);
+	plane2->SetDynamicFriction(0);
+	plane3->SetDynamicFriction(0);
+	plane4->SetDynamicFriction(0);
+	object->SetDynamicFriction(0);
+	
+	pShape1->SetRestitution(1);
+	pShape2->SetRestitution(1);
+	pShape3->SetRestitution(1);
+	pShape4->SetRestitution(1);
+	pShape5->SetRestitution(1);
+	plane1->SetRestitution(1);
+	plane2->SetRestitution(1);
+	plane3->SetRestitution(1);
+	plane4->SetRestitution(1);
+	object->SetRestitution(1);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;

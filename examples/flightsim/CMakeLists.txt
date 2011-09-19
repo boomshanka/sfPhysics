@@ -9,4 +9,4 @@ set(SRC ${SRCROOT}/Main.cpp
 # define the moonlander target
 sfphysics_add_example(flightsim
                  SOURCES ${SRC}
-                 DEPENDS sfml-system sfml-window sfml-graphics sfphysics-system)
+                 DEPENDS sfml-system sfml-window sfml-graphics sfphysics-mechanic)

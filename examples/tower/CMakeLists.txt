@@ -6,4 +6,4 @@ set(SRC ${SRCROOT}/Tower.cpp)
 # define the tower target
 sfphysics_add_example(tower
                  SOURCES ${SRC}
-                 DEPENDS sfml-system sfml-window sfml-graphics sfphysics-system)
+                 DEPENDS sfml-system sfml-window sfml-graphics sfphysics-mechanic)

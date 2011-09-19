@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <sfPhysics/System.hpp>
+#include <sfPhysics/Mechanic.hpp>
 
 
 
@@ -19,19 +20,19 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Physics Test");
 	window.EnableVerticalSync(true);
 	
-	sf::Image* image = new sf::Image();
-	image->LoadFromFile("kreis.png");
-	sf::Sprite kreise(*image);
+	sf::Texture* texture = new sf::Texture();
+	texture->LoadFromFile("kreis.png");
+	sf::Sprite kreise(*texture);
 	
 	sf::Event event;
 	int mouse_x, mouse_y;
 	
 	
 	sf::Shape shape; sf::Shape* bottom = new sf::Shape();// circle=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::Green),
-	sf::Shape circle2=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
-	circle3=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
-	circle4=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
-	circle5=sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
+	sf::Shape circle2 = sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
+	circle3 = sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
+	circle4 = sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White),
+	circle5 = sf::Shape::Circle(sf::Vector2f(50,50),50,sf::Color::White);
 	
 //	circle.SetPointColor(0,sf::Color::Yellow);
 	circle5.SetPointColor(0,sf::Color::Yellow);
@@ -61,7 +62,7 @@ int main()
 	circle5.SetPosition(400, 50);
 	
 	
-	sfp::Object object(shape,50);
+	sfp::Object* object = new sfp::Object(shape,50);
 	sfp::Object* foo = new sfp::Object(*bottom,50);
 	
 	sfp::Object pCircle(kreise, sfp::Shape::Circle(sf::Vector2f(1,1),1),50);
@@ -90,7 +91,7 @@ int main()
 	world.SetGravity(sf::Vector2f(0,10));
 	world.SetTimeFactor(0);
 	
-	world.AddObject(&object);
+	world.AddObject(object);
 	world.AddObject(&pCircle);
 	world.AddObject(&pCircle2);
 	world.AddObject(&pCircle3);
@@ -100,7 +101,7 @@ int main()
 	world.AddObject(plane2);
 	world.AddObject(plane3);
 	
-	collision->AddObject(&object);
+	collision->AddObject(object);
 //	collision->AddObject(foo);
 	collision->AddObject(&pCircle5);
 	collision->AddObject(&pCircle4);
@@ -123,7 +124,7 @@ int main()
 	plane2->SetRestitution(0.6);
 	plane3->SetRestitution(0.6);
 	foo->SetRestitution(0.5);
-	object.SetRestitution(0.4);
+	object->SetRestitution(0.4);
 	
 	pCircle.SetDynamicFriction(0.5);
 	pCircle2.SetDynamicFriction(0.5);
@@ -134,7 +135,7 @@ int main()
 	plane2->SetDynamicFriction(0.5);
 	plane3->SetDynamicFriction(0.5);
 	foo->SetDynamicFriction(0.5);
-	object.SetDynamicFriction(0.5);
+	object->SetDynamicFriction(0.5);
 	
 	sf::Clock frametime;
 	unsigned int frames=0;
@@ -145,7 +146,7 @@ int main()
 	
 	foo->Fix(true);
 	
-	object.SetRotation(45);
+	object->SetRotation(45);
 	
 	pCircle.SetRotation(90);
 	pCircle.SetRotationVelocity(500);
@@ -190,11 +191,11 @@ int main()
 		
 		//Frames
 		++frames;
-		if(frametime.GetElapsedTime()>=1000)
+		if(frametime.GetElapsedTime() >= 1000)
 		{
-			std::cerr<<frames<<"\n";
+			std::cerr << frames << "\n";
 			frametime.Reset();
-			frames=0;
+			frames = 0;
 		}
 		
 		// Play God
@@ -202,6 +203,7 @@ int main()
 		
 		world.MoveObjects();
 		
+		//std::cerr<<plane->GetPosition().x<<"\n\n";
 		
 		//Draw
 		window.Draw(shape);
@@ -223,7 +225,7 @@ int main()
 		circle4.SetColor(sf::Color::White);
 	} // Window Loop //
 	
-	delete image;
+	delete texture;
 	
 	delete collision;
 	
@@ -232,6 +234,7 @@ int main()
 	delete plane3;
 	delete foo;
 	delete bottom;
+	delete object;
 	
 	delete spring;
 	

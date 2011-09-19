@@ -3,6 +3,9 @@
 #include <SFML/Graphics.hpp>
 
 #include <sfPhysics/System.hpp>
+#include <sfPhysics/Mechanic.hpp>
+
+#include <iostream>
 
 
 
@@ -48,13 +51,13 @@ int main()
 	
 	pRocket->SetDensity(2);
 	
-	pGround->SetRestitution(0.2);
-	pRocket->SetRestitution(0.2);
+	pGround->SetRestitution(1);
+	pRocket->SetRestitution(1);
 	
-	pGround->SetDynamicFriction(0.8);
-	pRocket->SetDynamicFriction(0.8);
-	pGround->SetStaticFriction(1);
-	pRocket->SetStaticFriction(1);
+	pGround->SetDynamicFriction(0);
+	pRocket->SetDynamicFriction(0);
+	pGround->SetStaticFriction(0);
+	pRocket->SetStaticFriction(0);
 	
 	
 	sfp::Environment* world = new sfp::Environment();
@@ -70,6 +73,8 @@ int main()
 //	collision->AddObject(pGround);
 	collision->AddObject(pRocket);
 	collision->AddObject(pGround);//
+	
+	sfp::Hinge hinge(pRocket, NULL, sfp::Vector2f(0, -1), sfp::Vector2f());
 	
 	while (window.IsOpened()) // Window Loop //
 	{
@@ -87,6 +92,11 @@ int main()
 		
 		if(sf::Keyboard::IsKeyPressed(sf::Keyboard::Up)) pRocket->Impulse(sf::Vector2f(0,00), vec * static_cast<float>(window.GetFrameTime())/1000.f);
 		
+		if (sf::Mouse::IsButtonPressed(sf::Mouse::Left))
+		{
+			hinge.SetSecondLinkPoint(sf::Vector2f(sf::Mouse::GetPosition(window)));
+			hinge.RenderForces(window.GetFrameTime());
+		}
 		
 		world->RenderGravity();
 		
@@ -101,6 +111,8 @@ int main()
 		
 		window.Display();
 		window.Clear(sf::Color(10, 10, 60));
+		
+		std::cerr << "----\n";
 		
 	} // Window Loop //
 	
