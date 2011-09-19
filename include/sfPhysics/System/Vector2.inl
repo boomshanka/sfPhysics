@@ -171,15 +171,15 @@ inline sfp::Vector2<T> sfp::Vector2<T>::GetRotatedVector(float rotation) const
 template <typename T>
 inline sfp::Vector2<T> operator *(const sfp::Vector2<T>& left, const sfp::Vector2<T>& right)
 {
-	return sfp::Vector2<T>(left.x*right.x, left.y*right.y);
+	return sfp::Vector2<T>(left.x * right.x, left.y * right.y);
 }
 
 
 template <typename T>
 inline sfp::Vector2<T>& operator *=(sfp::Vector2<T>& left, const sfp::Vector2<T>& right)
 {
-	left.x*=right.x;
-	left.y*=right.y;
+	left.x *= right.x;
+	left.y *= right.y;
 	
 	return left;
 }
@@ -195,8 +195,8 @@ inline sfp::Vector2<T> operator /(const sfp::Vector2<T>& left, const sfp::Vector
 template <typename T>
 inline sfp::Vector2<T>& operator /=(sfp::Vector2<T>& left, const sfp::Vector2<T>& right)
 {
-	left.x/=right.x;
-	left.y/=right.y;
+	left.x /= right.x;
+	left.y /= right.y;
 	
 	return left;
 }

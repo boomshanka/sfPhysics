@@ -36,7 +36,6 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 add_definitions(-DSFPHYSICS_EXPORTS)
 
 # add the modules subdirectories
-##add_subdirectory(System)
 add_subdirectory(Mechanic)
 add_subdirectory(Electronic)
 if(SFML_ENABLED)
