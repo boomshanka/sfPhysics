@@ -17,43 +17,34 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
-
-
-#include <sfPhysics/Mechanic/Objects.hpp>
-
-#include <list>
-
-#include <cstddef>
-
+#ifndef SFPHYSICS_ELECTRICITY_HPP
+#define SFPHYSICS_ELECTRICITY_HPP
 
 
 namespace sfp
 {
-
-	class ObjectList
+	class Electricity
 	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
+		private:
+			float myVoltage;
+			float myAmperage;
+			
 		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			std::size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator  FIXME iterator!!
+			Electricity(float voltage = 0, float amperage = 0) : myVoltage(voltage), myAmperage(amperage) {}
+			~Electricity() {}
+			
+			float GetVoltage() {return myVoltage;}
+			float GetAmperage() {return myAmperage;}
+			
+			void SetVoltage(float voltage) {myVoltage = voltage;}
+			void SetAmperage(float amperage) {myAmperage = amperage;}
 	};
+	
+	
+} // namespace sfp
 
-} // namespace
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+#endif // SFPHYSICS_ELECTIRCITY_HPP
 
 

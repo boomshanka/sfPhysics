@@ -17,43 +17,47 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
+#ifndef SFPHYSICS_CIRCUITMANAGER_HPP
+#define SFPHYSICS_CIRCUITMANAGER_HPP
 
-
-#include <sfPhysics/Mechanic/Objects.hpp>
+#include <sfPhysics/Electronic/ElectronicComponent.hpp>
 
 #include <list>
-
 #include <cstddef>
-
 
 
 namespace sfp
 {
-
-	class ObjectList
+	class CircuitManager
 	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
+		private:
+			std::list<sfp::ElectronicComponent*> myComponents;
+			std::list<std::list<sfp::ElectronicComponent*>::iterator> mySources;
+			
 		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			std::size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator  FIXME iterator!!
+			CircuitManager();
+			~CircuitManager();
+			
+			void Update();
+			void FindVoltageSources();
+			
+			// list functions
+			void AddComponent(sfp::ElectronicComponent* object);
+			
+			void EraseComponent(std::list<sfp::ElectronicComponent*>::iterator& it);
+			void RemoveComponent(sfp::ElectronicComponent* object);
+			
+			std::size_t GetComponentCount() const;
+			
+			//FIXME iterator
+			
 	};
+	
+	
+} // namespace sfp
 
-} // namespace
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+#endif // SFPHYSICS_CIRCUITMANAGER_HPP
 
 

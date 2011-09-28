@@ -17,43 +17,43 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
+#ifndef SFPHYSICS_CONDUCTOR_HPP
+#define SFPHYSICS_CONDUCTOR_HPP
 
+#include <sfPhysics/Electronic/ElectronicComponent.hpp>
+#include <sfPhysics/Electronic/Electricity.hpp>
 
-#include <sfPhysics/Mechanic/Objects.hpp>
-
-#include <list>
-
+#include <vector>
 #include <cstddef>
-
 
 
 namespace sfp
 {
-
-	class ObjectList
+	class ElectronicComponent;
+	
+	class Conductor
 	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
+		private:
+			std::vector<ElectronicComponent*> myOutputComponents;
+			
 		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			std::size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator  FIXME iterator!!
+			Conductor();
+			~Conductor();
+			
+			void AddOutputComponent(ElectronicComponent& component);
+			void AddElectricity(const Electricity& electricitiy);
+			
+			std::size_t GetOutputComponentsCount() {return myOutputComponents.size();}
+			ElectronicComponent& GetOutputComponent(std::size_t component) {return *myOutputComponents[component];}
+			
+			
 	};
+	
+	
+} // namespace sfp
 
-} // namespace
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+#endif // SFPHYSICS_CONDUCTOR_HPP
 
 

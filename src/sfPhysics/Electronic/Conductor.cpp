@@ -17,43 +17,33 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
-
-
-#include <sfPhysics/Mechanic/Objects.hpp>
-
-#include <list>
-
-#include <cstddef>
+#include <sfPhysics/Electronic/Conductor.hpp>
 
 
 
-namespace sfp
+sfp::Conductor::Conductor()
 {
 
-	class ObjectList
-	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
-		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			std::size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator  FIXME iterator!!
-	};
-
-} // namespace
+}
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+sfp::Conductor::~Conductor()
+{
+
+}
+
+
+
+void sfp::Conductor::AddOutputComponent(ElectronicComponent& component)
+{
+	
+}
+
+
+void sfp::Conductor::AddElectricity(const Electricity& electricitiy)
+{
+
+}
+
 
 

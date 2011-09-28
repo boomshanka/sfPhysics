@@ -17,43 +17,38 @@
  ******************************************************************************/
 
 
-#ifndef SFPHYSICS_OBJECTLIST_HPP
-#define SFPHYSICS_OBJECTLIST_HPP
+#ifndef SFPHYSICS_LAMP_HPP
+#define SFPHYSICS_LAMP_HPP
 
-
-#include <sfPhysics/Mechanic/Objects.hpp>
-
-#include <list>
-
-#include <cstddef>
-
+#include <sfPhysics/Electronic/ElectronicComponent.hpp>
 
 
 namespace sfp
 {
-
-	class ObjectList
+	class Lamp : virtual public ElectronicComponent
 	{
-		protected:
-			std::list<sfp::Object*> myObjectList;
-		
+		private:
+			float myVoltage;
+			
+			float myBrightness;
+			
 		public:
-			ObjectList() {}
-			virtual ~ObjectList() {}
-		
-			void AddObject(sfp::Object* object) {myObjectList.push_back(object);}
-		
-			void EraseObject(std::list<sfp::Object*>::iterator& it) {myObjectList.erase(it);}
-			void RemoveObject(sfp::Object* object) {myObjectList.remove(object);}
-		
-			std::size_t GetObjectCount() const {return myObjectList.size();}
-		
-		//	std::list<sfp::Object*>::const_iterator  FIXME iterator!!
+			Lamp(float voltage, float resistance);
+			~Lamp();
+			
+			bool SetPortInput(std::size_t port, const Electricity& electricity);
+			void DeactivatePortInput(std::size_t port);
+			
+			Electricity GetPortOutput(std::size_t port);
+			void Update();
+			
 	};
+	
+	
+} // namespace sfp
 
-} // namespace
 
 
-#endif  // SFPHYSICS_OBJECTLIST_HPP
+#endif // SFPHYSICS_LAMP_HPP
 
 
