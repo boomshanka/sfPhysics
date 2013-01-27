@@ -90,9 +90,9 @@ macro(sfphysics_parse_arguments prefix arg_names option_names)
 endmacro()
 
 # add a new target which is a sfphysics library
-# ex: sfphysics_add_library(sfphysics-debugdraw
+# ex: sfphysics_add_library(sfphysics-mechanic
 #                      SOURCES 
-#                      DEPENDS sfphysics-system
+#                      DEPENDS sfphysics-geometry
 #                      EXTERNAL_LIBS sfml ...)
 macro(sfphysics_add_library target)
 
@@ -161,7 +161,7 @@ endmacro()
 # add a new target which is a sfphysics example
 # ex: sfphysics_add_example(tower
 #                      SOURCES tower.cpp ...
-#                      DEPENDS sfphysics-system)
+#                      DEPENDS sfphysics-geometry)
 macro(sfphysics_add_example target)
 
     # parse the arguments

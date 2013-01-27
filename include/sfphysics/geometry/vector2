@@ -1,0 +1,141 @@
+/******************************************************************************
+ **	sfPhysics - A simple 2D physics engine
+ ** Copyright (C) 2011  Olaf Vogt aka Boomshanka
+ ** 
+ ** This program is free software; you can redistribute it and/or modify it
+ ** under the terms of the GNU General Public License as published by the Free
+ ** Software Foundation; either version 3 of the License, or (at your option)
+ ** any later version. 
+ ** 
+ ** This program is distributed in the hope that it will be useful, but WITHOUT
+ ** ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ ** FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ ** more details. 
+ ** 
+ ** You should have received a copy of the GNU General Public License along
+ ** with this program; if not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
+#ifndef SFPHYSICS_VECTOR2
+#define SFPHYSICS_VECTOR2
+
+
+#ifdef SFML_ENABLED
+#include <SFML/System/Vector2.hpp>
+#else
+#include <sfphysics/SFML_System/Vector2.hpp>
+#endif
+
+
+#include <sfphysics/geometry/math>
+#include <sfphysics/geometry/trigonometry>
+#include <sfphysics/geometry/angle>
+
+
+
+namespace sfp
+{
+
+	template <typename T>
+	class vector2 : public sf::Vector2<T>
+	{
+		public:
+			vector2();
+			vector2(T x, T y);
+			vector2(const vector2<T>& vec);
+			
+			T get_length() const;
+			T get_length(const angle<T>& direction) const;
+			T get_squared_length() const;
+			angle<T> get_direction() const;
+			
+			void set_length(T length);
+			void set_length(T length, const angle<T>& direction);
+			void set_direction(const angle<T>& direction);
+			void rotate(const angle<T>&);
+			
+			void extend_length(T length);
+			void extend_length(T length, const angle<T>& direction);
+			void normalize();
+			
+			vector2<T> get_normal_vector() const;
+			vector2<T> get_unit_vector() const;
+			vector2<T> get_rotated_vector(const angle<T>& rotation) const;
+	};
+	
+	
+	template <typename T>
+	vector2<T> operator -(const vector2<T>& right);
+
+	template <typename T>
+	vector2<T>& operator +=(vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T>& operator -=(vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T> operator +(const vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T> operator -(const vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T> operator *(const vector2<T>& left, T right);
+	
+	template <typename T>
+	vector2<T> operator *(T left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T>& operator *=(vector2<T>& left, T right);
+	
+	template <typename T>
+	vector2<T> operator /(const vector2<T>& left, T right);
+	
+	template <typename T>
+	vector2<T>& operator /=(vector2<T>& left, T right);
+	
+	template <typename T>
+	bool operator ==(const vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	bool operator !=(const vector2<T>& left, const vector2<T>& right);
+	
+	// new operator
+	
+	template <typename T>
+	vector2<T> operator *(const vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T>& operator *=(vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T> operator /(const vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	vector2<T>& operator /=(vector2<T>& left, const vector2<T>& right);
+	
+	
+	template <typename T>
+	float cross_product(const vector2<T>& left, const vector2<T>& right);
+	
+	template <typename T>
+	float dot_product(const vector2<T>& left, const vector2<T>& right);
+	
+	
+	
+	#include <sfphysics/geometry/vector2.inl>
+	
+	
+	// Define the most common types
+	typedef vector2<int>   vector2i;
+	typedef vector2<float> vector2f;
+	typedef vector2<double> vector2d;
+	
+	
+} // namespace
+
+
+#endif // SFPHYSICS_VECTOR2
+
+

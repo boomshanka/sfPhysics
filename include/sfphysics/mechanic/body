@@ -1,0 +1,90 @@
+/******************************************************************************
+ **	sfPhysics - A simple 2D physics engine
+ ** Copyright (C) 2011  Olaf Vogt aka Boomshanka
+ ** 
+ ** This program is free software; you can redistribute it and/or modify it
+ ** under the terms of the GNU General Public License as published by the Free
+ ** Software Foundation; either version 3 of the License, or (at your option)
+ ** any later version. 
+ ** 
+ ** This program is distributed in the hope that it will be useful, but WITHOUT
+ ** ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ ** FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ ** more details. 
+ ** 
+ ** You should have received a copy of the GNU General Public License along
+ ** with this program; if not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
+#ifndef SFPHYSICS_BODY
+#define SFPHYSICS_BODY
+
+#include <sfphysics/mechanic/shape>
+#include <sfphysics/mechanic/properties>
+
+#include <sfphysics/geometry/vector2>
+#include <sfphysics/geometry/angle>
+#include <sfphysics/geometry/form>
+
+#include <memory> // Für shared_ptr
+
+
+namespace sfp
+{
+
+	class body
+	{
+		private:
+			properties m_properties;
+			shape m_shape;
+			
+			vector2f m_position;
+			anglef m_rotation;
+			
+			vector2f m_velocity;
+			anglef m_rotation_velocity; // oder angular speed, rotation speed, rotational velocity..
+			
+			vector2f m_center;
+			
+			
+		public:
+			body();
+			~body();
+			
+			// function for properties
+			properties& get_properties() {return m_properties;}
+			
+			// functios for shape
+			void add_form(std::shared_ptr<form> add);
+			bool remove_form(std::shared_ptr<form> remove);
+			void clear_forms();
+			
+			
+			// position and rotation functions
+			const vector2f& position() const;
+			void position(const vector2f& pos);
+			
+			const anglef& rotation() const;
+			void rotation(const anglef& rotation);
+			
+			// movement and rotation speed
+			const vector2f& velocity();
+			void velocity(const vector2f& vel);
+			void add_velocity(const vector2f& vel);
+			
+			const anglef& rotation_velocity();
+			void rotation_velocity(const anglef& rot);
+			void add_rotation_velocity(const anglef& rot);
+			
+			// transformation functions
+			vector2f to_global(const vector2f&) const;
+			vector2f to_local(const vector2f&) const;
+	};
+
+}
+
+
+#endif // SFPHYSICS_BODY
+
+

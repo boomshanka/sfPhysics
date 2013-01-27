@@ -11,7 +11,8 @@ project(sfPhysics)
 
 # include the configuration file
 include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
-##include(${CMAKE_SOURCE_DIR}/cmake/Modules/FindSFML.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/Macros.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/)
 find_package(SFML 2.0 REQUIRED system graphics)
 
 
@@ -27,13 +28,15 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 set(BUILD_SHARED_LIBS TRUE CACHE BOOL "TRUE to build sfPhysics as shared libraries, FALSE to build it as static libraries")
 
 # add an option for building the examples
-set(BUILD_EXAMPLES TRUE CACHE BOOL "TRUE to build the sfPhysics examples, FALSE to ignore them")
+set(BUILD_EXAMPLES TRUE CACHE BOOL "TRUE to build the sfPhysics 
+examples, FALSE to ignore them")
 
 # add an option for building the API documentation
 set(BUILD_DOC FALSE CACHE BOOL "TRUE to generate the API documentation, FALSE to ignore it")
 
 # add an option for building the libarie with SFML
-set(SFML_ENABLED TRUE CACHE BOOL "TRUE to build sfPhysics with functions for SFML and with the debugdraw pack")
+set(SFML_ENABLED TRUE CACHE BOOL "TRUE to build sfPhysics with functions 
+for SFML and with the debugdraw pack")
 
 
 #
@@ -57,9 +60,19 @@ endif()
 # disable the rpath stuff
 set(CMAKE_SKIP_BUILD_RPATH TRUE)
 
-
 # add the subdirectories
-add_subdirectory(src/sfPhysics)
+add_subdirectory(src/sfphysics)
+
+# setup the install rules
+install(DIRECTORY include
+        DESTINATION .
+        COMPONENT devel
+        PATTERN "*~" EXCLUDE
+        PATTERN ".git" EXCLUDE)
+install(FILES cmake/Modules/FindSfPhysics.cmake DESTINATION ${CMAKE_ROOT}/Modules)
+install(FILES LICENSE DESTINATION ${INSTALL_MISC_DIR})
+
+
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
@@ -67,11 +80,4 @@ endif()
 ##    add_subdirectory(doc)
 ##endif()
 
-# setup the install rules
-install(DIRECTORY include
-        DESTINATION .
-        COMPONENT devel
-        PATTERN ".git" EXCLUDE)
-install(FILES cmake/Modules/FindSfPhysics.cmake DESTINATION ${CMAKE_ROOT}/Modules)
-install(FILES LICENSE DESTINATION ${INSTALL_MISC_DIR})
 

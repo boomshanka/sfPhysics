@@ -39,6 +39,6 @@ endif()
 if(WINDOWS)
     set(INSTALL_MISC_DIR .)
 elseif(UNIX)
-    set(INSTALL_MISC_DIR share/sfPhysics)
+    set(INSTALL_MISC_DIR share/sfphysics)
 endif()
 
