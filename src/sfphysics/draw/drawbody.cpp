@@ -17,51 +17,43 @@
  ******************************************************************************/
 
 
+#include <sfphysics/draw/drawbody.hpp>
+#include <sfphysics/geometry/circle.hpp>
+#include <sfphysics/geometry/polygon.hpp>
 
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
+
+sfp::drawbody::drawbody(const sfp::Shape& shape, const sf::Color& color) :
+body(shape), m_drawer(new DefaultDrawer()), m_color(color)
 {
+	m_drawer->createShape(shape, m_color);
+}
 
+sfp::drawbody::~drawbody()
+{
+	
 }
 
 
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
+void sfp::drawbody::color(const sf::Color& color)
 {
+	m_color = color;
+	m_drawer->createShape(body::bodyshape(), m_color);
+}
 
+void sfp::drawbody::colorize(const sf::Color& color)
+{
+	m_drawer->createShape(body::bodyshape(), color*m_color);
 }
 
 
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
+void sfp::drawbody::draw(sf::RenderWindow& window, const transformf& scenetransform) const
 {
-//	if(cross_product(direction, p - point) == 0)
-	{
-		
-		return true;
-	}
+	// apply position and rotation to transformation
+	transformf trafo(scenetransform);
+	trafo.translate(body::position()).rotate(body::rotation()).translate(-body::center());
 	
-	return false;
+	// draw
+	m_drawer->draw(window, trafo);
 }
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
-
 
 

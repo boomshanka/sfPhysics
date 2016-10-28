@@ -17,51 +17,38 @@
  ******************************************************************************/
 
 
+#pragma once
 
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
+#include <sfphysics/mechanics/body.hpp>
+#include <sfphysics/mechanics/Contact.hpp>
+
+#include <list>
+
+
+namespace sfp
 {
-
-}
-
-
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
-{
-
-}
-
-
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
-{
-//	if(cross_product(direction, p - point) == 0)
+	// TODO: Possible singleton
+	class Collider
 	{
-		
-		return true;
-	}
-	
-	return false;
+		public:
+			Collider() {}
+			
+			bool collision(body& b1, body& b2, Contact& contact) const;
+			
+			
+		protected:
+			bool planePolygon(body& b1, body& b2, Contact& contact) const;
+			bool planeCircle(body& b1, body& b2, Contact& contact) const;
+			bool polygonPolygon(body& b1, body& b2, Contact& contact) const;
+			bool polygonCircle(body& b1, body& b2, Contact& contact) const;
+			
+			bool project(body& b1, body& b2, const std::list<sfp::vector2f>&) const;
+			
+		private:
+			
+			
+	};
+
 }
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
-
 
 

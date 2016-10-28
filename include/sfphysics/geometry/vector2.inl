@@ -48,117 +48,146 @@ inline sfp::vector2<T>::vector2(const vector2<T>& vec)
 }
 
 
-
 template <typename T>
-inline T sfp::vector2<T>::get_length() const
+template <typename U>
+inline sfp::vector2<T>::vector2(const vector2<U>& vec)
 {
-	return mathf::sqrt(this->get_squared_length());
+	this->x = static_cast<T>(vec.x);
+	this->y = static_cast<T>(vec.y);
 }
 
 
 template <typename T>
-inline T sfp::vector2<T>::get_length(const angle<T>& direction) const
+inline sfp::vector2<T>::vector2(const sf::Vector2<T>& vec)
+{
+	this->x = vec.x;
+	this->y = vec.y;
+}
+
+
+
+template <typename T>
+inline T sfp::vector2<T>::length() const
+{
+	return std::sqrt(this->squaredLength());
+}
+
+
+template <typename T>
+inline T sfp::vector2<T>::length(const angle<T>& direction) const
 {//FIXME einfacher?
 	sfp::vector2<T> vec;
 	
-	vec.x = trigf::cos(direction);
-	vec.y = trigf::sin(direction);
+	vec.x = trig<T>::cos(direction);
+	vec.y = trig<T>::sin(direction);
 	
 	return dot_product(*this, vec);
 }
 
 
 template <typename T>
-inline T sfp::vector2<T>::get_squared_length() const
+inline T sfp::vector2<T>::squaredLength() const
 {
 	return this->x*this->x + this->y*this->y;
 }
 
 
 template <typename T>
-inline sfp::angle<T> sfp::vector2<T>::get_direction() const
+inline sfp::angle<T> sfp::vector2<T>::direction() const
 { // FIXME siehe trig form von Imaginären Zahlen (Mathe Skript)
 	if(this->y < 0)
-		return trigf::atan2(this->y, this->x) + angle<T>::from_degree(360);
+		return trig<T>::atan2(this->y, this->x) + angle<T>::from_degree(360);
 	
-	return trigf::atan2(this->y, this->x);
+	return trig<T>::atan2(this->y, this->x);
 }
 
 
 
 template <typename T>
-inline void sfp::vector2<T>::set_length(T length)
+inline sfp::vector2<T>&  sfp::vector2<T>::length(T length)
 {
 	if(*this != sfp::vector2<T>(0, 0))
-		*this *= length / this->get_length();
+		*this *= length / this->length();
+		
+	return *this;
 }
 
 
 template <typename T>
-inline void sfp::vector2<T>::set_length(T length, const angle<T>& direction)
+inline sfp::vector2<T>& sfp::vector2<T>::length(T length, const angle<T>& direction)
 {
-	this->x = trigf::cos(direction) * length;
-	this->y = trigf::sin(direction) * length;
+	this->x = trig<T>::cos(direction) * length;
+	this->y = trig<T>::sin(direction) * length;
+	
+	return *this;
 }
 
 
 template <typename T>
-inline void sfp::vector2<T>::set_direction(const angle<T>& direction)
+inline sfp::vector2<T>& sfp::vector2<T>::direction(const angle<T>& direction)
 {
-	this->set_length(this->get_length(), direction.degree());
+	this->set_length(this->length(), direction.degrees());
+	return *this;
 }
 
 
 template <typename T>
-inline void sfp::vector2<T>::rotate(const angle<T>& rotation)
+inline sfp::vector2<T>& sfp::vector2<T>::rotate(const angle<T>& rotation)
 {
-	this->set_length(this->get_length(), rotation + this->get_direction());
+	this->set_length(this->length(), rotation + this->direction());
+	return *this;
 }
 
 
 
 template <typename T>
-inline void sfp::vector2<T>::extend_length(T length)
+inline sfp::vector2<T>& sfp::vector2<T>::extend(T length)
 {
 	this->get_unit_vector();
 	*this += (this->get_unit_vector() * length);
+	
+	return *this;
 }
 
 
 template <typename T>
-inline void sfp::vector2<T>::extend_length(T length, const angle<T>& direction)
+inline sfp::vector2<T>& sfp::vector2<T>::extend(T length, const angle<T>& direction)
 {
-	this->x += trigf::cos(direction) * length;
-	this->y += trigf::sin(direction) * length;
+	this->x += trig<T>::cos(direction) * length;
+	this->y += trig<T>::sin(direction) * length;
+	
+	return *this;
 }
 
 
 template <typename T>
-inline void sfp::vector2<T>::normalize()
+inline sfp::vector2<T>& sfp::vector2<T>::normalize()
 {
 	if(*this != sfp::vector2<T>(0, 0))
-		*this /= this->get_length();
+		*this /= this->length();
+		
+	return *this;
 }
 
 
 
 template <typename T>
-inline sfp::vector2<T> sfp::vector2<T>::get_normal_vector() const
+inline sfp::vector2<T> sfp::vector2<T>::normal() const
 {
 	return sfp::vector2<T>(-this->y, this->x);
 }
 
 
 template <typename T>
-inline sfp::vector2<T> sfp::vector2<T>::get_unit_vector() const
+inline sfp::vector2<T> sfp::vector2<T>::unit() const
 {
 	if(*this != sfp::vector2<T>(0, 0))
-		return *this / this->get_length();
+		return *this / this->length();
 }
 
 
 template <typename T>
-inline sfp::vector2<T> sfp::vector2<T>::get_rotated_vector(const angle<T>& rotation) const
+inline sfp::vector2<T> sfp::vector2<T>::rotated(const angle<T>& rotation) const
 {
 	sfp::vector2<T> vec(*this); vec.rotate(rotation);
 	return vec;
@@ -313,6 +342,13 @@ template <typename T>
 inline float dot_product(const sfp::vector2<T>& left, const sfp::vector2<T>& right)
 {
 	return left.x*right.x + left.y*right.y;
+}
+
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& os, const sf::Vector2<T>& vec)
+{
+	return os << "(" << vec.x << "," << vec.y << ")";
 }
 
 

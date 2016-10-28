@@ -20,14 +20,14 @@
 
 template<typename T>
 sfp::angle<T>::angle()
-: m_degree(0)
+: m_degrees(0)
 {
 
 }
 
 template<typename T>
-sfp::angle<T>::angle(T degree)
-: m_degree(degree)
+sfp::angle<T>::angle(T degrees)
+: m_degrees(degrees)
 {
 
 }
@@ -35,49 +35,41 @@ sfp::angle<T>::angle(T degree)
 
 
 template<typename T>
-void sfp::angle<T>::radian(T val)
+void sfp::angle<T>::radians(T val)
 {
-	m_degree = rad_to_deg<T>(val);
+	m_degrees = rad_to_deg<T>(val);
 }
 
 template<typename T>
-void sfp::angle<T>::degree(T val)
+void sfp::angle<T>::degrees(T val)
 {
-	m_degree = val;
-}
-
-
-template<typename T>
-T sfp::angle<T>::degree() const
-{
-	return m_degree;
-}
-
-template<typename T>
-T sfp::angle<T>::radian() const
-{
-	return deg_to_rad<T>(m_degree);
-}
-
-
-
-template<typename T>
-void sfp::angle<T>::normalize()
-{
-	m_degree -= static_cast<int>(m_degree / 360.f) * static_cast<T>(360);
+	m_degrees = val;
 }
 
 
 template<typename T>
-sfp::angle<T> sfp::angle<T>::from_radian(T radian)
+T sfp::angle<T>::degrees() const
 {
-	return angle<T>(rad_to_deg(radian));
+	return m_degrees;
 }
 
 template<typename T>
-sfp::angle<T> sfp::angle<T>::from_degree(T degree)
+T sfp::angle<T>::radians() const
 {
-	return angle<T>(degree);
+	return deg_to_rad<T>(m_degrees);
+}
+
+
+template<typename T>
+sfp::angle<T> sfp::angle<T>::from_radians(T radians)
+{
+	return angle<T>(rad_to_deg(radians));
+}
+
+template<typename T>
+sfp::angle<T> sfp::angle<T>::from_degrees(T degrees)
+{
+	return angle<T>(degrees);
 }
 
 
@@ -86,92 +78,92 @@ sfp::angle<T> sfp::angle<T>::from_degree(T degree)
 template <typename T>
 sfp::angle<T> operator -(const sfp::angle<T>& left)
 {
-	return sfp::angle<T>::from_degree(-left.degree());
+	return sfp::angle<T>::from_degrees(-left.degrees());
 }
 
 
 template <typename T>
 sfp::angle<T> operator +(const sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	return sfp::angle<T>::from_degree(left.degree() + right.degree());
+	return sfp::angle<T>::from_degrees(left.degrees() + right.degrees());
 }
 
 template <typename T>
 sfp::angle<T> operator -(const sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	return sfp::angle<T>::from_degree(left.degree() - right.degree());
+	return sfp::angle<T>::from_degrees(left.degrees() - right.degrees());
 }
 
 template <typename T>
 sfp::angle<T> operator *(const sfp::angle<T>& left, T right)
 {
-	return sfp::angle<T>::from_degree(left.degree() * right);
+	return sfp::angle<T>::from_degrees(left.degrees() * right);
 }
 
 template <typename T>
 sfp::angle<T> operator *(T left, const sfp::angle<T>& right)
 {
-	return sfp::angle<T>::from_degree(right.degree() * left);
+	return sfp::angle<T>::from_degrees(right.degrees() * left);
 }
 
 template <typename T>
 sfp::angle<T> operator /(const sfp::angle<T>& left, T right)
 {
-	return sfp::angle<T>::from_degree(left.degree() / right);
+	return sfp::angle<T>::from_degrees(left.degrees() / right);
 }
 
 template <typename T>
 sfp::angle<T> operator +=(sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	left.degree(left.degree() + right.degree());
+	left.degrees(left.degrees() + right.degrees());
 }
 
 template <typename T>
 sfp::angle<T> operator -=(sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	left.degree(left.degree() - right.degree());
+	left.degrees(left.degrees() - right.degrees());
 }
 
 template <typename T>
 sfp::angle<T> operator *=(const sfp::angle<T>& left, T right)
 {
-	left.degree(left.degree() * right);
+	left.degrees(left.degrees() * right);
 }
 
 template <typename T>
 sfp::angle<T> operator /=(const sfp::angle<T>& left, T right)
 {
-	left.degree(left.degree() / right);
+	left.degrees(left.degrees() / right);
 }
 
 
 template <typename T>
 sfp::angle<T> operator ==(const sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	return left.degree() == right.degree();
+	return left.degrees() == right.degrees();
 }
 
 template <typename T>
 sfp::angle<T> operator !=(const sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	return left.degree() != right.degree();
+	return left.degrees() != right.degrees();
 }
 
 template <typename T>
 sfp::angle<T> operator <(const sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	return left.degree() < right.degree();
+	return left.degrees() < right.degrees();
 }
 
 template <typename T>
 sfp::angle<T> operator >(const sfp::angle<T>& left, const sfp::angle<T>& right)
 {
-	return left.degree() > right.degree();
+	return left.degrees() > right.degrees();
 }
 
 
-// konvertierungen
 
+// Convertions
 
 template<typename T>
 T deg_to_rad(T deg)

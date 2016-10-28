@@ -1,11 +1,10 @@
 # add the examples subdirectories
 
-add_subdirectory(geometry_test)
+##add_subdirectory(geometry_test)
 
 if(SFML_ENABLED)
-##    add_subdirectory(moonlander)
-##    add_subdirectory(rocket)
-##    add_subdirectory(tower)
-##    add_subdirectory(flightsim)
+	add_subdirectory(GeometryUnitTest)
+	add_subdirectory(CollisionDetection)
+#	add_subdirectory(PhysicsLoop)
 endif()
 

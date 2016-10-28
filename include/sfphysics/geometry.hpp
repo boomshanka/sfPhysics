@@ -17,51 +17,24 @@
  ******************************************************************************/
 
 
-
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
-{
-
-}
+#pragma once
 
 
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
-{
+#include <sfphysics/settings.hpp>
+#include <sfphysics/SFML_System.hpp>
 
-}
+#include <sfphysics/geometry/angle.hpp>
+#include <sfphysics/geometry/trigonometry.hpp>
 
+#include <sfphysics/geometry/vector2.hpp>
+#include <sfphysics/geometry/transformation.hpp>
+#include <sfphysics/geometry/line.hpp>
+#include <sfphysics/geometry/triangle.hpp>
 
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
-{
-//	if(cross_product(direction, p - point) == 0)
-	{
-		
-		return true;
-	}
-	
-	return false;
-}
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
-
+#include <sfphysics/geometry/shape.hpp>
+#include <sfphysics/geometry/circle.hpp>
+#include <sfphysics/geometry/plane.hpp>
+#include <sfphysics/geometry/rectangle.hpp>
+#include <sfphysics/geometry/polygon.hpp>
 
 

@@ -17,57 +17,100 @@
  ******************************************************************************/
  
 
-#include <sfphysics/geometry/circle>
-
-#include <sfphysics/geometry/trigonometry>
-#include <sfphysics/geometry/math>
+#include <sfphysics/geometry/circle.hpp>
+#include <sfphysics/geometry/trigonometry.hpp>
 
 
-sfp::circle::circle(const sfp::vector2f& center, float radius) :
-m_center(center), m_radius(radius)
+sfp::CircleShape::CircleShape(float radius, const sfp::vector2f& center) :
+m_radius(radius),
+m_center(center)
 {
 
 }
 
 
-sfp::circle::~circle()
+sfp::CircleShape::~CircleShape()
 {
 
 }
 
 
 
-sfp::vector2f sfp::circle::center() const
+sfp::vector2f sfp::CircleShape::center() const
 {
 	return m_center;
 }
 
-void sfp::circle::center(const sfp::vector2f& center)
+void sfp::CircleShape::center(const sfp::vector2f& center)
 {
 	m_center = center;
 }
 
 
-float sfp::circle::radius() const
+float sfp::CircleShape::radius() const
 {
 	return m_radius;
 }
 
-void sfp::circle::radius(float radius)
+void sfp::CircleShape::radius(float radius)
 {
 	m_radius = radius;
 }
 
 
-float sfp::circle::area() const
+float sfp::CircleShape::area() const
 {
-	return trigf::pi * mathf::square(m_radius);
+	return trigf::pi * m_radius*m_radius;
 }
 
 
-float sfp::circle::inertia_moment() const
+float sfp::CircleShape::inertia_moment() const
 {
-	return 0.5 * trigf::pi * mathf::square(mathf::square(m_radius)); // 0.5 * m * r² ; m = pi r² -> 0.5 * pi * r^4
+	// 0.5 * m * r^2 ; m = pi r^2 -> 0.5 * pi * r^4
+	return 0.5 * trigf::pi * m_radius*m_radius*m_radius*m_radius;
 }
+
+
+sfp::boxf sfp::CircleShape::bounds() const
+{
+	return boxf(m_center - vector2f(m_radius, m_radius), m_center + vector2f(m_radius, m_radius));
+}
+
+
+sfp::boxf sfp::CircleShape::bounds(const sfp::transformf& transform) const
+{
+	// Since the transformation contains only translation and rotation the size stays as it is
+	vector2f transformed_center(transform.transform(m_center));
+	return boxf(transformed_center - vector2f(m_radius, m_radius), transformed_center + vector2f(m_radius, m_radius));
+}
+
+
+sfp::minmaxf sfp::CircleShape::project(const sfp::vector2f& axis) const
+{
+	return project(axis, sfp::transformf());
+}
+
+
+sfp::minmaxf sfp::CircleShape::project(const sfp::vector2f& axis, const sfp::transformf& transform) const
+{
+	minmaxf projection;
+	float center = dot_product(axis, transform.transform(m_center));
+	
+	return projection.apply(center - m_radius).apply(center + m_radius);
+}
+
+
+
+std::unique_ptr<sfp::Shape> sfp::CircleShape::copy() const
+{
+	return std::unique_ptr<Shape>{new CircleShape(m_radius, m_center)};
+}
+
+
+void sfp::CircleShape::accept(sfp::ShapeDispatcher& dispatcher) const
+{
+	dispatcher.dispatch(*this);
+}
+
 
 

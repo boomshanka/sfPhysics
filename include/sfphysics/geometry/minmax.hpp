@@ -17,51 +17,49 @@
  ******************************************************************************/
 
 
+#pragma once
 
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
+#include <ostream>
+
+
+namespace sfp
 {
-
-}
-
-
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
-{
-
-}
-
-
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
-{
-//	if(cross_product(direction, p - point) == 0)
+	template <typename T>
+	class minmax
 	{
-		
-		return true;
-	}
+		public:
+			minmax();
+			minmax(T value);
+			
+			minmax<T>& apply(T value);
+			minmax<T>& apply(const minmax<T>& values);
+			
+			T min() const;
+			T max() const;
+			
+			bool contains(T value) const;
+			bool intersects(const minmax<T>& mm) const;
+			
+			bool valid() const;
+			
+		private:
+			T m_min;
+			T m_max;
+			
+			bool m_init;
+	};
 	
-	return false;
+	// ostream operator for output
+	template <typename T>
+	std::ostream& operator<<(std::ostream& os, const sfp::minmax<T>& mm); 
+	
+	#include <sfphysics/geometry/minmax.inl>
+	
+	typedef minmax<unsigned int> minmaxu;
+	typedef minmax<int> minmaxi;
+	typedef minmax<float> minmaxf;
+	typedef minmax<double> minmaxd;
+	
+	
 }
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
-
-
 

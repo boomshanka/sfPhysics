@@ -67,7 +67,7 @@ const T sfp::trig<T>::pi_over_180 = 0.017453292519943295769236907684886;
 template<typename T>
 T sfp::trig<T>::sin(const angle<T>& ang)
 {
-	return std::sin(ang.radian());
+	return std::sin(ang.radians());
 	
 /*	int a = static_cast<int>(angle * 0.1);
 	if(a < 10 && a > -1)
@@ -81,7 +81,7 @@ T sfp::trig<T>::sin(const angle<T>& ang)
 template<typename T>
 T sfp::trig<T>::cos(const angle<T>& ang)
 {
-	return std::cos(ang.radian());
+	return std::cos(ang.radians());
 	
 /*	int a = static_cast<int>(angle * 0.1);
 	if(a < 10 && a > -1)
@@ -95,7 +95,7 @@ T sfp::trig<T>::cos(const angle<T>& ang)
 template<typename T>
 T sfp::trig<T>::tan(const angle<T>& ang)
 {
-	return std::tan(ang.radian());
+	return std::tan(ang.radians());
 	
 /*	int a = static_cast<int>(angle * 0.1);
 	if(a < 10 && a > -1)
@@ -114,8 +114,8 @@ T sfp::trig<T>::tan(const angle<T>& ang)
 template<typename T>
 T sfp::trig<T>::fast_sin(const angle<T>& ang)
 {
-	int a = static_cast<int>(ang.degree() * 0.1);
-	T b = ang.degree() - 10 * a;
+	int a = static_cast<int>(ang.degrees() * 0.1);
+	T b = ang.degrees() - 10 * a;
 	
 	return table_tenperstep[a] * table_oneperstep[static_cast<int>(b)] + table_tenperstep[9-a] * b * pi_over_180;
 }
@@ -124,8 +124,8 @@ T sfp::trig<T>::fast_sin(const angle<T>& ang)
 template<typename T>
 T sfp::trig<T>::fast_cos(const angle<T>& ang)
 {
-	int a = static_cast<int>(ang.degree() * 0.1);
-	T b = ang.degree() - 10 * a;
+	int a = static_cast<int>(ang.degrees() * 0.1);
+	T b = ang.degrees() - 10 * a;
 	
 	return table_tenperstep[9-a] * table_oneperstep[static_cast<int>(b)] - table_tenperstep[a] * b * pi_over_180;
 }
@@ -134,8 +134,8 @@ T sfp::trig<T>::fast_cos(const angle<T>& ang)
 template<typename T>
 T sfp::trig<T>::fast_tan(const angle<T>& ang) //FIXME
 {
-	int a = static_cast<int>(ang.degree() * 0.1);
-	T b = ang.degree() - 10 * a;
+	int a = static_cast<int>(ang.degrees() * 0.1);
+	T b = ang.degrees() - 10 * a;
 	
 	return (table_tenperstep[a] * table_oneperstep[static_cast<int>(b)] + b * pi_over_180 * table_tenperstep[9-a]) /
 			(table_tenperstep[9-a] * table_oneperstep[static_cast<int>(b)] - table_tenperstep[a] * b * pi_over_180);
@@ -153,21 +153,21 @@ angle<T> sfp::trig<T>::asin(T value)
 template<typename T>
 angle<T> sfp::trig<T>::acos(T value)
 {
-	return angle<T>::from_radian(std::acos(value));
+	return angle<T>::from_radians(std::acos(value));
 }
 
 
 template<typename T>
 angle<T> sfp::trig<T>::atan(T value)
 {
-	return angle<T>::from_radian(std::atan(value));
+	return angle<T>::from_radians(std::atan(value));
 }
 
 
 template<typename T>
 angle<T> sfp::trig<T>::atan2(T y, T x)
 {
-	return angle<T>::from_radian(std::atan2(y, x));
+	return angle<T>::from_radians(std::atan2(y, x));
 }
 
 

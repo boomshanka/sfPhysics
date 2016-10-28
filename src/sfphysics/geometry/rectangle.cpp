@@ -17,56 +17,159 @@
  ******************************************************************************/
 
 
-#include <sfphysics/geometry/rectangle>
-
-#include <sfphysics/geometry/math>
+#include <sfphysics/geometry/rectangle.hpp>
 
 
-sfp::rectangle::rectangle(const sfp::vector2f& center, const sfp::vector2f& size) :
-m_center(center), m_size(size)
+sfp::RectangleShape::RectangleShape(const sfp::vector2f& size, const sfp::vector2f& center) :
+m_size(size),
+m_center(center)
 {
 
 }
 
-sfp::rectangle::~rectangle()
+sfp::RectangleShape::~RectangleShape()
 {
 
 }
 
 
-sfp::vector2f sfp::rectangle::center() const
+sfp::vector2f sfp::RectangleShape::center() const
 {
 	return m_center;
 }
 
 
-void sfp::rectangle::center(const sfp::vector2f& center)
+void sfp::RectangleShape::center(const sfp::vector2f& center)
 {
 	m_center = center;
 }
 
 
-const sfp::vector2f& sfp::rectangle::size() const
+const sfp::vector2f& sfp::RectangleShape::size() const
 {
 	return m_size;
 }
 
 
-void sfp::rectangle::size(const sfp::vector2f& size)
+void sfp::RectangleShape::size(const sfp::vector2f& size)
 {
 	m_size = size;
 }
 
 
-float sfp::rectangle::area() const
+float sfp::RectangleShape::area() const
 {
 	return m_size.x * m_size.y;
 }
 
 
-float sfp::rectangle::inertia_moment() const
+float sfp::RectangleShape::inertia_moment() const
 {
-	return area() * (sfp::mathf::square(m_size.x) + sfp::mathf::square(m_size.y)) / 12.f;
+	return area() * m_size.squaredLength() / 12.f;
 }
 
+
+sfp::boxf sfp::RectangleShape::bounds() const
+{
+	return boxf(m_center - (m_size/2.f), m_center + (m_size/2.f));
+}
+
+
+sfp::boxf sfp::RectangleShape::bounds(const transformf& transform) const
+{
+	vector2f min, max;
+	min = max = transform.transform(corner(0));
+	for (vector2f n : {corner(1), corner(2), corner(3)})
+	{
+		n = transform.transform(n);
+		if (n.x > max.x)
+		{
+			max.x = n.x;
+		}
+		else if (n.x < min.x)
+		{
+			min.x = n.x;
+		}
+		
+		if (n.y > max.y)
+		{
+			max.y = n.y;
+		}
+		else if (n.y < min.y)
+		{
+			min.y = n.y;
+		}
+	}
+	
+	return boxf(min, max);
+}
+
+
+sfp::vector2f sfp::RectangleShape::separatingAxis(unsigned int index) const
+{
+	separatingAxis(index, transformf());
+}
+
+sfp::vector2f sfp::RectangleShape::separatingAxis(unsigned int index, const transformf& transform) const
+{
+	if (index == 0)
+	{
+		return transform.transform(corner(0))-transform.transform(corner(1));
+	}
+	else // TODO: nur für index 1, alle andere invalid
+	{
+		return transform.transform(corner(1))-transform.transform(corner(2));
+	}
+}
+
+
+sfp::minmaxf sfp::RectangleShape::project(const sfp::vector2f& axis) const
+{
+	return project(axis, sfp::transformf());
+}
+
+
+sfp::minmaxf sfp::RectangleShape::project(const sfp::vector2f& axis, const sfp::transformf& transform) const
+{
+	minmaxf projection(dot_product(axis, transform.transform(corner(0))));
+	
+	for (sfp::vector2f point : {corner(1), corner(2), corner(3)})
+	{
+		projection.apply(dot_product(axis, transform.transform(point)));
+	}
+	
+	return projection;
+}
+
+
+std::unique_ptr<sfp::Shape> sfp::RectangleShape::copy() const
+{
+	return std::unique_ptr<Shape>{new RectangleShape(m_size, m_center)};
+}
+
+
+sfp::vector2f sfp::RectangleShape::corner(unsigned int i) const
+{
+	switch(i)
+	{
+		case 0:
+			return m_center + (vector2f(-m_size.x, -m_size.y) / 2.f);
+			
+		case 1:
+			return m_center + (vector2f(m_size.x, -m_size.y) / 2.f);
+			
+		case 2:
+			return m_center + (vector2f(m_size.x, m_size.y) / 2.f);
+			
+		case 3:
+		default:
+			return m_center + (vector2f(-m_size.x, m_size.y) / 2.f);
+	}
+}
+
+
+void sfp::RectangleShape::accept(sfp::ShapeDispatcher& dispatcher) const
+{
+	dispatcher.dispatch(*this);
+}
 

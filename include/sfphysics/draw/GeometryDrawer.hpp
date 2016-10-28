@@ -17,51 +17,33 @@
  ******************************************************************************/
 
 
+#pragma once
 
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
+#include <sfphysics/draw/drawable.hpp>
+
+#include <sfphysics/geometry/vector2.hpp>
+#include <sfphysics/geometry/line.hpp>
+#include <sfphysics/geometry/box.hpp>
+#include <sfphysics/geometry/transformation.hpp>
+
+#include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/Color.hpp>
+
+
+namespace sfp
 {
-
-}
-
-
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
-{
-
-}
-
-
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
-{
-//	if(cross_product(direction, p - point) == 0)
+	class GeometryDraw : public sfp::drawable
 	{
-		
-		return true;
-	}
-	
-	return false;
+		public:
+			GeometryDraw(const sfp::linef& l, const sf::Color& color = sf::Color::Black);
+			GeometryDraw(const sfp::vector2f& vector, const sfp::vector2f& pos = sfp::vector2f(0,0), const sf::Color& color = sf::Color::Black);
+			GeometryDraw(const sfp::boxf& b, const sf::Color& color = sf::Color::Black);
+			
+			virtual void draw(sf::RenderWindow& window, const transformf& transform) const;
+			
+		private:
+			sf::VertexArray m_vertice;
+	};
 }
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
-
 
 

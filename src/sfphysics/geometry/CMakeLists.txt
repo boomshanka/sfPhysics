@@ -3,29 +3,32 @@ set(SRCROOT ${CMAKE_SOURCE_DIR}/src/sfphysics/geometry)
 
 # all source files
 set(SRC
-    ${INCROOT}/../settings
-    ${INCROOT}/angle
+    ${INCROOT}/../settings.hpp
+    ${INCROOT}/../geometry.hpp
+    ${INCROOT}/minmax.hpp
+    ${INCROOT}/minmax.inl
+    ${INCROOT}/angle.hpp
     ${INCROOT}/angle.inl
-    ${INCROOT}/trigonometry
+    ${INCROOT}/trigonometry.hpp
     ${INCROOT}/trigonometry.inl
-    ${INCROOT}/math
-    ${INCROOT}/math.inl
-    ${INCROOT}/vector2
+    ${INCROOT}/vector2.hpp
     ${INCROOT}/vector2.inl
-    ${INCROOT}/matrix
-    ${INCROOT}/matrix.inl
-    ${INCROOT}/line
+    ${INCROOT}/transformation.hpp
+    ${INCROOT}/transformation.inl
+    ${INCROOT}/line.hpp
     ${INCROOT}/line.inl
-    ${INCROOT}/triangle
+    ${INCROOT}/box.hpp
+    ${INCROOT}/box.inl
+    ${INCROOT}/triangle.hpp
     ${INCROOT}/triangle.inl
-    ${INCROOT}/form
-    ${INCROOT}/circle
+    ${INCROOT}/shape.hpp
+    ${INCROOT}/circle.hpp
     ${SRCROOT}/circle.cpp
-    ${INCROOT}/rectangle
+    ${INCROOT}/rectangle.hpp
     ${SRCROOT}/rectangle.cpp
-    ${INCROOT}/polygon
+    ${INCROOT}/polygon.hpp
     ${SRCROOT}/polygon.cpp
-    ${INCROOT}/plane
+    ${INCROOT}/plane.hpp
     ${SRCROOT}/plane.cpp
 )
 

@@ -15,53 +15,43 @@
  ** You should have received a copy of the GNU General Public License along
  ** with this program; if not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+ 
+ 
+#pragma once
+
+#include <sfphysics/draw/drawable.hpp>
+#include <sfphysics/draw/ShapeDrawer.hpp>
+#include <sfphysics/mechanics/body.hpp>
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
+
+#include <memory>
 
 
-
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
+namespace sfp
 {
-
-}
-
-
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
-{
-
-}
-
-
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
-{
-//	if(cross_product(direction, p - point) == 0)
+	typedef std::vector<sf::VertexArray> VertexArrayList;
+	
+	class drawbody : public sfp::drawable, public sfp::body
 	{
+		public:
+			drawbody(const Shape& shape, const sf::Color& color = sf::Color::Red); // TODO: Color default=random and add ShapeDrawer
+			
+			// TODO: usefull functions for drawbdody
+			void color(const sf::Color& color);
+			void colorize(const sf::Color& color);
+			
+			~drawbody();
 		
-		return true;
-	}
+		private:
+			std::unique_ptr<ShapeDrawer> m_drawer;
+			sf::Color m_color;
+			
+			virtual void draw(sf::RenderWindow& window, const transformf& transform) const;
+	};
 	
-	return false;
-}
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
+} // namespace
 
 
 

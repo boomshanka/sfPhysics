@@ -17,51 +17,47 @@
  ******************************************************************************/
 
 
+#pragma once
 
-template <typename T>
-inline sfp::line<T>::line(bool inf) :
-infinite(inf)
+
+namespace sfp
 {
 
-}
-
-
-template <typename T>
-inline sfp::line<T>::line(const sfp::vector2<T>& first, const sfp::vector2<T>& second, bool inf) :
-first_point(first), second_point(second), infinite(inf)
-{
-
-}
-
-
-// TODO
-template <typename T>
-inline bool sfp::line<T>::contains(const sfp::vector2<T>& point, float& relative_position)
-{
-//	if(cross_product(direction, p - point) == 0)
+	class materialdef
 	{
-		
-		return true;
-	}
+		public:
+			materialdef();
+			materialdef(const materialdef&);
+			materialdef(float density, float restitution, float stat_friction, float dyn_friction);			
+			
+			float density() const;
+			void density(float dens);
+						
+			float restitution() const;
+			void restitution(float res);
+			
+			float dynamic_friction() const;
+			bool dynamic_friction(float dyn);
+			
+			float static_friction() const;
+			bool static_friction(float stat);
+			
+			bool friction(float stat, float dyn);
+			
+		private:
+			float m_density;
+			float m_restitution;
+			float m_static_friction;
+			float m_dynamic_friction;
+	};
 	
-	return false;
+	
+	static materialdef wood;
+	static materialdef steel;
+	static materialdef aluminium;
+	static materialdef stone;
+	static materialdef rubber;
+	static materialdef soil;
+	
 }
-
-
-/*
-template <typename T>
-inline bool sfp::line<T>::intersects(const sfp::line<T>& line, float& relative_position)
-{
-	float cross = cross_product(direction, line.direction);
-	
-	if(cross == 0)
-		return false;
-	
-	relative_position = cross_product(line.direction, point - line.point) / cross;
-	
-	return true;
-}
-*/
-
-
 

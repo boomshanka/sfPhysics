@@ -35,14 +35,12 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 # define the export symbol ??
 add_definitions(-DSFPHYSICS_EXPORTS)
 
-# c++0x
-add_definitions(-std=c++0x)
-
 # add the modules subdirectories
 add_subdirectory(geometry)
-add_subdirectory(mechanic)
-#add_subdirectory(electroinc)
-add_subdirectory(draw)
-#endif()
+add_subdirectory(mechanics)
+# add draw module if SFML is enabled
+if(SFML_ENABLED)
+    add_subdirectory(draw)
+endif()
 
 

@@ -3,15 +3,22 @@ set(SRCROOT ${CMAKE_SOURCE_DIR}/src/sfphysics/draw)
 
 # all source files
 set(SRC
-    ${SRCROOT}/bodydraw.cpp
-    ${INCROOT}/bodydraw
-    ${INCROOT}/drawsettings
+    ${INCROOT}/../draw.hpp
+    ${SRCROOT}/scene.cpp
+    ${INCROOT}/scene.hpp
+    ${INCROOT}/drawable.hpp
+    ${SRCROOT}/drawbody.cpp
+    ${INCROOT}/drawbody.hpp
+    ${SRCROOT}/ShapeDrawer.cpp
+    ${INCROOT}/ShapeDrawer.hpp
+    ${SRCROOT}/GeometryDrawer.cpp
+    ${INCROOT}/GeometryDrawer.hpp
 )
 
 
 # define the sfphysics-debugdraw target
-sfphysics_add_library(sfphysics-debugdraw
+sfphysics_add_library(sfphysics-draw
                  SOURCES ${SRC}
-                 DEPENDS sfphysics-mechanic sfml-graphics
+                 DEPENDS sfphysics-geometry sfphysics-mechanics sfml-graphics
                  EXTERNAL_LIBS ${DEBUGDRAW_EXT_LIBS})
 

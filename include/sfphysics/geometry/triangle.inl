@@ -17,6 +17,8 @@
  ******************************************************************************/
  
  
+ #include <cmath>
+ 
  
 template <typename T>
 inline sfp::triangle<T>::triangle(const sfp::vector2<T>& p_1, const sfp::vector2<T>& p_2, const sfp::vector2<T>& p_3) :
@@ -36,14 +38,14 @@ inline sfp::triangle<T>::~triangle()
 template <typename T>
 inline T sfp::triangle<T>::area() const
 {
-	return sfp::math<T>::abs(cross_product(p2 - p1, p3 - p1) / static_cast<T>(2));
+	return std::abs(cross_product(p2 - p1, p3 - p1) / static_cast<T>(2));
 }
 
 
 template <typename T>
 inline T sfp::triangle<T>::perimeter() const
 {
-	return (p2 - p1).get_length()  + (p3 - p2).get_length() + (p1 - p3).get_length();
+	return (p2 - p1).length()  + (p3 - p2).get_length() + (p1 - p3).length();
 }
 
 
@@ -54,8 +56,8 @@ inline T sfp::triangle<T>::inertia_moment() const
 	sfp::vector2<T> a(p2 - p1);
 	sfp::vector2<T> b(p3 - p2);
 	
-	return (sfp::math<T>::abs(cross_product(a, b) / static_cast<T>(2)) * // area
-			(a.get_squared_length() + b.get_squared_length() + sfp::vector2<T>(p1 - p3).get_squared_length())) / // squared sides
+	return (std::abs(cross_product(a, b) / static_cast<T>(2)) * // area
+			(a.squaredLength() + b.squaredLength() + sfp::vector2<T>(p1 - p3).squaredLength())) / // squared sides
 			static_cast<T>(36); // factor 1/36
 }
 
