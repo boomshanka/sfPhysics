@@ -4,10 +4,10 @@ set(SRCROOT ${CMAKE_SOURCE_DIR}/src/sfphysics/mechanics)
 
 # all source files
 set(SRC
-    ${INCROOT}/body.hpp
-    ${SRCROOT}/body.cpp
-    ${INCROOT}/materialdef.hpp
-    ${SRCROOT}/materialdef.cpp
+    ${INCROOT}/Body.hpp
+    ${SRCROOT}/Body.cpp
+    ${INCROOT}/MaterialDef.hpp
+    ${SRCROOT}/MaterialDef.cpp
     ${INCROOT}/Collider.hpp
     ${SRCROOT}/Collider.cpp
     ${INCROOT}/Contact.hpp

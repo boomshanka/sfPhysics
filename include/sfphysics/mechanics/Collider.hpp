@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <sfphysics/mechanics/body.hpp>
+#include <sfphysics/mechanics/Body.hpp>
 #include <sfphysics/mechanics/Contact.hpp>
 
 #include <sfphysics/geometry/circle.hpp>
@@ -38,7 +38,7 @@ namespace sfp
 		public:
 			Collider() {}
 			
-			bool collision(body& b1, body& b2, Contact& contact);
+			bool collision(Body& b1, Body& b2, Contact& contact);
 			
 			void dispatch(const CircleShape& shape);
 			void dispatch(const PolygonShape& shape);
@@ -46,13 +46,13 @@ namespace sfp
 			void dispatch(const PlaneShape& shape);
 			
 		protected:
-			bool planePolygon(body& b1, body& b2, Contact& contact) const;
-			bool planeCircle(body& b1, body& b2, Contact& contact) const;
-			bool polygonPolygon(body& b1, body& b2, Contact& contact);
-			bool polygonCircle(body& b1, body& b2, Contact& contact);
-			bool circleCircle(body& b1, body& b2, Contact& contact) const;
+			bool planePolygon(Body& b1, Body& b2, Contact& contact) const;
+			bool planeCircle(Body& b1, Body& b2, Contact& contact) const;
+			bool polygonPolygon(Body& b1, Body& b2, Contact& contact);
+			bool polygonCircle(Body& b1, Body& b2, Contact& contact);
+			bool circleCircle(Body& b1, Body& b2, Contact& contact) const;
 			
-			bool project(body& b1, body& b2, const std::list<sfp::vector2f>& axes) const;
+			bool project(Body& b1, Body& b2, const std::list<sfp::vector2f>& axes) const;
 			
 			
 		private:

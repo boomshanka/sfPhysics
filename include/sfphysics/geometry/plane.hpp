@@ -40,11 +40,11 @@ namespace sfp
 			void normal(const vector2f& normal);
 			
 			float area() const;
-			float inertia_moment() const;
+			float inertiaMoment() const;
 			
 			boxf bounds() const;
 			boxf bounds(const transformf&) const;
-						
+			
 			minmaxf project(const vector2f& axis) const;
 			minmaxf project(const vector2f& axis, const transformf& transform) const;
 			

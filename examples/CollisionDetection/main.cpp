@@ -18,13 +18,13 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <sfphysics/geometry.hpp>
-#include <sfphysics/mechanics.hpp>
-#include <sfphysics/draw.hpp>
+#include <sfphysics/Geometry.hpp>
+#include <sfphysics/Mechanics.hpp>
+#include <sfphysics/Draw.hpp>
 
 #include <iostream>
 
-void drawGrid(sfp::scene& sc);
+void drawGrid(sfp::Scene& sc);
 
 
 int main()
@@ -37,18 +37,18 @@ int main()
 	sfp::CircleShape circle(1, sfp::vector2f(3,2));
 	sfp::PolygonShape polygon;
 	sfp::PlaneShape plane(sfp::vector2f(0,-1));
-	polygon.add_point(sfp::vector2f(0,0));
-	polygon.add_point(sfp::vector2f(1,-1));
-	polygon.add_point(sfp::vector2f(2,0));
-	polygon.add_point(sfp::vector2f(2,2));
-	polygon.add_point(sfp::vector2f(0,2));
+	polygon.addPoint(sfp::vector2f(0,0));
+	polygon.addPoint(sfp::vector2f(1,-1));
+	polygon.addPoint(sfp::vector2f(2,0));
+	polygon.addPoint(sfp::vector2f(2,2));
+	polygon.addPoint(sfp::vector2f(0,2));
 	sfp::RectangleShape rectangle(sfp::vector2f(7,1));
 	
-	sfp::drawbody body1(polygon, sf::Color::Green);
-	sfp::drawbody body2(circle, sf::Color::Blue);
-	sfp::drawbody body3(polygon, sf::Color::Red);
-	sfp::drawbody body4(rectangle, sf::Color(100,100,100));
-	sfp::drawbody body5(plane, sf::Color::Green);
+	sfp::Drawbody body1(polygon, sf::Color::Green);
+	sfp::Drawbody body2(circle, sf::Color::Blue);
+	sfp::Drawbody body3(polygon, sf::Color::Red);
+	sfp::Drawbody body4(rectangle, sf::Color(100,100,100));
+	sfp::Drawbody body5(plane, sf::Color::Green);
 	body1.position(sfp::vector2f(4,3));
 	body2.position(sfp::vector2f(1.5,2.5));
 	body3.position(sfp::vector2f(14,8));
@@ -62,7 +62,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "sfPhysics Collision Detection Example");
 	window.setFramerateLimit(60);
 	
-	sfp::scene scene(window, sfp::vector2f(16,12), sfp::vector2f(800,600));
+	sfp::Scene scene(window, sfp::vector2f(16,12), sfp::vector2f(800,600));
 	
 	sfp::Collider collider;
 	
@@ -99,17 +99,17 @@ int main()
 		if (body1.bounds().intersects(body2.bounds()) || body1.bounds().intersects(body3.bounds()) ||
 			body1.bounds().intersects(body4.bounds()))
 		{
-			scene.draw(sfp::GeometryDraw(body1.bounds(), sf::Color::Red));
+			scene.draw(sfp::GeometryDrawer(body1.bounds(), sf::Color::Red));
 		}
 		else
 		{
-			scene.draw(sfp::GeometryDraw(body1.bounds(), sf::Color::Black));
+			scene.draw(sfp::GeometryDrawer(body1.bounds(), sf::Color::Black));
 		}
 		
 		// other bounding boxes
-		scene.draw(sfp::GeometryDraw(body2.bounds()));
-		scene.draw(sfp::GeometryDraw(body3.bounds()));
-		scene.draw(sfp::GeometryDraw(body4.bounds()));
+		scene.draw(sfp::GeometryDrawer(body2.bounds()));
+		scene.draw(sfp::GeometryDrawer(body3.bounds()));
+		scene.draw(sfp::GeometryDrawer(body4.bounds()));
 		
 		// reset colors
 		body2.colorize(sf::Color::White);
@@ -144,12 +144,12 @@ int main()
 }
 
 
-void drawGrid(sfp::scene& sc)
+void drawGrid(sfp::Scene& sc)
 {
 	for (unsigned int i = 0; i < 16; ++i)
-		sc.draw(sfp::GeometryDraw(sfp::linef(sfp::vector2f(i, 0), sfp::vector2f(i, 12)), sf::Color(150,150,150)));
+		sc.draw(sfp::GeometryDrawer(sfp::linef(sfp::vector2f(i, 0), sfp::vector2f(i, 12)), sf::Color(150,150,150)));
 	
 	for (unsigned int i = 0; i < 12; ++i)
-		sc.draw(sfp::GeometryDraw(sfp::linef(sfp::vector2f(0, i), sfp::vector2f(16, i)), sf::Color(150,150,150)));
+		sc.draw(sfp::GeometryDrawer(sfp::linef(sfp::vector2f(0, i), sfp::vector2f(16, i)), sf::Color(150,150,150)));
 }
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- **	sfphysics - A simple 2D physics engine
+ **	sfPhysics - A simple 2D physics engine
  ** Copyright (C) 2011  Olaf Vogt aka Boomshanka
  ** 
  ** This program is free software; you can redistribute it and/or modify it
@@ -19,7 +19,19 @@
 
 #pragma once
 
-#include <sfphysics/draw/scene.hpp>
-#include <sfphysics/draw/drawbody.hpp>
-#include <sfphysics/draw/GeometryDraw.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include <sfphysics/geometry/transformation.hpp>
+
+
+namespace sfp
+{
+	class Drawable
+	{
+		public:
+			virtual void draw(sf::RenderWindow& window, const transformf& transform) const = 0;
+			
+	};
+}
+
 

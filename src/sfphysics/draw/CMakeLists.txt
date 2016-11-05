@@ -4,11 +4,11 @@ set(SRCROOT ${CMAKE_SOURCE_DIR}/src/sfphysics/draw)
 # all source files
 set(SRC
     ${INCROOT}/../draw.hpp
-    ${SRCROOT}/scene.cpp
-    ${INCROOT}/scene.hpp
-    ${INCROOT}/drawable.hpp
-    ${SRCROOT}/drawbody.cpp
-    ${INCROOT}/drawbody.hpp
+    ${SRCROOT}/Scene.cpp
+    ${INCROOT}/Scene.hpp
+    ${INCROOT}/Drawable.hpp
+    ${SRCROOT}/Drawbody.cpp
+    ${INCROOT}/Drawbody.hpp
     ${SRCROOT}/ShapeDrawer.cpp
     ${INCROOT}/ShapeDrawer.hpp
     ${SRCROOT}/GeometryDrawer.cpp

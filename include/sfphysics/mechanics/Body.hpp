@@ -24,7 +24,7 @@
 #include <sfphysics/geometry/transformation.hpp>
 #include <sfphysics/geometry/shape.hpp>
 
-#include <sfphysics/mechanics/materialdef.hpp>
+#include <sfphysics/mechanics/MaterialDef.hpp>
 
 #include <memory>
 
@@ -32,15 +32,15 @@
 namespace sfp
 {
 
-	class body
+	class Body
 	{
 		public:
-			body(const Shape& shape, const materialdef& material = materialdef());
-			~body();
+			Body(const Shape& shape, const MaterialDef& material = MaterialDef());
+			~Body();
 			
 			// material
-			const materialdef& material() const;
-			void material(const materialdef&);
+			const MaterialDef& material() const;
+			void material(const MaterialDef&);
 			
 			// shape
 			const sfp::Shape& bodyshape() const;
@@ -57,17 +57,17 @@ namespace sfp
 			const vector2f& velocity() const;
 			void velocity(const vector2f& vel);
 						
-			const anglef& angular_velocity() const;
-			void angular_velocity(const anglef& ang_vel);
+			const anglef& angularVelocity() const;
+			void angularVelocity(const anglef& vel);
 			
 			// mass (just getter - determinated by density and area)
 			float mass() const;
 			
 			// transformation functions
-			vector2f to_global(const vector2f&) const;
-			vector2f to_local(const vector2f&) const;
-			const transformf& get_transformation() const;
-			const transformf& get_inverse_transformation() const;
+			vector2f toGlobal(const vector2f&) const;
+			vector2f toLocal(const vector2f&) const;
+			const transformf& transformation() const;
+			const transformf& inverseTransformation() const;
 			
 			// bounding box
 			boxf bounds() const;
@@ -80,7 +80,7 @@ namespace sfp
 			void center(const vector2f&);
 			
 		private:
-			materialdef m_material;
+			MaterialDef m_material;
 			std::unique_ptr<Shape> m_shape;
 			
 			vector2f m_center;
@@ -88,19 +88,20 @@ namespace sfp
 			anglef m_rotation;
 			
 			vector2f m_velocity;
-			anglef m_angular_velocity;
+			anglef m_angularVelocity;
 			
 			float m_mass;
+			float m_angularMass;
 			
-			mutable transformf m_to_global;
-			mutable transformf m_to_local;
+			mutable transformf m_toGlobal;
+			mutable transformf m_toLocal;
 			
 			mutable enum class transformstate {
 				None, ToGlobal, Both
 			} m_transformstate;
 			
-			void update_shape();
-			void update_transformation() const;
+			void updateShape();
+			void updateTransformation() const;
 	};
 
 }

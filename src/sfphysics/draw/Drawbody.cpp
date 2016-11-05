@@ -17,21 +17,43 @@
  ******************************************************************************/
 
 
-#pragma once
-
-#include <SFML/Graphics/RenderWindow.hpp>
-
-#include <sfphysics/geometry/transformation.hpp>
+#include <sfphysics/draw/Drawbody.hpp>
+#include <sfphysics/geometry/circle.hpp>
+#include <sfphysics/geometry/polygon.hpp>
 
 
-namespace sfp
+sfp::Drawbody::Drawbody(const sfp::Shape& shape, const sf::Color& color) :
+Body(shape), m_drawer(new DefaultDrawer()), m_color(color)
 {
-	class drawable
-	{
-		public:
-			virtual void draw(sf::RenderWindow& window, const transformf& transform) const = 0;
-			
-	};
+	m_drawer->createShape(shape, m_color);
+}
+
+sfp::Drawbody::~Drawbody()
+{
+	
+}
+
+
+void sfp::Drawbody::color(const sf::Color& color)
+{
+	m_color = color;
+	m_drawer->createShape(Body::bodyshape(), m_color);
+}
+
+void sfp::Drawbody::colorize(const sf::Color& color)
+{
+	m_drawer->createShape(Body::bodyshape(), color*m_color);
+}
+
+
+void sfp::Drawbody::draw(sf::RenderWindow& window, const transformf& scenetransform) const
+{
+	// apply position and rotation to transformation
+	transformf trafo(scenetransform);
+	trafo.translate(Body::position()).rotate(Body::rotation()).translate(-Body::center());
+	
+	// draw
+	m_drawer->draw(window, trafo);
 }
 
 

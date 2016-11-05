@@ -15,45 +15,42 @@
  ** You should have received a copy of the GNU General Public License along
  ** with this program; if not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+ 
+ 
+#pragma once
+
+#include <sfphysics/draw/Drawable.hpp>
+#include <sfphysics/draw/ShapeDrawer.hpp>
+#include <sfphysics/mechanics/Body.hpp>
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
+
+#include <memory>
 
 
-#include <sfphysics/draw/drawbody.hpp>
-#include <sfphysics/geometry/circle.hpp>
-#include <sfphysics/geometry/polygon.hpp>
-
-
-sfp::drawbody::drawbody(const sfp::Shape& shape, const sf::Color& color) :
-body(shape), m_drawer(new DefaultDrawer()), m_color(color)
+namespace sfp
 {
-	m_drawer->createShape(shape, m_color);
-}
-
-sfp::drawbody::~drawbody()
-{
+	typedef std::vector<sf::VertexArray> VertexArrayList;
 	
-}
-
-
-void sfp::drawbody::color(const sf::Color& color)
-{
-	m_color = color;
-	m_drawer->createShape(body::bodyshape(), m_color);
-}
-
-void sfp::drawbody::colorize(const sf::Color& color)
-{
-	m_drawer->createShape(body::bodyshape(), color*m_color);
-}
-
-
-void sfp::drawbody::draw(sf::RenderWindow& window, const transformf& scenetransform) const
-{
-	// apply position and rotation to transformation
-	transformf trafo(scenetransform);
-	trafo.translate(body::position()).rotate(body::rotation()).translate(-body::center());
+	class Drawbody : public sfp::Drawable, public sfp::Body
+	{
+		public:
+			Drawbody(const Shape& shape, const sf::Color& color = sf::Color::Red); // TODO: Color default=random and add ShapeDrawer
+			~Drawbody();
+			
+			// TODO: usefull functions for drawbdody
+			void color(const sf::Color& color);
+			void colorize(const sf::Color& color);
+		
+		private:
+			std::unique_ptr<ShapeDrawer> m_drawer;
+			sf::Color m_color;
+			
+			virtual void draw(sf::RenderWindow& window, const transformf& transform) const;
+	};
 	
-	// draw
-	m_drawer->draw(window, trafo);
-}
+} // namespace
+
 
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <sfphysics/mechanics/body.hpp>
+#include <sfphysics/mechanics/Body.hpp>
 
 
 namespace sfp

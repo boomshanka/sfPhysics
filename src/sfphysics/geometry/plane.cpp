@@ -70,7 +70,7 @@ float sfp::PlaneShape::area() const
 }
 
 
-float sfp::PlaneShape::inertia_moment() const
+float sfp::PlaneShape::inertiaMoment() const
 {
 	return std::numeric_limits<float>::infinity();
 }

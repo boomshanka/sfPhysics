@@ -51,7 +51,7 @@ inline T sfp::triangle<T>::perimeter() const
 
 
 template <typename T>
-inline T sfp::triangle<T>::inertia_moment() const
+inline T sfp::triangle<T>::inertiaMoment() const
 {
 	sfp::vector2<T> a(p2 - p1);
 	sfp::vector2<T> b(p3 - p2);

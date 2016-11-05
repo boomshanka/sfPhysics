@@ -17,18 +17,18 @@
  ******************************************************************************/
 
 
-#include <sfphysics/mechanics/materialdef.hpp>
+#include <sfphysics/mechanics/MaterialDef.hpp>
 
 
-sfp::materialdef wood = sfp::materialdef(1, 0.5, 0.4, 0.6);
-sfp::materialdef steel = sfp::materialdef(1, 0.5, 0.4, 0.6);
-sfp::materialdef aluminium = sfp::materialdef(1, 0.5, 0.4, 0.6);
-sfp::materialdef stone = sfp::materialdef(1, 0.5, 0.4, 0.6);
-sfp::materialdef rubber = sfp::materialdef(1, 0.5, 0.4, 0.6);
-sfp::materialdef soil = sfp::materialdef(1, 0.5, 0.4, 0.6);
+sfp::MaterialDef wood = sfp::MaterialDef(1, 0.5, 0.4, 0.6);
+sfp::MaterialDef steel = sfp::MaterialDef(1, 0.5, 0.4, 0.6);
+sfp::MaterialDef aluminium = sfp::MaterialDef(1, 0.5, 0.4, 0.6);
+sfp::MaterialDef stone = sfp::MaterialDef(1, 0.5, 0.4, 0.6);
+sfp::MaterialDef rubber = sfp::MaterialDef(1, 0.5, 0.4, 0.6);
+sfp::MaterialDef soil = sfp::MaterialDef(1, 0.5, 0.4, 0.6);
 
 
-sfp::materialdef::materialdef() :
+sfp::MaterialDef::MaterialDef() :
 m_density(1),
 m_restitution(0.5),
 m_dynamic_friction(0.4),
@@ -37,7 +37,7 @@ m_static_friction(0.6)
 
 }
 
-sfp::materialdef::materialdef(float dens, float res, float stat_friction, float dyn_friction) :
+sfp::MaterialDef::MaterialDef(float dens, float res, float stat_friction, float dyn_friction) :
 m_density(dens),
 m_restitution(res),
 m_dynamic_friction(stat_friction),
@@ -46,7 +46,7 @@ m_static_friction(dyn_friction)
 
 }
 
-sfp::materialdef::materialdef(const materialdef& mat) :
+sfp::MaterialDef::MaterialDef(const MaterialDef& mat) :
 m_density(mat.m_density),	
 m_restitution(mat.m_restitution),
 m_dynamic_friction(mat.m_dynamic_friction),
@@ -56,35 +56,35 @@ m_static_friction(mat.m_static_friction)
 }
 
 
-float sfp::materialdef::density() const
+float sfp::MaterialDef::density() const
 {
 	return m_density;
 }
 
-void sfp::materialdef::density(float dens)
+void sfp::MaterialDef::density(float dens)
 {
 	m_density = dens;
 }
 
 
-float sfp::materialdef::restitution() const
+float sfp::MaterialDef::restitution() const
 {
 	return m_restitution;
 }
 
-void sfp::materialdef::restitution(float res)
+void sfp::MaterialDef::restitution(float res)
 {
 	m_restitution = res;
 }
 
 
-float sfp::materialdef::dynamic_friction() const
+float sfp::MaterialDef::dynamic_friction() const
 {
 	return m_dynamic_friction;
 }
 
 
-bool sfp::materialdef::dynamic_friction(float dyn)
+bool sfp::MaterialDef::dynamic_friction(float dyn)
 {
 	if(dyn > m_static_friction)
 		return false;
@@ -94,13 +94,13 @@ bool sfp::materialdef::dynamic_friction(float dyn)
 }
 
 
-float sfp::materialdef::static_friction() const
+float sfp::MaterialDef::static_friction() const
 {
 	return m_static_friction;
 }
 
 
-bool sfp::materialdef::static_friction(float stat)
+bool sfp::MaterialDef::static_friction(float stat)
 {
 	if(stat < m_dynamic_friction)
 		return false;
@@ -110,7 +110,7 @@ bool sfp::materialdef::static_friction(float stat)
 }
 
 
-bool sfp::materialdef::friction(float stat, float dyn)
+bool sfp::MaterialDef::friction(float stat, float dyn)
 {
 	if(stat < dyn)
 		return false;

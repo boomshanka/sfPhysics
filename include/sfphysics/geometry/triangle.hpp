@@ -39,7 +39,7 @@ namespace sfp
 			T area() const;
 			T perimeter() const;
 			
-			T inertia_moment() const;
+			T inertiaMoment() const;
 			vector2<T> center() const;
 			
 	};

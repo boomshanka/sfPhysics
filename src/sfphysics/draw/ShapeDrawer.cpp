@@ -82,18 +82,18 @@ void sfp::DefaultDrawer::dispatch(const sfp::PolygonShape& shape)
 	m_vertice = VertexArrayList(2);
 	
 	// Two more points for center and last point = first point
-	m_vertice[0] = sf::VertexArray(sf::TrianglesFan, shape.point_count() + 2);
+	m_vertice[0] = sf::VertexArray(sf::TrianglesFan, shape.pointCount() + 2);
 	// For surrounding line, last point = first point
-	m_vertice[1] = sf::VertexArray(sf::LinesStrip, shape.point_count() + 1);
+	m_vertice[1] = sf::VertexArray(sf::LinesStrip, shape.pointCount() + 1);
 	
 	// First point is center
 	m_vertice[0][0].position = static_cast<const sf::Vector2f&>(shape.center());
 	m_vertice[0][0].color = m_color;
 	
 	// Loop over all points
-	for (unsigned int i = 0; i < shape.point_count() + 1; ++i)
+	for (unsigned int i = 0; i < shape.pointCount() + 1; ++i)
 	{
-		if (i != shape.point_count())
+		if (i != shape.pointCount())
 		{
 			m_vertice[0][i+1].position = static_cast<const sf::Vector2f&>(shape.point(i));
 			m_vertice[1][i].position = static_cast<const sf::Vector2f&>(shape.point(i));

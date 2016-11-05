@@ -39,7 +39,7 @@ namespace sfp
 			void size(const vector2f& size);
 			
 			float area() const;
-			float inertia_moment() const;
+			float inertiaMoment() const;
 			
 			boxf bounds() const;
 			boxf bounds(const transformf&) const;

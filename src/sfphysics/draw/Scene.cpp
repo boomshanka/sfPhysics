@@ -17,12 +17,12 @@
  ******************************************************************************/
 
 
-#include <sfphysics/draw/scene.hpp>
+#include <sfphysics/draw/Scene.hpp>
 
 #include <iostream>
 
 
-sfp::scene::scene(sf::RenderWindow& window, const vector2f& size_scene, const vector2f& size_window) :
+sfp::Scene::Scene(sf::RenderWindow& window, const vector2f& size_scene, const vector2f& size_window) :
 m_window(window),
 m_size_scene(size_scene),
 m_center_scene(size_scene / 2.f),
@@ -35,99 +35,99 @@ m_transform_updated(false)
 }
 
 
-sfp::scene::~scene()
+sfp::Scene::~Scene()
 {
 	
 }
 
 
-void sfp::scene::size_scene(const vector2f& size)
+void sfp::Scene::size_scene(const vector2f& size)
 {
 	m_size_scene = size;
 	m_transform_updated = false;
 }
 
-void sfp::scene::size_scene(const vector2f& size, vector2f center)
+void sfp::Scene::size_scene(const vector2f& size, vector2f center)
 {
 	m_size_scene = size;
 	m_center_scene = center;
 	m_transform_updated = false;
 }
 
-const sfp::vector2f& sfp::scene::size_scene() const
+const sfp::vector2f& sfp::Scene::size_scene() const
 {
 	return m_size_scene;
 }
 
 
-void sfp::scene::center_scene(const vector2f& center)
+void sfp::Scene::center_scene(const vector2f& center)
 {
 	m_center_scene = center;
 	m_transform_updated = false;
 }
 
-const sfp::vector2f& sfp::scene::center_scene() const
+const sfp::vector2f& sfp::Scene::center_scene() const
 {
 	return m_center_scene;
 }
 
 
-void sfp::scene::rotation_scene(const anglef& angle)
+void sfp::Scene::rotation_scene(const anglef& angle)
 {
 	m_angle_scene = angle;
 	m_transform_updated = false;
 }
 
-const sfp::anglef& sfp::scene::rotation_scene() const
+const sfp::anglef& sfp::Scene::rotation_scene() const
 {
 	return m_angle_scene;
 }
 
 
 	
-void sfp::scene::size_window(const vector2f& size)
+void sfp::Scene::size_window(const vector2f& size)
 {
 	m_size_window = size;
 	m_transform_updated = false;
 }
 
-void sfp::scene::size_window(const vector2f& size, vector2f center)
+void sfp::Scene::size_window(const vector2f& size, vector2f center)
 {
 	m_size_window = size;
 	m_center_window = center;
 	m_transform_updated = false;
 }
 
-const sfp::vector2f& sfp::scene::size_window() const
+const sfp::vector2f& sfp::Scene::size_window() const
 {
 	return m_size_window;
 }
 
 
-void sfp::scene::center_window(const vector2f& center)
+void sfp::Scene::center_window(const vector2f& center)
 {
 	m_center_window = center;
 	m_transform_updated = false;
 }
 
-const sfp::vector2f& sfp::scene::center_window() const
+const sfp::vector2f& sfp::Scene::center_window() const
 {
 	return m_center_window;
 }
 
 
-sfp::vector2f sfp::scene::transformToScene(const sfp::vector2f& windowCoord) const
+sfp::vector2f sfp::Scene::transformToScene(const sfp::vector2f& windowCoord) const
 {
 	return m_inverseTransform.transform(windowCoord);
 }
 
-sfp::vector2f sfp::scene::transformToWindow(const sfp::vector2f& sceneCoord) const
+sfp::vector2f sfp::Scene::transformToWindow(const sfp::vector2f& sceneCoord) const
 {
 	return m_transform.transform(sceneCoord);
 }
 
 
-void sfp::scene::draw(const sfp::drawable& drawable)
+void sfp::Scene::draw(const sfp::Drawable& drawable)
 {
 	if (!m_transform_updated)
 	{
@@ -138,13 +138,13 @@ void sfp::scene::draw(const sfp::drawable& drawable)
 }
 
 
-void sfp::scene::update_transformation() const
+void sfp::Scene::update_transformation() const
 {
 	m_transform.clear();
 	
 	if ((m_size_window.x / m_size_scene.x) != (m_size_window.y / m_size_scene.y))
 	{
-		std::cout << "ssfp::scene warning: Scene size and window view have different ratios";
+		std::cout << "sfp::Scene warning: Scene size and window view have different ratios";
 	}
 	m_scale = m_size_window.x / m_size_scene.x;
 	

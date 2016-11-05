@@ -22,7 +22,7 @@
 
 
 sfp::PolygonShape::PolygonShape() :
-m_area(0), m_inertia_moment(0), m_center(sfp::vector2f(0, 0))
+m_area(0), m_inertiaMoment(0), m_center(sfp::vector2f(0, 0))
 {
 
 }
@@ -33,14 +33,14 @@ sfp::PolygonShape::~PolygonShape()
 }
 
 
-void sfp::PolygonShape::point_count(std::size_t count)
+void sfp::PolygonShape::pointCount(std::size_t count)
 {
 	m_points.resize(count);
 	
 	update();
 }
 
-std::size_t sfp::PolygonShape::point_count() const
+std::size_t sfp::PolygonShape::pointCount() const
 {
 	return m_points.size();
 }
@@ -59,7 +59,7 @@ const sfp::vector2f& sfp::PolygonShape::point(std::size_t pos) const
 }
 
 
-void sfp::PolygonShape::add_point(const sfp::vector2f& point)
+void sfp::PolygonShape::addPoint(const sfp::vector2f& point)
 {
 	m_points.push_back(point);
 	
@@ -72,7 +72,7 @@ void sfp::PolygonShape::clear()
 {
 	m_points.clear();
 	m_area = 0;
-	m_inertia_moment = 0;
+	m_inertiaMoment = 0;
 	m_center = sfp::vector2f(0, 0);
 }
 
@@ -83,9 +83,9 @@ float sfp::PolygonShape::area() const
 }
 
 
-float sfp::PolygonShape::inertia_moment() const
+float sfp::PolygonShape::inertiaMoment() const
 {
-	return m_inertia_moment;
+	return m_inertiaMoment;
 }
 
 
@@ -138,16 +138,6 @@ sfp::boxf sfp::PolygonShape::bounds(const transformf& transform) const
 }
 
 /*
-unsigned int sfp::PolygonShape::separatingAxisCount() const
-{
-	return m_points.size();
-}
-
-sfp::vector2f sfp::PolygonShape::separatingAxis(unsigned int index) const
-{
-	separatingAxis(index, transformf());
-}
-
 sfp::vector2f sfp::PolygonShape::separatingAxis(unsigned int index, const transformf& transform) const
 {
 	if (index < m_points.size())
@@ -188,7 +178,7 @@ sfp::minmaxf sfp::PolygonShape::project(const sfp::vector2f& axis, const sfp::tr
 void sfp::PolygonShape::update()
 {
 	m_area = 0;
-	m_inertia_moment = 0;
+	m_inertiaMoment = 0;
 	m_center = sfp::vector2f(0, 0);
 	
 	for(std::size_t i = 2; i < m_points.size(); ++i)
@@ -210,8 +200,8 @@ void sfp::PolygonShape::add_triangle(std::size_t pos)
 	float factor = tri_area / (tri_area + m_area);
 	
 	// Trägheitsmomente erhöhen und addieren
-	m_inertia_moment += m_area * vector2f(factor * diff).squaredLength();
-	m_inertia_moment += tri.inertia_moment() + tri_area * vector2f((1 - factor) * diff).squaredLength();
+	m_inertiaMoment += m_area * vector2f(factor * diff).squaredLength();
+	m_inertiaMoment += tri.inertiaMoment() + tri_area * vector2f((1 - factor) * diff).squaredLength();
 	
 	// Add area and move center
 	m_area += tri_area;
@@ -225,7 +215,7 @@ std::unique_ptr<sfp::Shape> sfp::PolygonShape::copy() const
 	
 	polygon->m_points = m_points;
 	polygon->m_area = m_area;
-	polygon->m_inertia_moment = m_inertia_moment;
+	polygon->m_inertiaMoment = m_inertiaMoment;
 	polygon->m_center = m_center;
 	
 	return std::unique_ptr<Shape>{polygon};

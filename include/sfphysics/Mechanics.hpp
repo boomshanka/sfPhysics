@@ -1,5 +1,5 @@
 /******************************************************************************
- **	sfPhysics - A simple 2D physics engine
+ **	sfphysics - A simple 2D physics engine
  ** Copyright (C) 2011  Olaf Vogt aka Boomshanka
  ** 
  ** This program is free software; you can redistribute it and/or modify it
@@ -19,44 +19,10 @@
 
 #pragma once
 
-#include <sfphysics/geometry/shape.hpp>
-#include <sfphysics/geometry/vector2.hpp>
 
-
-namespace sfp
-{
-	
-	class CircleShape : public Shape
-	{
-		public:
-			CircleShape(float radius, const vector2f& center = vector2f(0, 0));
-			~CircleShape();
-			
-			vector2f center() const;
-			void center(const vector2f& center);
-			
-			float radius() const;
-			void radius(float radius);
-			
-			float area() const;
-			float inertiaMoment() const;
-			
-			boxf bounds() const;
-			boxf bounds(const transformf&) const;
-						
-			minmaxf project(const vector2f& axis) const;
-			minmaxf project(const vector2f& axis, const transformf& transform) const;
-			
-			shape_type type() const { return shape_type::Circle; }
-			std::unique_ptr<Shape> copy() const;
-			void accept(ShapeDispatcher& dispatcher) const;
-			
-		private:
-			float m_radius;
-			vector2f m_center;
-			
-	};
-	
-}
+#include <sfphysics/mechanics/Body.hpp>
+#include <sfphysics/mechanics/Collider.hpp>
+#include <sfphysics/mechanics/Contact.hpp>
+#include <sfphysics/mechanics/MaterialDef.hpp>
 
 

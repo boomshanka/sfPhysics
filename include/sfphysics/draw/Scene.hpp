@@ -23,18 +23,18 @@
 #include <sfphysics/geometry/angle.hpp>
 #include <sfphysics/geometry/transformation.hpp>
 
-#include <sfphysics/draw/drawable.hpp>
+#include <sfphysics/draw/Drawable.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
 
 namespace sfp
 {
-	class scene
+	class Scene
 	{
 		public:
-			scene(sf::RenderWindow& window, const vector2f& size_scene, const vector2f& size_window);
-			~scene();
+			Scene(sf::RenderWindow& window, const vector2f& size_scene, const vector2f& size_window);
+			~Scene();
 			
 			void size_scene(const vector2f& size);
 			void size_scene(const vector2f& size, vector2f center);
@@ -59,7 +59,7 @@ namespace sfp
 			vector2f transformToWindow(const vector2f& sceneCoord) const;
 			
 			
-			void draw(const sfp::drawable& drawable);
+			void draw(const sfp::Drawable& drawable);
 			
 		private:
 			sf::RenderWindow& m_window;

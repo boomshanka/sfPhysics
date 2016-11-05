@@ -23,12 +23,12 @@
 namespace sfp
 {
 
-	class materialdef
+	class MaterialDef
 	{
 		public:
-			materialdef();
-			materialdef(const materialdef&);
-			materialdef(float density, float restitution, float stat_friction, float dyn_friction);			
+			MaterialDef();
+			MaterialDef(const MaterialDef&);
+			MaterialDef(float density, float restitution, float stat_friction, float dyn_friction);			
 			
 			float density() const;
 			void density(float dens);
@@ -52,12 +52,12 @@ namespace sfp
 	};
 	
 	
-	static materialdef wood;
-	static materialdef steel;
-	static materialdef aluminium;
-	static materialdef stone;
-	static materialdef rubber;
-	static materialdef soil;
+	static MaterialDef wood;
+	static MaterialDef steel;
+	static MaterialDef aluminium;
+	static MaterialDef stone;
+	static MaterialDef rubber;
+	static MaterialDef soil;
 	
 }
 

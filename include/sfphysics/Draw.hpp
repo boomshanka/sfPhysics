@@ -19,10 +19,7 @@
 
 #pragma once
 
-
-#include <sfphysics/mechanics/body.hpp>
-#include <sfphysics/mechanics/Collider.hpp>
-#include <sfphysics/mechanics/Contact.hpp>
-#include <sfphysics/mechanics/materialdef.hpp>
-
+#include <sfphysics/draw/Scene.hpp>
+#include <sfphysics/draw/Drawbody.hpp>
+#include <sfphysics/draw/GeometryDrawer.hpp>
 

@@ -45,7 +45,7 @@ namespace sfp
 			virtual ~Shape() {}
 			
 			virtual float area() const = 0;
-			virtual float inertia_moment() const = 0;
+			virtual float inertiaMoment() const = 0;
 			virtual vector2f center() const = 0;
 			
 			virtual boxf bounds() const = 0;

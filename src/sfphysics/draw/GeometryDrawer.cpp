@@ -17,12 +17,12 @@
  ******************************************************************************/
 
 
-#include <sfphysics/draw/GeometryDraw.hpp>
+#include <sfphysics/draw/GeometryDrawer.hpp>
 
 #include <SFML/Graphics/Transform.hpp>
 
 
-sfp::GeometryDraw::GeometryDraw(const sfp::linef& l, const sf::Color& color)
+sfp::GeometryDrawer::GeometryDrawer(const sfp::linef& l, const sf::Color& color)
 {
 	// TODO: infinite lines
 	m_vertice = sf::VertexArray(sf::Lines, 2);
@@ -34,7 +34,7 @@ sfp::GeometryDraw::GeometryDraw(const sfp::linef& l, const sf::Color& color)
 }
 
 
-sfp::GeometryDraw::GeometryDraw(const sfp::vector2f& vector, const sfp::vector2f& pos, const sf::Color& color)
+sfp::GeometryDrawer::GeometryDrawer(const sfp::vector2f& vector, const sfp::vector2f& pos, const sf::Color& color)
 {
 	m_vertice = sf::VertexArray(sf::Lines, 6);
 	
@@ -44,7 +44,7 @@ sfp::GeometryDraw::GeometryDraw(const sfp::vector2f& vector, const sfp::vector2f
 	m_vertice[1].position = static_cast<const sf::Vector2f&>(pos + vector);
 }
 
-sfp::GeometryDraw::GeometryDraw(const sfp::boxf& b, const sf::Color& color)
+sfp::GeometryDrawer::GeometryDrawer(const sfp::boxf& b, const sf::Color& color)
 {
 	m_vertice = sf::VertexArray(sf::LinesStrip, 5);
 	
@@ -62,7 +62,7 @@ sfp::GeometryDraw::GeometryDraw(const sfp::boxf& b, const sf::Color& color)
 
 
 
-void sfp::GeometryDraw::draw(sf::RenderWindow& window, const transformf& scenetransform) const
+void sfp::GeometryDrawer::draw(sf::RenderWindow& window, const transformf& scenetransform) const
 {
 	// draw
 	window.draw(m_vertice, static_cast<sf::Transform>(scenetransform));

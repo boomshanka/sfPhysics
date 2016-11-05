@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <sfphysics/draw/drawable.hpp>
+#include <sfphysics/draw/Drawable.hpp>
 
 #include <sfphysics/geometry/vector2.hpp>
 #include <sfphysics/geometry/line.hpp>
@@ -32,12 +32,12 @@
 
 namespace sfp
 {
-	class GeometryDraw : public sfp::drawable
+	class GeometryDrawer : public sfp::Drawable
 	{
 		public:
-			GeometryDraw(const sfp::linef& l, const sf::Color& color = sf::Color::Black);
-			GeometryDraw(const sfp::vector2f& vector, const sfp::vector2f& pos = sfp::vector2f(0,0), const sf::Color& color = sf::Color::Black);
-			GeometryDraw(const sfp::boxf& b, const sf::Color& color = sf::Color::Black);
+			GeometryDrawer(const sfp::linef& l, const sf::Color& color = sf::Color::Black);
+			GeometryDrawer(const sfp::vector2f& vector, const sfp::vector2f& pos = sfp::vector2f(0,0), const sf::Color& color = sf::Color::Black);
+			GeometryDrawer(const sfp::boxf& b, const sf::Color& color = sf::Color::Black);
 			
 			virtual void draw(sf::RenderWindow& window, const transformf& transform) const;
 			

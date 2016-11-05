@@ -34,17 +34,17 @@ namespace sfp
 			PolygonShape();
 			~PolygonShape();
 			
-			void point_count(std::size_t count);
-			std::size_t point_count() const;
+			void pointCount(std::size_t count);
+			std::size_t pointCount() const;
 			
 			void point(std::size_t pos, const vector2f& point);
 			const vector2f& point(std::size_t pos) const;
 			
-			void add_point(const vector2f& point);
+			void addPoint(const vector2f& point);
 			void clear();
 			
 			float area() const;
-			float inertia_moment() const;
+			float inertiaMoment() const;
 			vector2f center() const;
 			
 			boxf bounds() const;
@@ -61,7 +61,7 @@ namespace sfp
 			std::vector<vector2f> m_points;
 			
 			float m_area;
-			float m_inertia_moment;
+			float m_inertiaMoment;
 			vector2f m_center;
 			
 			void update();

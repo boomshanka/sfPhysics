@@ -63,7 +63,7 @@ float sfp::RectangleShape::area() const
 }
 
 
-float sfp::RectangleShape::inertia_moment() const
+float sfp::RectangleShape::inertiaMoment() const
 {
 	return area() * m_size.squaredLength() / 12.f;
 }
@@ -105,11 +105,6 @@ sfp::boxf sfp::RectangleShape::bounds(const transformf& transform) const
 }
 
 /*
-sfp::vector2f sfp::RectangleShape::separatingAxis(unsigned int index) const
-{
-	separatingAxis(index, transformf());
-}
-
 sfp::vector2f sfp::RectangleShape::separatingAxis(unsigned int index, const transformf& transform) const
 {
 	if (index == 0)

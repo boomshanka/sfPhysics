@@ -64,7 +64,7 @@ float sfp::CircleShape::area() const
 }
 
 
-float sfp::CircleShape::inertia_moment() const
+float sfp::CircleShape::inertiaMoment() const
 {
 	// 0.5 * m * r^2 ; m = pi r^2 -> 0.5 * pi * r^4
 	return 0.5 * trigf::pi * m_radius*m_radius*m_radius*m_radius;
