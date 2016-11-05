@@ -35,8 +35,7 @@ namespace sfp
 		Circle,
 		Polygon,
 		Rectangle,
-		Plane,
-		Complex
+		Plane
 	};
 	
 	
@@ -51,11 +50,7 @@ namespace sfp
 			
 			virtual boxf bounds() const = 0;
 			virtual boxf bounds(const transformf&) const = 0;
-			
-			virtual unsigned int separatingAxisCount() const = 0;
-			virtual vector2f separatingAxis(unsigned int index) const = 0;
-			virtual vector2f separatingAxis(unsigned int index, const transformf& transform) const = 0;
-			
+						
 			virtual minmaxf project(const vector2f& axis) const = 0;
 			virtual minmaxf project(const vector2f& axis, const transformf& transform) const = 0;
 			
@@ -69,7 +64,6 @@ namespace sfp
 	class PolygonShape;
 	class RectangleShape;
 	class PlaneShape;
-//	class ComplexShape; // Todo: Not implemented yet!
 	
 	class ShapeDispatcher
 	{
@@ -78,7 +72,6 @@ namespace sfp
 		virtual void dispatch(const PolygonShape& shape) = 0;
 		virtual void dispatch(const RectangleShape& shape) = 0;
 		virtual void dispatch(const PlaneShape& shape) = 0;
-		//virtual void dispatch(const ComplexShape& shape) = 0; // Todo: Not implemented yet
 	};
 }
 

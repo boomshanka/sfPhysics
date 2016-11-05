@@ -36,6 +36,7 @@ int main()
 	*/
 	sfp::CircleShape circle(1, sfp::vector2f(3,2));
 	sfp::PolygonShape polygon;
+	sfp::PlaneShape plane(sfp::vector2f(0,-1));
 	polygon.add_point(sfp::vector2f(0,0));
 	polygon.add_point(sfp::vector2f(1,-1));
 	polygon.add_point(sfp::vector2f(2,0));
@@ -43,17 +44,20 @@ int main()
 	polygon.add_point(sfp::vector2f(0,2));
 	sfp::RectangleShape rectangle(sfp::vector2f(7,1));
 	
-	sfp::drawbody body1(circle, sf::Color::Green);
+	sfp::drawbody body1(polygon, sf::Color::Green);
 	sfp::drawbody body2(circle, sf::Color::Blue);
 	sfp::drawbody body3(polygon, sf::Color::Red);
 	sfp::drawbody body4(rectangle, sf::Color(100,100,100));
+	sfp::drawbody body5(plane, sf::Color::Green);
 	body1.position(sfp::vector2f(4,3));
 	body2.position(sfp::vector2f(1.5,2.5));
-	body3.position(sfp::vector2f(14,10));
-	body4.position(sfp::vector2f(6,8));
+	body3.position(sfp::vector2f(14,8));
+	body4.position(sfp::vector2f(6,6));
+	body5.position(sfp::vector2f(5,11));
 	
 	body3.rotation(sfp::anglef::from_degrees(15));
 	body4.rotation(sfp::anglef::from_degrees(85));
+	body5.rotation(sfp::anglef::from_degrees(-5));
 	
 	sf::RenderWindow window(sf::VideoMode(800, 600), "sfPhysics Collision Detection Example");
 	window.setFramerateLimit(60);
@@ -89,6 +93,7 @@ int main()
 		scene.draw(body2);
 		scene.draw(body3);
 		scene.draw(body4);
+		scene.draw(body5);
 		
 		// Bounding box of moving object (changes color when intersects)
 		if (body1.bounds().intersects(body2.bounds()) || body1.bounds().intersects(body3.bounds()) ||
@@ -110,6 +115,7 @@ int main()
 		body2.colorize(sf::Color::White);
 		body3.colorize(sf::Color::White);
 		body4.colorize(sf::Color::White);
+		body5.colorize(sf::Color::White);
 		
 		// check collisions
 		sfp::Contact contact;
@@ -124,6 +130,10 @@ int main()
 		if (collider.collision(body1, body4, contact))
 		{
 			body4.colorize(sf::Color::Blue);
+		}
+		if (collider.collision(body1, body5, contact))
+		{
+			body5.colorize(sf::Color::Black);
 		}
 				
 		window.display();

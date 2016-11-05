@@ -36,6 +36,7 @@ namespace sfp
 			void center(const vector2f& center);
 			
 			const vector2f& normal() const;
+			vector2f normal(const transformf& transform) const;
 			void normal(const vector2f& normal);
 			
 			float area() const;
@@ -43,13 +44,9 @@ namespace sfp
 			
 			boxf bounds() const;
 			boxf bounds(const transformf&) const;
-			
-			unsigned int separatingAxisCount() const { return 1; }
-			vector2f separatingAxis(unsigned int index) const;
-			vector2f separatingAxis(unsigned int index, const transformf& transform) const;
-			
-			minmaxf project(const vector2f& axis) const {return minmaxf();}
-			minmaxf project(const vector2f& axis, const transformf& transform) const { return minmaxf(); }
+						
+			minmaxf project(const vector2f& axis) const;
+			minmaxf project(const vector2f& axis, const transformf& transform) const;
 			
 			shape_type type() const { return shape_type::Plane; }
 			std::unique_ptr<Shape> copy() const;

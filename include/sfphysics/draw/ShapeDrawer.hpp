@@ -64,6 +64,8 @@ namespace sfp
 			
 			const unsigned int m_circle_points = 60;
 			const unsigned int m_circle_slice_points = 5;
+			
+			const float m_pseudo_infinity_factor = 1e6;
 	};
 	
 } // namespace

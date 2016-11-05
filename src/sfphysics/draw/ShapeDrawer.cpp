@@ -21,7 +21,7 @@
 #include <sfphysics/geometry/trigonometry.hpp>
 #include <sfphysics/geometry/angle.hpp>
 
-
+#include <limits>
 
 
 void sfp::DefaultDrawer::createShape(const Shape& shape, const sf::Color& color)
@@ -114,7 +114,7 @@ void sfp::DefaultDrawer::dispatch(const sfp::RectangleShape& shape)
 {
 	m_vertice = VertexArrayList(2);
 	
-	// Two more points for center and last point = first point
+	// Filling. Two more points for center and last point = first point
 	m_vertice[0] = sf::VertexArray(sf::TrianglesFan, 6);
 	// For surrounding line, last point = first point
 	m_vertice[1] = sf::VertexArray(sf::LinesStrip, 5);
@@ -153,8 +153,38 @@ void sfp::DefaultDrawer::dispatch(const sfp::RectangleShape& shape)
 
 void sfp::DefaultDrawer::dispatch(const sfp::PlaneShape& shape)
 {
-	// TODO!
-	m_vertice = VertexArrayList();
+	// Draw one HUGE rectangle so the plane seems infinite
+	m_vertice = VertexArrayList(2);
+	
+	// Filling. One more point for last point = first point
+	m_vertice[0] = sf::VertexArray(sf::TrianglesFan, 5);
+	// For upper line
+	m_vertice[1] = sf::VertexArray(sf::LinesStrip, 2);
+	
+	// Upper edges
+	sfp::vector2f edge1 = shape.center() - (shape.normal().normal() * m_pseudo_infinity_factor);
+	sfp::vector2f edge2 = shape.center() + (shape.normal().normal() * m_pseudo_infinity_factor);
+	m_vertice[0][0].position = static_cast<sf::Vector2f>(edge1);
+	m_vertice[0][0].color = m_color;
+	 // Last point = first point
+	m_vertice[0][4].position = static_cast<sf::Vector2f>(edge1);
+	m_vertice[0][4].color = m_color;
+	m_vertice[1][0].position = static_cast<sf::Vector2f>(edge1);
+	m_vertice[1][0].color = sf::Color::Black;
+	// Other edge
+	m_vertice[0][1].position = static_cast<sf::Vector2f>(edge2);
+	m_vertice[0][1].color = m_color;
+	m_vertice[1][1].position = static_cast<sf::Vector2f>(edge2);
+	m_vertice[1][1].color = sf::Color::Black;
+	
+	// Lower edges
+	edge1 = shape.center() + (( shape.normal().normal() - shape.normal()) * m_pseudo_infinity_factor);
+	edge2 = shape.center() + ((-shape.normal().normal() - shape.normal()) * m_pseudo_infinity_factor);
+	m_vertice[0][2].position = static_cast<sf::Vector2f>(edge1); 
+	m_vertice[0][2].color = m_color;
+	
+	m_vertice[0][3].position = static_cast<sf::Vector2f>(edge1);
+	m_vertice[0][3].color = m_color;
 }
 
 

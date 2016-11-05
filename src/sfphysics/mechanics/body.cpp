@@ -146,17 +146,6 @@ sfp::boxf sfp::body::bounds() const
 }
 
 
-unsigned int sfp::body::separatingAxisCount() const
-{
-	return m_shape->separatingAxisCount();
-}
-
-sfp::vector2f sfp::body::separatingAxis(unsigned int index) const
-{
-	return m_shape->separatingAxis(index, m_to_global);
-}
-
-
 sfp::minmaxf sfp::body::project(const sfp::vector2f& axis) const
 {
 	if (m_transformstate == transformstate::None)

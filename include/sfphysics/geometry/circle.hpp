@@ -43,11 +43,7 @@ namespace sfp
 			
 			boxf bounds() const;
 			boxf bounds(const transformf&) const;
-			
-			unsigned int separatingAxisCount() const { return 0; }
-			vector2f separatingAxis(unsigned int index) const { return vector2f(1,0); }
-			vector2f separatingAxis(unsigned int index, const transformf& transform) const { return vector2f(1,0); }
-			
+						
 			minmaxf project(const vector2f& axis) const;
 			minmaxf project(const vector2f& axis, const transformf& transform) const;
 			

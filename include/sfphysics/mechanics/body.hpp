@@ -71,10 +71,7 @@ namespace sfp
 			
 			// bounding box
 			boxf bounds() const;
-			
-			unsigned int separatingAxisCount() const;
-			vector2f separatingAxis(unsigned int index) const;
-			
+						
 			// axis projection
 			minmaxf project(const sfp::vector2f& axis) const;
 			

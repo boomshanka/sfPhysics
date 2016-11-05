@@ -52,6 +52,12 @@ const sfp::vector2f& sfp::PlaneShape::normal() const
 }
 
 
+sfp::vector2f sfp::PlaneShape::normal(const sfp::transformf& transform) const
+{
+	return transform.transform(m_center+m_normal) - transform.transform(m_center);
+}
+
+
 void sfp::PlaneShape::normal(const sfp::vector2f& normal)
 {
 	m_normal = normal;
@@ -60,13 +66,13 @@ void sfp::PlaneShape::normal(const sfp::vector2f& normal)
 
 float sfp::PlaneShape::area() const
 {
-	return 1;
+	return std::numeric_limits<float>::infinity();
 }
 
 
 float sfp::PlaneShape::inertia_moment() const
 {
-	return 1;
+	return std::numeric_limits<float>::infinity();
 }
 
 
@@ -76,7 +82,7 @@ sfp::boxf sfp::PlaneShape::bounds() const
 }
 
 
-sfp::boxf sfp::PlaneShape::bounds(const transformf& transform) const
+sfp::boxf sfp::PlaneShape::bounds(const sfp::transformf& transform) const
 {
 	float inf = std::numeric_limits<float>::infinity();
 	vector2f normal = transform.transform(m_normal) - transform.transform(vector2f(0,0));
@@ -102,15 +108,17 @@ sfp::boxf sfp::PlaneShape::bounds(const transformf& transform) const
 }
 
 
-sfp::vector2f sfp::PlaneShape::separatingAxis(unsigned int index) const
+sfp::minmaxf sfp::PlaneShape::project(const sfp::vector2f& axis) const
 {
-	separatingAxis(index, transformf());
+	// since plane is infinite projection doesn't make sense in most cases
+	return minmaxf();
 }
 
-sfp::vector2f sfp::PlaneShape::separatingAxis(unsigned int index, const transformf& transform) const
+
+sfp::minmaxf sfp::PlaneShape::project(const sfp::vector2f& axis, const sfp::transformf& transform) const
 {
-	// TODO: Index prüfen?
-	return transform.transform(sfp::vector2f(-m_normal.y, m_normal.x));
+	// since plane is infinite projection doesn't make sense in most cases
+	return minmaxf();
 }
 
 

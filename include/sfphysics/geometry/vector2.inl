@@ -96,7 +96,7 @@ template <typename T>
 inline sfp::angle<T> sfp::vector2<T>::direction() const
 { // FIXME siehe trig form von Imaginären Zahlen (Mathe Skript)
 	if(this->y < 0)
-		return trig<T>::atan2(this->y, this->x) + angle<T>::from_degree(360);
+		return trig<T>::atan2(this->y, this->x) + angle<T>::from_degrees(360);
 	
 	return trig<T>::atan2(this->y, this->x);
 }

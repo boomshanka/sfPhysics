@@ -22,31 +22,44 @@
 #include <sfphysics/mechanics/body.hpp>
 #include <sfphysics/mechanics/Contact.hpp>
 
+#include <sfphysics/geometry/circle.hpp>
+#include <sfphysics/geometry/polygon.hpp>
+#include <sfphysics/geometry/rectangle.hpp>
+#include <sfphysics/geometry/plane.hpp>
+
 #include <list>
 
 
 namespace sfp
 {
 	// TODO: Possible singleton
-	class Collider
+	class Collider : public ShapeDispatcher
 	{
 		public:
 			Collider() {}
 			
-			bool collision(body& b1, body& b2, Contact& contact) const;
+			bool collision(body& b1, body& b2, Contact& contact);
 			
+			void dispatch(const CircleShape& shape);
+			void dispatch(const PolygonShape& shape);
+			void dispatch(const RectangleShape& shape);
+			void dispatch(const PlaneShape& shape);
 			
 		protected:
 			bool planePolygon(body& b1, body& b2, Contact& contact) const;
 			bool planeCircle(body& b1, body& b2, Contact& contact) const;
-			bool polygonPolygon(body& b1, body& b2, Contact& contact) const;
-			bool polygonCircle(body& b1, body& b2, Contact& contact) const;
+			bool polygonPolygon(body& b1, body& b2, Contact& contact);
+			bool polygonCircle(body& b1, body& b2, Contact& contact);
+			bool circleCircle(body& b1, body& b2, Contact& contact) const;
 			
-			bool project(body& b1, body& b2, const std::list<sfp::vector2f>&) const;
+			bool project(body& b1, body& b2, const std::list<sfp::vector2f>& axes) const;
+			
 			
 		private:
-			
-			
+			mutable bool m_nearestPoint;
+			mutable transformf m_transform;
+			mutable std::list<sfp::vector2f> m_axes;
+			mutable vector2f m_point;
 	};
 
 }

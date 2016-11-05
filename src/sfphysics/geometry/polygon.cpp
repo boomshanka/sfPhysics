@@ -137,7 +137,7 @@ sfp::boxf sfp::PolygonShape::bounds(const transformf& transform) const
 	return boxf();
 }
 
-
+/*
 unsigned int sfp::PolygonShape::separatingAxisCount() const
 {
 	return m_points.size();
@@ -164,7 +164,7 @@ sfp::vector2f sfp::PolygonShape::separatingAxis(unsigned int index, const transf
 	
 	return sfp::vector2f(1,0); // TODO oder (0,0) als invaliden vektor
 }
-
+*/
 
 sfp::minmaxf sfp::PolygonShape::project(const sfp::vector2f& axis) const
 {
