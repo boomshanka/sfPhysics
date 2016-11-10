@@ -46,20 +46,33 @@ namespace sfp
 			void dispatch(const PlaneShape& shape);
 			
 		protected:
-			bool planePolygon(Body& b1, Body& b2, Contact& contact) const;
-			bool planeCircle(Body& b1, Body& b2, Contact& contact) const;
+			bool planePolygon(Body& b1, Body& b2, Contact& contact);
+			bool planeCircle(Body& b1, Body& b2, Contact& contact);
 			bool polygonPolygon(Body& b1, Body& b2, Contact& contact);
 			bool polygonCircle(Body& b1, Body& b2, Contact& contact);
-			bool circleCircle(Body& b1, Body& b2, Contact& contact) const;
+			bool circleCircle(Body& b1, Body& b2, Contact& contact);
 			
-			bool project(Body& b1, Body& b2, const std::list<sfp::vector2f>& axes) const;
 			
+			bool		project(Body& b1, Body& b2, const std::list<vector2f>& axes);
+			
+			float		circleRadius(Body& circle);
+			vector2f	planeNormal(Body& plane);
+			
+			void		findPolygonSeparatingAxes(Body& polygon);
+			vector2f	closestPolygonPoint(Body& polygon, const vector2f& reference);
+			template <typename F>
+			vector2f	closestPolygonPoint(vector2f referencePoint, unsigned int pointCount, F globalPointPosition);
 			
 		private:
-			mutable bool m_nearestPoint;
-			mutable transformf m_transform;
-			mutable std::list<sfp::vector2f> m_axes;
-			mutable vector2f m_point;
+			enum class PolygonTask {closestPoint, separatingAxis} m_polygonTask;
+			
+			transformf m_transform;
+			vector2f m_point;
+			std::list<vector2f> m_axes;
+			
+			vector2f m_normal;
+			
+			float m_radius;
 	};
 
 }
