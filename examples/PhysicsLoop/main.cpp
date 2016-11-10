@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <sfPhysics/System.hpp>
-#include <sfPhysics/Mechanic.hpp>
+#include <sfPhysics/Mechanics.hpp>
 
 #include <iostream>
 

@@ -17,48 +17,24 @@
  ******************************************************************************/
 
 
-#include <iostream>
-#include <ostream>
-
-#include <sfPhysics/Geometry.hpp>
+#pragma once
 
 
-namespace Color
-{
-	enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    
-     std::ostream& operator<<(std::ostream& os, Code code) {
-		#ifdef __linux__
-        return os << "\033[" << static_cast<int>(code) << "m";
-        #else
-        return os;
-        #endif
-    }
-}
+#include <sfPhysics/Settings.hpp>
+#include <sfPhysics/SFML_System.hpp>
 
-int main()
-{
-	std::cout << "This is " << Color::FG_RED << "red" << Color::FG_DEFAULT << "!\n";
-	
-	sfp::transformf trafo;
-	
-	trafo.translate(sfp::vector2f(1,1));
-	std::cout << trafo.transform(sfp::vector2f(0,0)) << std::endl;
-	trafo.invert();
-	std::cout << trafo.transform(sfp::vector2f(1,1)) << std::endl;
-	
-	std::cin.clear();
-	std::cin.get();
-	
-	
-	return 0;
-}
+#include <sfPhysics/Geometry/angle.hpp>
+#include <sfPhysics/Geometry/trigonometry.hpp>
+
+#include <sfPhysics/Geometry/vector2.hpp>
+#include <sfPhysics/Geometry/transformation.hpp>
+#include <sfPhysics/Geometry/line.hpp>
+#include <sfPhysics/Geometry/triangle.hpp>
+
+#include <sfPhysics/Geometry/shape.hpp>
+#include <sfPhysics/Geometry/circle.hpp>
+#include <sfPhysics/Geometry/plane.hpp>
+#include <sfPhysics/Geometry/rectangle.hpp>
+#include <sfPhysics/Geometry/polygon.hpp>
+
+

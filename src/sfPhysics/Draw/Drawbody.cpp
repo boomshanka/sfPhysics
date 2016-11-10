@@ -17,48 +17,43 @@
  ******************************************************************************/
 
 
-#include <iostream>
-#include <ostream>
+#include <sfPhysics/Draw/Drawbody.hpp>
+#include <sfPhysics/Geometry/circle.hpp>
+#include <sfPhysics/Geometry/polygon.hpp>
 
-#include <sfPhysics/Geometry.hpp>
 
-
-namespace Color
+sfp::Drawbody::Drawbody(const sfp::Shape& shape, const sf::Color& color) :
+Body(shape), m_drawer(new DefaultDrawer()), m_color(color)
 {
-	enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    
-     std::ostream& operator<<(std::ostream& os, Code code) {
-		#ifdef __linux__
-        return os << "\033[" << static_cast<int>(code) << "m";
-        #else
-        return os;
-        #endif
-    }
+	m_drawer->createShape(shape, m_color);
 }
 
-int main()
+sfp::Drawbody::~Drawbody()
 {
-	std::cout << "This is " << Color::FG_RED << "red" << Color::FG_DEFAULT << "!\n";
 	
-	sfp::transformf trafo;
-	
-	trafo.translate(sfp::vector2f(1,1));
-	std::cout << trafo.transform(sfp::vector2f(0,0)) << std::endl;
-	trafo.invert();
-	std::cout << trafo.transform(sfp::vector2f(1,1)) << std::endl;
-	
-	std::cin.clear();
-	std::cin.get();
-	
-	
-	return 0;
 }
+
+
+void sfp::Drawbody::color(const sf::Color& color)
+{
+	m_color = color;
+	m_drawer->createShape(Body::bodyshape(), m_color);
+}
+
+void sfp::Drawbody::colorize(const sf::Color& color)
+{
+	m_drawer->createShape(Body::bodyshape(), color*m_color);
+}
+
+
+void sfp::Drawbody::draw(sf::RenderWindow& window, const transformf& scenetransform) const
+{
+	// apply position and rotation to transformation
+	transformf trafo(scenetransform);
+	trafo.translate(Body::position()).rotate(Body::rotation()).translate(-Body::center());
+	
+	// draw
+	m_drawer->draw(window, trafo);
+}
+
+

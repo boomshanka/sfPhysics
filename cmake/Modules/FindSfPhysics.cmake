@@ -23,7 +23,7 @@ if(SFPHYSICS_STATIC_LIBRARIES)
 endif()
 
 # find the SFPHYSICS include directory
-find_path(SFPHYSICS_INCLUDE_DIR sfphysics/settings
+find_path(SFPHYSICS_INCLUDE_DIR sfPhysics/settings
           PATH_SUFFIXES include
           PATHS
           ~/Library/Frameworks

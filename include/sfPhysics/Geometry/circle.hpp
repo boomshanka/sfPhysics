@@ -17,48 +17,46 @@
  ******************************************************************************/
 
 
-#include <iostream>
-#include <ostream>
+#pragma once
 
-#include <sfPhysics/Geometry.hpp>
+#include <sfPhysics/Geometry/shape.hpp>
+#include <sfPhysics/Geometry/vector2.hpp>
 
 
-namespace Color
+namespace sfp
 {
-	enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    
-     std::ostream& operator<<(std::ostream& os, Code code) {
-		#ifdef __linux__
-        return os << "\033[" << static_cast<int>(code) << "m";
-        #else
-        return os;
-        #endif
-    }
+	
+	class CircleShape : public Shape
+	{
+		public:
+			CircleShape(float radius, const vector2f& center = vector2f(0, 0));
+			~CircleShape();
+			
+			vector2f center() const;
+			void center(const vector2f& center);
+			
+			float radius() const;
+			void radius(float radius);
+			
+			float area() const;
+			float inertiaMoment() const;
+			
+			boxf bounds() const;
+			boxf bounds(const transformf&) const;
+						
+			minmaxf project(const vector2f& axis) const;
+			minmaxf project(const vector2f& axis, const transformf& transform) const;
+			
+			shape_type type() const { return shape_type::Circle; }
+			std::unique_ptr<Shape> copy() const;
+			void accept(ShapeDispatcher& dispatcher) const;
+			
+		private:
+			float m_radius;
+			vector2f m_center;
+			
+	};
+	
 }
 
-int main()
-{
-	std::cout << "This is " << Color::FG_RED << "red" << Color::FG_DEFAULT << "!\n";
-	
-	sfp::transformf trafo;
-	
-	trafo.translate(sfp::vector2f(1,1));
-	std::cout << trafo.transform(sfp::vector2f(0,0)) << std::endl;
-	trafo.invert();
-	std::cout << trafo.transform(sfp::vector2f(1,1)) << std::endl;
-	
-	std::cin.clear();
-	std::cin.get();
-	
-	
-	return 0;
-}
+

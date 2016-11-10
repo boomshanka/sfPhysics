@@ -15,50 +15,42 @@
  ** You should have received a copy of the GNU General Public License along
  ** with this program; if not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+ 
+ 
+#pragma once
+
+#include <sfPhysics/Draw/Drawable.hpp>
+#include <sfPhysics/Draw/ShapeDrawer.hpp>
+#include <sfPhysics/Mechanics/Body.hpp>
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
+
+#include <memory>
 
 
-#include <iostream>
-#include <ostream>
-
-#include <sfPhysics/Geometry.hpp>
-
-
-namespace Color
+namespace sfp
 {
-	enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    
-     std::ostream& operator<<(std::ostream& os, Code code) {
-		#ifdef __linux__
-        return os << "\033[" << static_cast<int>(code) << "m";
-        #else
-        return os;
-        #endif
-    }
-}
+	typedef std::vector<sf::VertexArray> VertexArrayList;
+	
+	class Drawbody : public sfp::Drawable, public sfp::Body
+	{
+		public:
+			Drawbody(const Shape& shape, const sf::Color& color = sf::Color::Red); // TODO: Color default=random and add ShapeDrawer
+			~Drawbody();
+			
+			// TODO: usefull functions for drawbdody
+			void color(const sf::Color& color);
+			void colorize(const sf::Color& color);
+		
+		private:
+			std::unique_ptr<ShapeDrawer> m_drawer;
+			sf::Color m_color;
+			
+			virtual void draw(sf::RenderWindow& window, const transformf& transform) const;
+	};
+	
+} // namespace
 
-int main()
-{
-	std::cout << "This is " << Color::FG_RED << "red" << Color::FG_DEFAULT << "!\n";
-	
-	sfp::transformf trafo;
-	
-	trafo.translate(sfp::vector2f(1,1));
-	std::cout << trafo.transform(sfp::vector2f(0,0)) << std::endl;
-	trafo.invert();
-	std::cout << trafo.transform(sfp::vector2f(1,1)) << std::endl;
-	
-	std::cin.clear();
-	std::cin.get();
-	
-	
-	return 0;
-}
+
+

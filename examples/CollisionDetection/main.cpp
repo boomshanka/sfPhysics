@@ -18,9 +18,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <sfphysics/Geometry.hpp>
-#include <sfphysics/Mechanics.hpp>
-#include <sfphysics/Draw.hpp>
+#include <sfPhysics/Geometry.hpp>
+#include <sfPhysics/Mechanics.hpp>
+#include <sfPhysics/Draw.hpp>
 
 #include <iostream>
 

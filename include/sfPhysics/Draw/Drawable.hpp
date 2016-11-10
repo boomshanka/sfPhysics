@@ -17,48 +17,21 @@
  ******************************************************************************/
 
 
-#include <iostream>
-#include <ostream>
+#pragma once
 
-#include <sfPhysics/Geometry.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include <sfPhysics/Geometry/transformation.hpp>
 
 
-namespace Color
+namespace sfp
 {
-	enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    
-     std::ostream& operator<<(std::ostream& os, Code code) {
-		#ifdef __linux__
-        return os << "\033[" << static_cast<int>(code) << "m";
-        #else
-        return os;
-        #endif
-    }
+	class Drawable
+	{
+		public:
+			virtual void draw(sf::RenderWindow& window, const transformf& transform) const = 0;
+			
+	};
 }
 
-int main()
-{
-	std::cout << "This is " << Color::FG_RED << "red" << Color::FG_DEFAULT << "!\n";
-	
-	sfp::transformf trafo;
-	
-	trafo.translate(sfp::vector2f(1,1));
-	std::cout << trafo.transform(sfp::vector2f(0,0)) << std::endl;
-	trafo.invert();
-	std::cout << trafo.transform(sfp::vector2f(1,1)) << std::endl;
-	
-	std::cin.clear();
-	std::cin.get();
-	
-	
-	return 0;
-}
+

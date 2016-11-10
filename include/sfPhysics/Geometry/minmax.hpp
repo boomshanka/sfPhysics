@@ -17,48 +17,49 @@
  ******************************************************************************/
 
 
-#include <iostream>
+#pragma once
+
 #include <ostream>
 
-#include <sfPhysics/Geometry.hpp>
 
-
-namespace Color
+namespace sfp
 {
-	enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    
-     std::ostream& operator<<(std::ostream& os, Code code) {
-		#ifdef __linux__
-        return os << "\033[" << static_cast<int>(code) << "m";
-        #else
-        return os;
-        #endif
-    }
+	template <typename T>
+	class minmax
+	{
+		public:
+			minmax();
+			minmax(T value);
+			
+			minmax<T>& apply(T value);
+			minmax<T>& apply(const minmax<T>& values);
+			
+			T min() const;
+			T max() const;
+			
+			bool contains(T value) const;
+			bool intersects(const minmax<T>& mm) const;
+			
+			bool valid() const;
+			
+		private:
+			T m_min;
+			T m_max;
+			
+			bool m_init;
+	};
+	
+	// ostream operator for output
+	template <typename T>
+	std::ostream& operator<<(std::ostream& os, const sfp::minmax<T>& mm); 
+	
+	#include <sfPhysics/Geometry/minmax.inl>
+	
+	typedef minmax<unsigned int> minmaxu;
+	typedef minmax<int> minmaxi;
+	typedef minmax<float> minmaxf;
+	typedef minmax<double> minmaxd;
+	
+	
 }
 
-int main()
-{
-	std::cout << "This is " << Color::FG_RED << "red" << Color::FG_DEFAULT << "!\n";
-	
-	sfp::transformf trafo;
-	
-	trafo.translate(sfp::vector2f(1,1));
-	std::cout << trafo.transform(sfp::vector2f(0,0)) << std::endl;
-	trafo.invert();
-	std::cout << trafo.transform(sfp::vector2f(1,1)) << std::endl;
-	
-	std::cin.clear();
-	std::cin.get();
-	
-	
-	return 0;
-}

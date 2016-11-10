@@ -13,7 +13,7 @@ project(sfPhysics)
 include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Macros.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/)
-find_package(SFML 2.0 REQUIRED system graphics)
+find_package(SFML 2.4 REQUIRED system graphics)
 
 
 # setup version numbers
@@ -61,7 +61,7 @@ endif()
 set(CMAKE_SKIP_BUILD_RPATH TRUE)
 
 # add the subdirectories
-add_subdirectory(src/sfphysics)
+add_subdirectory(src/sfPhysics)
 
 # setup the install rules
 install(DIRECTORY include
